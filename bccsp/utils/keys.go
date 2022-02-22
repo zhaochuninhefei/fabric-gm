@@ -27,6 +27,7 @@ import (
 	"errors"
 	"fmt"
 
+	"gitee.com/zhaochuninhefei/gmgo/pkcs12"
 	"gitee.com/zhaochuninhefei/gmgo/sm2"
 	gmx509 "gitee.com/zhaochuninhefei/gmgo/x509"
 )
@@ -69,12 +70,12 @@ func oidFromNamedCurve(curve elliptic.Curve) (asn1.ObjectIdentifier, bool) {
 }
 
 // PrivateKeyToDER marshals a private key to der
-func PrivateKeyToDER(privateKey *ecdsa.PrivateKey) ([]byte, error) {
+func PrivateKeyToDER(privateKey *sm2.PrivateKey) ([]byte, error) {
 	if privateKey == nil {
-		return nil, errors.New("Invalid ecdsa private key. It must be different from nil.")
+		return nil, errors.New("Invalid sm2 private key. It must be different from nil.")
 	}
 
-	return x509.MarshalECPrivateKey(privateKey)
+	return pkcs12.MarshalECPrivateKey(privateKey)
 }
 
 // PrivateKeyToPEM converts the private key to PEM format.
