@@ -16,6 +16,7 @@ import (
 
 const pkcs11Enabled = false
 
+// TODO 注意这里定义的FactoryOpts不会与`pkcs11.go`里定义的FactoryOpts冲突，因为该文件头声明了编译条件是 `!pkcs11`，而`pkcs11.go`的编译条件是`pkcs11`
 // FactoryOpts holds configuration information used to initialize factory implementations
 type FactoryOpts struct {
 	ProviderName string  `mapstructure:"default" json:"default" yaml:"Default"`
