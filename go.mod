@@ -4,10 +4,10 @@ go 1.17
 
 require (
 	code.cloudfoundry.org/clock v1.0.0
-	gitee.com/zhaochuninhefei/fabric-chaincode-go-gm v0.0.2
-	gitee.com/zhaochuninhefei/fabric-config-gm v0.0.1
-	gitee.com/zhaochuninhefei/gmgo v0.0.3
-	gitee.com/zhaochuninhefei/saramagm v0.0.1
+	gitee.com/zhaochuninhefei/fabric-chaincode-go-gm v0.0.3
+	gitee.com/zhaochuninhefei/fabric-config-gm v0.0.2
+	gitee.com/zhaochuninhefei/gmgo v0.0.4
+	gitee.com/zhaochuninhefei/saramagm v0.0.2
 	github.com/Knetic/govaluate v3.0.1-0.20171022003610-9aa49832a739+incompatible
 	github.com/VictoriaMetrics/fastcache v1.9.0
 	github.com/davecgh/go-spew v1.1.1
@@ -116,6 +116,10 @@ require (
 )
 
 replace (
+	// gitee.com/zhaochuninhefei/fabric-chaincode-go-gm => /home/zhaochun/work/sources/gcbaas/fabric-chaincode-go-gm
+	// gitee.com/zhaochuninhefei/fabric-config-gm => /home/zhaochun/work/sources/gcbaas/fabric-config-gm
+	// gitee.com/zhaochuninhefei/gmgo => /home/zhaochun/work/sources/gm-zc/gmgo
+	// gitee.com/zhaochuninhefei/saramagm => /home/zhaochun/work/sources/gcbaas/saramagm
 	github.com/go-kit/kit => github.com/go-kit/kit v0.8.0
 	github.com/hyperledger/fabric-protos-go => github.com/hyperledger/fabric-protos-go v0.0.0-20200506201313-25f6564b9ac4
 	github.com/mitchellh/mapstructure => github.com/mitchellh/mapstructure v1.3.3

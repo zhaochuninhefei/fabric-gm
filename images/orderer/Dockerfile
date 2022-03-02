@@ -5,16 +5,16 @@
 ARG GO_VER
 ARG ALPINE_VER
 FROM alpine:${ALPINE_VER} as base
-RUN sed -i "s?dl-cdn.alpinelinux.org?mirrors.aliyun.com?g" /etc/apk/repositories
-RUN apk add --no-cache tzdata
+RUN sed -i "s?dl-cdn.alpinelinux.org?mirrors.aliyun.com?g" /etc/apk/repositories \
+    && apk add --no-cache tzdata
 # set up nsswitch.conf for Go's "netgo" implementation
 # - https://github.com/golang/go/blob/go1.9.1/src/net/conf.go#L194-L275
 # - docker run --rm debian:stretch grep '^hosts:' /etc/nsswitch.conf
 RUN [ ! -e /etc/nsswitch.conf ] && echo 'hosts: files dns' > /etc/nsswitch.conf
 
 FROM golang:${GO_VER}-alpine${ALPINE_VER} as golang
-RUN sed -i "s?dl-cdn.alpinelinux.org?mirrors.aliyun.com?g" /etc/apk/repositories
-RUN apk add --no-cache \
+RUN sed -i "s?dl-cdn.alpinelinux.org?mirrors.aliyun.com?g" /etc/apk/repositories \
+	&& apk add --no-cache \
 	gcc \
 	musl-dev \
 	git \
@@ -25,8 +25,8 @@ WORKDIR $GOPATH/src/github.com/hyperledger/fabric
 
 FROM golang as orderer
 ARG GO_TAGS
-RUN go env -w GOPROXY=https://goproxy.cn,direct
-RUN make orderer GO_TAGS=${GO_TAGS}
+RUN go env -w GOPROXY=https://goproxy.cn,direct \
+    && make orderer GO_TAGS=${GO_TAGS}
 
 FROM base
 ENV FABRIC_CFG_PATH /etc/hyperledger/fabric

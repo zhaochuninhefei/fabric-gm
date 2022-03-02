@@ -12,7 +12,7 @@ import (
 	"crypto/rand"
 	"crypto/sha256"
 
-	// "crypto/x509"
+	"crypto/x509"
 	"crypto/x509/pkix"
 	"encoding/pem"
 	"io/ioutil"
@@ -26,7 +26,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/gm"
 	"gitee.com/zhaochuninhefei/gmgo/sm2"
-	"gitee.com/zhaochuninhefei/gmgo/x509"
+	gx509 "gitee.com/zhaochuninhefei/gmgo/x509"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/cryptogen/csp"
 	"github.com/pkg/errors"
@@ -42,7 +42,7 @@ type CA struct {
 	PostalCode         string
 	Signer             crypto.Signer
 	SignCert           *x509.Certificate
-	SignSm2Cert        *x509.Certificate
+	SignSm2Cert        *gx509.Certificate
 	Sm2Key             *sm2.PrivateKey
 }
 
@@ -105,7 +105,7 @@ func NewCA(
 	// 	&priv.PublicKey,
 	// 	priv,
 	// )
-	templateSm2.SignatureAlgorithm = x509.SM2WithSM3
+	templateSm2.SignatureAlgorithm = gx509.SM2WithSM3
 	sm2Cert, err := genCertificateGMSM2(
 		baseDir,
 		name,
@@ -146,7 +146,7 @@ func (ca *CA) SignCertificate(
 	pub *sm2.PublicKey,
 	ku x509.KeyUsage,
 	eku []x509.ExtKeyUsage,
-) (*x509.Certificate, error) {
+) (*gx509.Certificate, error) {
 
 	template := x509Template()
 	template.KeyUsage = ku
@@ -177,7 +177,7 @@ func (ca *CA) SignCertificate(
 	}
 	template.PublicKey = pub
 	templateSm2 := gm.ParseX509Certificate2Sm2(&template)
-	templateSm2.SignatureAlgorithm = x509.SM2WithSM3
+	templateSm2.SignatureAlgorithm = gx509.SM2WithSM3
 	cert, err := genCertificateGMSM2(
 		baseDir,
 		name,
@@ -284,7 +284,7 @@ func genCertificateECDSA(
 ) (*x509.Certificate, error) {
 
 	//create the x509 public cert
-	certBytes, err := x509.CreateCertificateFromReader(rand.Reader, template, parent, pub, priv)
+	certBytes, err := x509.CreateCertificate(rand.Reader, template, parent, pub, priv)
 	if err != nil {
 		return nil, err
 	}
@@ -313,9 +313,9 @@ func genCertificateECDSA(
 func genCertificateGMSM21(
 	baseDir,
 	name string,
-	template, parent *x509.Certificate,
+	template, parent *gx509.Certificate,
 	pub *sm2.PublicKey,
-	key bccsp.Key) (*x509.Certificate, error) {
+	key bccsp.Key) (*gx509.Certificate, error) {
 	//create the x509 public cert
 	certBytes, err := gm.CreateCertificateToMem(template, parent, key)
 
@@ -340,7 +340,7 @@ func genCertificateGMSM21(
 	// }
 	//x509Cert, err := sm2.ReadCertificateFromPem(fileName)
 
-	x509Cert, err := x509.ReadCertificateFromMem(certBytes)
+	x509Cert, err := gx509.ReadCertificateFromMem(certBytes)
 	if err != nil {
 		return nil, err
 	}
@@ -353,13 +353,13 @@ func genCertificateGMSM2(
 	baseDir,
 	name string,
 	template,
-	parent *x509.Certificate,
+	parent *gx509.Certificate,
 	pub *sm2.PublicKey,
 	priv interface{},
-) (*x509.Certificate, error) {
+) (*gx509.Certificate, error) {
 
 	//create the x509 public cert
-	certBytes, err := x509.CreateCertificateFromReader(rand.Reader, template, parent, pub, priv)
+	certBytes, err := gx509.CreateCertificateFromReader(rand.Reader, template, parent, pub, priv)
 	if err != nil {
 		return nil, err
 	}
@@ -377,7 +377,7 @@ func genCertificateGMSM2(
 		return nil, err
 	}
 
-	x509Cert, err := x509.ParseCertificate(certBytes)
+	x509Cert, err := gx509.ParseCertificate(certBytes)
 	if err != nil {
 		return nil, err
 	}
@@ -416,8 +416,8 @@ func LoadCertificateECDSA(certPath string) (*x509.Certificate, error) {
 }
 
 // LoadCertificateGMSM2 load a ecdsa cert from a file in cert path
-func LoadCertificateGMSM2(certPath string) (*x509.Certificate, error) {
-	var cert *x509.Certificate
+func LoadCertificateGMSM2(certPath string) (*gx509.Certificate, error) {
+	var cert *gx509.Certificate
 	var err error
 
 	walkFunc := func(path string, info os.FileInfo, err error) error {
@@ -430,7 +430,7 @@ func LoadCertificateGMSM2(certPath string) (*x509.Certificate, error) {
 			if block == nil || block.Type != "CERTIFICATE" {
 				return errors.Errorf("%s: wrong PEM encoding", path)
 			}
-			cert, err = x509.ParseCertificate(block.Bytes)
+			cert, err = gx509.ParseCertificate(block.Bytes)
 			if err != nil {
 				return errors.Errorf("%s: wrong DER encoding", path)
 			}

@@ -6,7 +6,7 @@ SPDX-License-Identifier: Apache-2.0
 package msp
 
 import (
-	// "crypto/x509"
+	"crypto/x509"
 	"encoding/pem"
 	"os"
 	"path/filepath"
@@ -14,7 +14,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/cryptogen/ca"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/cryptogen/csp"
 	fabricmsp "gitee.com/zhaochuninhefei/fabric-gm/msp"
-	"gitee.com/zhaochuninhefei/gmgo/x509"
+	gx509 "gitee.com/zhaochuninhefei/gmgo/x509"
 	"github.com/pkg/errors"
 	"gopkg.in/yaml.v2"
 )
@@ -283,7 +283,7 @@ func x509Export(path string, cert *x509.Certificate) error {
 	return pemExport(path, "CERTIFICATE", cert.Raw)
 }
 
-func sm2Export(path string, cert *x509.Certificate) error {
+func sm2Export(path string, cert *gx509.Certificate) error {
 	return pemExport(path, "CERTIFICATE", cert.Raw)
 }
 

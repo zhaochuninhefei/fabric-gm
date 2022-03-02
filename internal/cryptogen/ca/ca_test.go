@@ -6,7 +6,7 @@ SPDX-License-Identifier: Apache-2.0
 package ca_test
 
 import (
-	// "crypto/x509"
+	"crypto/x509"
 	"io/ioutil"
 	"net"
 	"os"
@@ -16,7 +16,8 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/cryptogen/ca"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/cryptogen/csp"
 	"gitee.com/zhaochuninhefei/gmgo/sm2"
-	"gitee.com/zhaochuninhefei/gmgo/x509"
+
+	gx509 "gitee.com/zhaochuninhefei/gmgo/x509"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -251,7 +252,7 @@ func TestGenerateSignCertificate(t *testing.T) {
 	// use an empty CA to test error path
 	badCA := &ca.CA{
 		Name:        "badCA",
-		SignSm2Cert: &x509.Certificate{},
+		SignSm2Cert: &gx509.Certificate{},
 	}
 	_, err = badCA.SignCertificate(certDir, testName, nil, nil, &sm2.PublicKey{},
 		x509.KeyUsageKeyEncipherment, []x509.ExtKeyUsage{x509.ExtKeyUsageAny})
