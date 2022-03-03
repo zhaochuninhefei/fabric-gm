@@ -110,7 +110,7 @@ General:
             # TODO: The default Hash and Security level needs refactoring to be
             # fully configurable. Changing these defaults requires coordination
             # SHA2 is hardcoded in several places, not only BCCSP
-            Hash: GMSM3
+            Hash: SM3
             Security: 256
             # Location of key store. If this is unset, a location will be
             # chosen using: 'LocalMSPDir'/keystore

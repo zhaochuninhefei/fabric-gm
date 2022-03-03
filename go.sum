@@ -52,8 +52,9 @@ gitee.com/zhaochuninhefei/fabric-chaincode-go-gm v0.0.3 h1:ZLW8Tz5snGY/tne1fqsKg
 gitee.com/zhaochuninhefei/fabric-chaincode-go-gm v0.0.3/go.mod h1:XIK6h+Wns5Qq9axlLKeuT1uuk5aUT4QeASCw3jK9Uvo=
 gitee.com/zhaochuninhefei/fabric-config-gm v0.0.2 h1:9X53Y5W8TswejgVG+JavB6Joys/uMuihY6gBup37Ct8=
 gitee.com/zhaochuninhefei/fabric-config-gm v0.0.2/go.mod h1:BxyMqBjoou0YXK4acsQdPamW2krhTvnDDixJ9ubSwNI=
-gitee.com/zhaochuninhefei/gmgo v0.0.4 h1:yH3SJi2zpsjBJJIRAR0Taq1fhGTPP6MGe90vbcKLpQE=
 gitee.com/zhaochuninhefei/gmgo v0.0.4/go.mod h1:kQv8Tn9hZ4d1WV0zpHmMDaCq+syJmrAvHQbgezTqEwI=
+gitee.com/zhaochuninhefei/gmgo v0.0.5 h1:jt3iUxFeCnt1T1k1hFFRKk1dvSWxxReVXslFZlOlc4k=
+gitee.com/zhaochuninhefei/gmgo v0.0.5/go.mod h1:kQv8Tn9hZ4d1WV0zpHmMDaCq+syJmrAvHQbgezTqEwI=
 gitee.com/zhaochuninhefei/saramagm v0.0.2 h1:4AuCBIv/7qql9NgifmA7UVokXFWrDfIHsdat59CL9c4=
 gitee.com/zhaochuninhefei/saramagm v0.0.2/go.mod h1:TXK+/AZklVYMKmLDlt7dcYpns6YMhK0oIVWjixNKGeE=
 github.com/Azure/azure-sdk-for-go v16.2.1+incompatible/go.mod h1:9XXNKU+eRnpl9moKnB4QOLf1HestfXbmab5FXxiDBjc=

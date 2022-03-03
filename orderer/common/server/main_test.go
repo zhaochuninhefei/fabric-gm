@@ -482,7 +482,7 @@ func TestLoadLocalMSP(t *testing.T) {
 					BCCSP: &factory.FactoryOpts{
 						ProviderName: "GM",
 						SwOpts: &factory.SwOpts{
-							HashFamily: "GMSM3",
+							HashFamily: "SM3",
 							SecLevel:   256,
 							Ephemeral:  true,
 						},

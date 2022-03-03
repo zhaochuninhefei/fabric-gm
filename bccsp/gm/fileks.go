@@ -174,7 +174,7 @@ func (ks *fileBasedKeyStore) StoreKey(k bccsp.Key) (err error) {
 
 		err = ks.storePrivateKey(hex.EncodeToString(k.SKI()), kk.privKey)
 		if err != nil {
-			return fmt.Errorf("Failed storing GMSM2 private key [%s]", err)
+			return fmt.Errorf("Failed storing SM2 private key [%s]", err)
 		}
 
 	case *gmsm2PublicKey:
@@ -182,7 +182,7 @@ func (ks *fileBasedKeyStore) StoreKey(k bccsp.Key) (err error) {
 
 		err = ks.storePublicKey(hex.EncodeToString(k.SKI()), kk.pubKey)
 		if err != nil {
-			return fmt.Errorf("Failed storing GMSM2 public key [%s]", err)
+			return fmt.Errorf("Failed storing SM2 public key [%s]", err)
 		}
 	case *gmsm4PrivateKey:
 		kk := k.(*gmsm4PrivateKey)
@@ -191,7 +191,7 @@ func (ks *fileBasedKeyStore) StoreKey(k bccsp.Key) (err error) {
 
 		err = ks.storeKey(hex.EncodeToString(k.SKI()), kk.privKey)
 		if err != nil {
-			return fmt.Errorf("Failed storing GMSM4 key [%s]", err)
+			return fmt.Errorf("Failed storing SM4 key [%s]", err)
 		}
 	default:
 		return fmt.Errorf("Key type not reconigned [%s]", k)

@@ -61,11 +61,11 @@ const (
 	X509Certificate = "X509Certificate"
 
 	// GMSM4
-	GMSM4 = "GMSM4"
+	GMSM4 = "SM4"
 	// GMSM3
-	GMSM3 = "GMSM3"
+	GMSM3 = "SM3"
 	// GMSM2
-	GMSM2 = "GMSM2"
+	GMSM2 = "SM2"
 )
 
 // ECDSAKeyGenOpts contains options for ECDSA key generation.
@@ -303,7 +303,6 @@ func (opts *GMSM4KeyGenOpts) Algorithm() string {
 func (opts *GMSM4KeyGenOpts) Ephemeral() bool {
 	return opts.Temporary
 }
-
 
 //GMSM4ImportKeyOpts  实现  bccsp.KeyImportOpts 接口
 type GMSM4ImportKeyOpts struct {

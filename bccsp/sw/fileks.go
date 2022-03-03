@@ -185,19 +185,19 @@ func (ks *fileBasedKeyStore) StoreKey(k bccsp.Key) (err error) {
 	case *gmsm2PrivateKey:
 		err = ks.storePrivateKey(hex.EncodeToString(k.SKI()), kk.privKey)
 		if err != nil {
-			return fmt.Errorf("failed storing GMSM2 private key [%s]", err)
+			return fmt.Errorf("failed storing SM2 private key [%s]", err)
 		}
 
 	case *gmsm2PublicKey:
 		err = ks.storePublicKey(hex.EncodeToString(k.SKI()), kk.pubKey)
 		if err != nil {
-			return fmt.Errorf("failed storing GMSM2 public key [%s]", err)
+			return fmt.Errorf("failed storing SM2 public key [%s]", err)
 		}
 
 	case *gmsm4PrivateKey:
 		err = ks.storeKey(hex.EncodeToString(k.SKI()), kk.privKey)
 		if err != nil {
-			return fmt.Errorf("failed storing GMSM4 key [%s]", err)
+			return fmt.Errorf("failed storing SM4 key [%s]", err)
 		}
 
 	case *ecdsaPrivateKey:

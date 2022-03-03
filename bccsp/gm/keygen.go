@@ -31,7 +31,7 @@ func (gm *gmsm2KeyGenerator) KeyGen(opts bccsp.KeyGenOpts) (k bccsp.Key, err err
 	//调用 SM2的注册证书方法
 	privKey, err := sm2.GenerateKey(rand.Reader)
 	if err != nil {
-		return nil, fmt.Errorf("Failed generating GMSM2 key  [%s]", err)
+		return nil, fmt.Errorf("Failed generating SM2 key  [%s]", err)
 	}
 
 	return &gmsm2PrivateKey{privKey}, nil
@@ -45,7 +45,7 @@ type gmsm4KeyGenerator struct {
 func (gm *gmsm4KeyGenerator) KeyGen(opts bccsp.KeyGenOpts) (k bccsp.Key, err error) {
 	lowLevelKey, err := GetRandomBytes(int(gm.length))
 	if err != nil {
-		return nil, fmt.Errorf("Failed generating GMSM4 %d key [%s]", gm.length, err)
+		return nil, fmt.Errorf("Failed generating SM4 %d key [%s]", gm.length, err)
 	}
 
 	return &gmsm4PrivateKey{lowLevelKey, false}, nil

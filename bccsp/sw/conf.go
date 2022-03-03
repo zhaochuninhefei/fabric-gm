@@ -30,7 +30,7 @@ func (conf *config) setSecurityLevel(securityLevel int, hashFamily string) (err 
 		err = conf.setSecurityLevelSHA2(securityLevel)
 	case "SHA3":
 		err = conf.setSecurityLevelSHA3(securityLevel)
-	case "GMSM3":
+	case "SM3":
 		err = conf.setSecurityLevelGMSM3(securityLevel)
 	default:
 		err = fmt.Errorf("Hash Family not supported [%s]", hashFamily)

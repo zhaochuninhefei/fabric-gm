@@ -132,7 +132,7 @@ func (ki *x509PublicKeyImportOptsKeyImporter) KeyImport(raw interface{}, opts bc
 		fmt.Printf("")
 		sm2PublicKey, ok := pk.(sm2.PublicKey)
 		if !ok {
-			return nil, errors.New("Parse interface [] to smm2 pk error")
+			return nil, errors.New("Parse interface [] to sm2 pk error")
 		}
 		der, err := x509.MarshalSm2PublicKey(&sm2PublicKey)
 		if err != nil {
@@ -184,7 +184,7 @@ func (*gmsm2PrivateKeyOptsKeyImporter) KeyImport(raw interface{}, opts bccsp.Key
 	gmsm2SK, err := x509.ParsePKCS8UnecryptedPrivateKey(der)
 
 	if err != nil {
-		return nil, fmt.Errorf("Failed converting to GMSM2 private key [%s]", err)
+		return nil, fmt.Errorf("Failed converting to SM2 private key [%s]", err)
 	}
 
 	return &gmsm2PrivateKey{gmsm2SK}, nil
@@ -205,7 +205,7 @@ func (*gmsm2PublicKeyOptsKeyImporter) KeyImport(raw interface{}, opts bccsp.KeyI
 	gmsm2SK, err := x509.ParseSm2PublicKey(der)
 
 	if err != nil {
-		return nil, fmt.Errorf("Failed converting to GMSM2 private key [%s]", err)
+		return nil, fmt.Errorf("Failed converting to SM2 private key [%s]", err)
 	}
 
 	return &gmsm2PublicKey{gmsm2SK}, nil

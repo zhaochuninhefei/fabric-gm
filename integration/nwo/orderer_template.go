@@ -45,7 +45,7 @@ General:
   BCCSP:
     Default: GM
     GM:
-      Hash: GMSM3
+      Hash: SM3
       Security: 256
       FileKeyStore:
         KeyStore:

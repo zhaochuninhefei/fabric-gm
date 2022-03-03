@@ -22,7 +22,7 @@ func GetDefaultOpts() *FactoryOpts {
 	return &FactoryOpts{
 		ProviderName: "GM",
 		SwOpts: &SwOpts{
-			HashFamily: "GMSM3",
+			HashFamily: "SM3",
 			SecLevel:   256,
 			Ephemeral:  true,
 		},

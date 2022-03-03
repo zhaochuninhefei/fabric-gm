@@ -30,7 +30,7 @@ func ComputeSHA256(data []byte) (hash []byte) {
 func ComputeGMSM3(data []byte) (hash []byte) {
 	hash, err := factory.GetDefault().Hash(data, &bccsp.GMSM3Opts{})
 	if err != nil {
-		panic(fmt.Errorf("Failed computing GMSM3 on [% x]", data))
+		panic(fmt.Errorf("Failed computing SM3 on [% x]", data))
 	}
 	return
 }

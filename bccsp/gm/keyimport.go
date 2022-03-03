@@ -58,19 +58,19 @@ func (*gmsm2PrivateKeyImportOptsKeyImporter) KeyImport(raw interface{}, opts bcc
 
 	// lowLevelKey, err := utils.DERToPrivateKey(der)
 	// if err != nil {
-	// 	return nil, fmt.Errorf("Failed converting PKIX to GMSM2 public key [%s]", err)
+	// 	return nil, fmt.Errorf("Failed converting PKIX to SM2 public key [%s]", err)
 	// }
 
 	// gmsm2SK, ok := lowLevelKey.(*sm2.PrivateKey)
 	// if !ok {
-	// 	return nil, errors.New("Failed casting to GMSM2 private key. Invalid raw material.")
+	// 	return nil, errors.New("Failed casting to SM2 private key. Invalid raw material.")
 	// }
 
 	//gmsm2SK, err :=  sm2.ParseSM2PrivateKey(der)
 	gmsm2SK, err := x509.ParsePKCS8UnecryptedPrivateKey(der)
 
 	if err != nil {
-		return nil, fmt.Errorf("Failed converting to GMSM2 private key [%s]", err)
+		return nil, fmt.Errorf("Failed converting to SM2 private key [%s]", err)
 	}
 
 	return &gmsm2PrivateKey{gmsm2SK}, nil
@@ -90,17 +90,17 @@ func (*gmsm2PublicKeyImportOptsKeyImporter) KeyImport(raw interface{}, opts bccs
 
 	// lowLevelKey, err := utils.DERToPrivateKey(der)
 	// if err != nil {
-	// 	return nil, fmt.Errorf("Failed converting PKIX to GMSM2 public key [%s]", err)
+	// 	return nil, fmt.Errorf("Failed converting PKIX to SM2 public key [%s]", err)
 	// }
 
 	// gmsm2SK, ok := lowLevelKey.(*sm2.PrivateKey)
 	// if !ok {
-	// 	return nil, errors.New("Failed casting to GMSM2 private key. Invalid raw material.")
+	// 	return nil, errors.New("Failed casting to SM2 private key. Invalid raw material.")
 	// }
 
 	gmsm2SK, err := x509.ParseSm2PublicKey(der)
 	if err != nil {
-		return nil, fmt.Errorf("Failed converting to GMSM2 public key [%s]", err)
+		return nil, fmt.Errorf("Failed converting to SM2 public key [%s]", err)
 	}
 
 	return &gmsm2PublicKey{gmsm2SK}, nil
@@ -204,7 +204,7 @@ func (ki *x509PublicKeyImportOptsKeyImporter) KeyImport(raw interface{}, opts bc
 			pk,
 			&bccsp.ECDSAGoPublicKeyImportOpts{Temporary: opts.Ephemeral()})
 	default:
-		return nil, errors.New("Certificate's public key type not recognized. Supported keys: [GMSM2]")
+		return nil, errors.New("Certificate's public key type not recognized. Supported keys: [SM2]")
 	}
 
 	// return ki.bccsp.keyImporters[reflect.TypeOf(&bccsp.GMSM2PublicKeyImportOpts{})].KeyImport(
