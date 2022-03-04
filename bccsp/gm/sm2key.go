@@ -18,7 +18,6 @@ package gm
 import (
 	"crypto/elliptic"
 	"crypto/sha256"
-	"errors"
 	"fmt"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
@@ -33,7 +32,7 @@ type gmsm2PrivateKey struct {
 // Bytes converts this key to its byte representation,
 // if this operation is allowed.
 func (k *gmsm2PrivateKey) Bytes() (raw []byte, err error) {
-	return nil, errors.New("Not supported.")
+	return x509.MarshalSm2UnecryptedPrivateKey(k.privKey)
 }
 
 // SKI returns the subject key identifier of this key.
