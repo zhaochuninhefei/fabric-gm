@@ -102,7 +102,8 @@ func VerifyEpochPK(pk *sm2.PublicKey, epochPK *ECP2, epochPkSig []byte, epoch in
 		return errors.Wrap(err, "failed unmashalling signature")
 	}
 
-	if !sm2.Verify(pk, digest[:], sig.R, sig.S) {
+	// TODO Verify -> Sm2Verify
+	if !sm2.Sm2Verify(pk, digest[:], nil, sig.R, sig.S) {
 		return errors.Errorf("EpochPKSig invalid")
 	}
 

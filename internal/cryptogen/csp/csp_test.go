@@ -158,7 +158,8 @@ func TestECDSASigner(t *testing.T) {
 	}
 
 	// ensure signature is valid by using standard verify function
-	ok := sm2.Verify(&priv.PublicKey, digest, ecdsaSig.R, ecdsaSig.S)
+	// TODO Verify -> Sm2Verify
+	ok := sm2.Sm2Verify(&priv.PublicKey, digest, nil, ecdsaSig.R, ecdsaSig.S)
 	assert.True(t, ok, "Expected valid signature")
 }
 

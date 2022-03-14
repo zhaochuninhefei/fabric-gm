@@ -36,7 +36,8 @@ func TestSigner(t *testing.T) {
 
 	r, s, err := utils.UnmarshalECDSASignature(sig)
 	assert.NoError(t, err)
-	sm2.Verify(&signer.key.PublicKey, util.ComputeSHA256(msg), r, s)
+	// TODO Verify -> Sm2Verify
+	sm2.Sm2Verify(&signer.key.PublicKey, util.ComputeSHA256(msg), nil, r, s)
 }
 
 func TestSignerDifferentFormats(t *testing.T) {
