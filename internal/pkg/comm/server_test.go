@@ -625,8 +625,8 @@ func TestNewSecureGRPCServer(t *testing.T) {
 	// Test TLS versions which should be valid
 	tlsVersions := map[string]uint16{
 		"TLS12": tls.VersionTLS12,
-		// TODO gmtls添加VersionTLS13
-		"TLS13": tls.VersionTLS13,
+		// TODO gmtls添加VersionGMSSL
+		"TLSGM": tls.VersionGMSSL,
 	}
 	for name, tlsVersion := range tlsVersions {
 		tlsVersion := tlsVersion
@@ -1164,8 +1164,8 @@ func TestCipherSuites(t *testing.T) {
 		{
 			name:    "server default / client all",
 			success: true,
-			// TODO gmtls添加VersionTLS13
-			versions: []uint16{tls.VersionTLS12, tls.VersionTLS13},
+			// TODO gmtls添加VersionGMSSL
+			versions: []uint16{tls.VersionTLS12, tls.VersionGMSSL},
 		},
 		{
 			name:          "server default / client match",

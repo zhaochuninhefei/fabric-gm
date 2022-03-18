@@ -18,6 +18,7 @@ package msp
 
 import (
 	"bytes"
+	"crypto/ecdsa"
 	"crypto/x509/pkix"
 	"encoding/asn1"
 	"encoding/pem"
@@ -27,7 +28,6 @@ import (
 
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/gm"
 	_ "gitee.com/zhaochuninhefei/fabric-gm/bccsp/utils"
-	"gitee.com/zhaochuninhefei/gmgo/sm2"
 	"gitee.com/zhaochuninhefei/gmgo/x509"
 
 	//	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/utils"
@@ -96,7 +96,7 @@ func sanitizeECDSASignedCert(cert *x509.Certificate, parentCert *x509.Certificat
 	}
 
 	// TODO ecdsa改为sm2
-	expectedSig, err := gm.SignatureToLowS(parentCert.PublicKey.(*sm2.PublicKey), cert.Signature)
+	expectedSig, err := gm.SignatureToLowS(parentCert.PublicKey.(*ecdsa.PublicKey), cert.Signature)
 	if err != nil {
 		return nil, err
 	}
