@@ -52,9 +52,6 @@ gitee.com/zhaochuninhefei/fabric-chaincode-go-gm v0.0.3 h1:ZLW8Tz5snGY/tne1fqsKg
 gitee.com/zhaochuninhefei/fabric-chaincode-go-gm v0.0.3/go.mod h1:XIK6h+Wns5Qq9axlLKeuT1uuk5aUT4QeASCw3jK9Uvo=
 gitee.com/zhaochuninhefei/fabric-config-gm v0.0.2 h1:9X53Y5W8TswejgVG+JavB6Joys/uMuihY6gBup37Ct8=
 gitee.com/zhaochuninhefei/fabric-config-gm v0.0.2/go.mod h1:BxyMqBjoou0YXK4acsQdPamW2krhTvnDDixJ9ubSwNI=
-gitee.com/zhaochuninhefei/gmgo v0.0.4/go.mod h1:kQv8Tn9hZ4d1WV0zpHmMDaCq+syJmrAvHQbgezTqEwI=
-gitee.com/zhaochuninhefei/gmgo v0.0.5 h1:jt3iUxFeCnt1T1k1hFFRKk1dvSWxxReVXslFZlOlc4k=
-gitee.com/zhaochuninhefei/gmgo v0.0.5/go.mod h1:kQv8Tn9hZ4d1WV0zpHmMDaCq+syJmrAvHQbgezTqEwI=
 gitee.com/zhaochuninhefei/saramagm v0.0.2 h1:4AuCBIv/7qql9NgifmA7UVokXFWrDfIHsdat59CL9c4=
 gitee.com/zhaochuninhefei/saramagm v0.0.2/go.mod h1:TXK+/AZklVYMKmLDlt7dcYpns6YMhK0oIVWjixNKGeE=
 github.com/Azure/azure-sdk-for-go v16.2.1+incompatible/go.mod h1:9XXNKU+eRnpl9moKnB4QOLf1HestfXbmab5FXxiDBjc=
@@ -1171,8 +1168,9 @@ golang.org/x/sys v0.0.0-20211124211545-fe61309f8881/go.mod h1:oPkhp1MJrh7nUepCBc
 golang.org/x/sys v0.0.0-20211210111614-af8b64212486/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/sys v0.0.0-20211216021012-1d35b9e2eb4e/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/sys v0.0.0-20220204135822-1c1b9b1eba6a/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
-golang.org/x/sys v0.0.0-20220209214540-3681064d5158 h1:rm+CHSpPEEW2IsXUib1ThaHIjuBVZjxNgSKmBLFfD4c=
 golang.org/x/sys v0.0.0-20220209214540-3681064d5158/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
+golang.org/x/sys v0.0.0-20220310020820-b874c991c1a5 h1:y/woIyUBFbpQGKS0u1aHF/40WUDnek3fPOyD08H5Vng=
+golang.org/x/sys v0.0.0-20220310020820-b874c991c1a5/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/term v0.0.0-20201126162022-7de9c90e9dd1/go.mod h1:bj7SfCRtBDWHUb9snDiAeCFNEtKQo2Wmx5Cou7ajbmo=
 golang.org/x/term v0.0.0-20210615171337-6886f2dfbf5b/go.mod h1:jbD1KX2456YbFQfuXm/mYQcufACuNUgVhRMnK/tPxf8=
 golang.org/x/term v0.0.0-20210927222741-03fcf44c2211 h1:JGgROgKl9N8DuW20oFS5gxc+lE67/N3FcwmBPMe7ArY=

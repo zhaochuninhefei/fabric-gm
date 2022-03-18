@@ -25,9 +25,11 @@ import (
 )
 
 // GetRandomBytes returns len random looking bytes
+// 生成长度为len的随机字节流。
+// 用于生成sm4密钥的话，长度应该指定16字节
 func GetRandomBytes(len int) ([]byte, error) {
 	if len < 0 {
-		return nil, errors.New("Len must be larger than 0")
+		return nil, errors.New("len must be larger than 0")
 	}
 
 	buffer := make([]byte, len)
@@ -37,13 +39,15 @@ func GetRandomBytes(len int) ([]byte, error) {
 		return nil, err
 	}
 	if n != len {
-		return nil, fmt.Errorf("Buffer not filled. Requested [%d], got [%d]", len, n)
+		return nil, fmt.Errorf("buffer not filled. Requested [%d], got [%d]", len, n)
 	}
 
 	return buffer, nil
 }
 
 // AESCBCPKCS7Encrypt combines CBC encryption and PKCS7 padding
+
+// 直接调用sm4分组加密 分组在哪做?
 func SM4Encrypt(key, src []byte) ([]byte, error) {
 	// // First pad
 	// tmp := pkcs7Padding(src)
@@ -56,6 +60,8 @@ func SM4Encrypt(key, src []byte) ([]byte, error) {
 }
 
 // AESCBCPKCS7Decrypt combines CBC decryption and PKCS7 unpadding
+
+// 直接调用sm4分组解密 分组在哪做?
 func SM4Decrypt(key, src []byte) ([]byte, error) {
 	// First decrypt
 	// pt, err := aesCBCDecrypt(key, src)
@@ -70,7 +76,7 @@ func SM4Decrypt(key, src []byte) ([]byte, error) {
 
 type gmsm4Encryptor struct{}
 
-//实现 Encryptor 接口
+// 实现 Encryptor 接口 分组在哪做?
 func (*gmsm4Encryptor) Encrypt(k bccsp.Key, plaintext []byte, opts bccsp.EncrypterOpts) (ciphertext []byte, err error) {
 
 	return SM4Encrypt(k.(*gmsm4PrivateKey).privKey, plaintext)
@@ -84,7 +90,7 @@ func (*gmsm4Encryptor) Encrypt(k bccsp.Key, plaintext []byte, opts bccsp.Encrypt
 
 type gmsm4Decryptor struct{}
 
-//实现 Decryptor 接口
+// 实现 Decryptor 接口 分组在哪做?
 func (*gmsm4Decryptor) Decrypt(k bccsp.Key, ciphertext []byte, opts bccsp.DecrypterOpts) (plaintext []byte, err error) {
 
 	return SM4Decrypt(k.(*gmsm4PrivateKey).privKey, ciphertext)

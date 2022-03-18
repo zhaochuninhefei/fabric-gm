@@ -28,6 +28,11 @@ import (
 	"golang.org/x/crypto/sha3"
 )
 
+/*
+ * 这里是对 bccsp.BCCSP 接口的国密实现。
+ * SM4的接口实现可能有问题，没有看到分组操作，而是直接调用了分组加解密。
+ */
+
 var (
 	logger = flogging.MustGetLogger("bccsp_gm")
 )
@@ -66,28 +71,36 @@ func New(securityLevel int, hashFamily string, keyStore bccsp.KeyStore) (bccsp.B
 
 	// Set the encryptors
 	encryptors := make(map[reflect.Type]Encryptor)
-	encryptors[reflect.TypeOf(&gmsm4PrivateKey{})] = &gmsm4Encryptor{} //sm4 加密选项
+	// sm4 加密选项，要注意，这里实现的sm4加密只是分组加密，没有对明文做分组操作。
+	encryptors[reflect.TypeOf(&gmsm4PrivateKey{})] = &gmsm4Encryptor{}
 
 	// Set the decryptors
 	decryptors := make(map[reflect.Type]Decryptor)
-	decryptors[reflect.TypeOf(&gmsm4PrivateKey{})] = &gmsm4Decryptor{} //sm4 解密选项
+	// sm4 解密选项，要注意，这里实现的sm4解密只是分组解密，没有对密文做分组操作。
+	decryptors[reflect.TypeOf(&gmsm4PrivateKey{})] = &gmsm4Decryptor{}
 
 	// Set the signers
 	signers := make(map[reflect.Type]Signer)
-	signers[reflect.TypeOf(&gmsm2PrivateKey{})] = &gmsm2Signer{} //sm2 国密签名
+	//sm2 国密签名
+	signers[reflect.TypeOf(&gmsm2PrivateKey{})] = &gmsm2Signer{}
+	// ecdsa签名，注意内部逻辑改为了sm2签名，但要注意椭圆曲线的选择是不是 sm2P256
 	signers[reflect.TypeOf(&ecdsaPrivateKey{})] = &ecdsaPrivateKeySigner{}
 
 	// Set the verifiers
 	verifiers := make(map[reflect.Type]Verifier)
-	verifiers[reflect.TypeOf(&gmsm2PrivateKey{})] = &gmsm2PrivateKeyVerifier{}  //sm2 私钥验签
-	verifiers[reflect.TypeOf(&gmsm2PublicKey{})] = &gmsm2PublicKeyKeyVerifier{} //sm2 公钥验签
+	//sm2 私钥验签，注意，实际上还是公钥验签
+	verifiers[reflect.TypeOf(&gmsm2PrivateKey{})] = &gmsm2PrivateKeyVerifier{}
+	//sm2 公钥验签
+	verifiers[reflect.TypeOf(&gmsm2PublicKey{})] = &gmsm2PublicKeyKeyVerifier{}
+	// ecdsa验签，注意内部逻辑改为了sm2验签，但要注意椭圆曲线的选择是不是 sm2P256
 	verifiers[reflect.TypeOf(&ecdsaPrivateKey{})] = &ecdsaPrivateKeyVerifier{}
 	verifiers[reflect.TypeOf(&ecdsaPublicKey{})] = &ecdsaPublicKeyKeyVerifier{}
 
 	// Set the hashers
 	hashers := make(map[reflect.Type]Hasher)
 	hashers[reflect.TypeOf(&bccsp.SHAOpts{})] = &hasher{hash: conf.hashFunction}
-	hashers[reflect.TypeOf(&bccsp.GMSM3Opts{})] = &hasher{hash: sm3.New} //sm3 Hash选项
+	//sm3 Hash选项
+	hashers[reflect.TypeOf(&bccsp.GMSM3Opts{})] = &hasher{hash: sm3.New}
 	hashers[reflect.TypeOf(&bccsp.SHA256Opts{})] = &hasher{hash: sha256.New}
 	hashers[reflect.TypeOf(&bccsp.SHA384Opts{})] = &hasher{hash: sha512.New384}
 	hashers[reflect.TypeOf(&bccsp.SHA3_256Opts{})] = &hasher{hash: sha3.New256}
@@ -104,16 +117,21 @@ func New(securityLevel int, hashFamily string, keyStore bccsp.KeyStore) (bccsp.B
 
 	// Set the key generators
 	keyGenerators := make(map[reflect.Type]KeyGenerator)
+	// sm2密钥对生成器
 	keyGenerators[reflect.TypeOf(&bccsp.GMSM2KeyGenOpts{})] = &gmsm2KeyGenerator{}
+	// sm4密钥生成器
 	keyGenerators[reflect.TypeOf(&bccsp.GMSM4KeyGenOpts{})] = &gmsm4KeyGenerator{length: 32}
+	// 注意只有国密sm2与sm4的密钥生成器
 	impl.keyGenerators = keyGenerators
 
 	// Set the key derivers
 	keyDerivers := make(map[reflect.Type]KeyDeriver)
+	// 空的keyDerivers TODO 那么为啥不直接干掉 `bccsp/gm/keyderiv.go`呢？
 	impl.keyDerivers = keyDerivers
 
 	// Set the key importers
 	keyImporters := make(map[reflect.Type]KeyImporter)
+	// 导入在 `bccsp/gm/keyimport.go`中定义的系列keyimporter
 	keyImporters[reflect.TypeOf(&bccsp.GMSM4ImportKeyOpts{})] = &gmsm4ImportKeyOptsKeyImporter{}
 	keyImporters[reflect.TypeOf(&bccsp.GMSM2PrivateKeyImportOpts{})] = &gmsm2PrivateKeyImportOptsKeyImporter{}
 	keyImporters[reflect.TypeOf(&bccsp.GMSM2PublicKeyImportOpts{})] = &gmsm2PublicKeyImportOptsKeyImporter{}
@@ -126,7 +144,7 @@ func New(securityLevel int, hashFamily string, keyStore bccsp.KeyStore) (bccsp.B
 	return impl, nil
 }
 
-//定义国密算法结构体
+// 定义国密算法结构体 impl
 type impl struct {
 	conf          *config                    //bccsp实例的配置
 	ks            bccsp.KeyStore             //key存储系统对象，存储和获取Key对象
@@ -140,13 +158,15 @@ type impl struct {
 	keyImporters  map[reflect.Type]KeyImporter
 }
 
-//根据key生成选项opts生成一个key
+// 为 impl 实现 bccsp.BCCSP 接口
+
+// 实现KeyGen方法，生成密钥
 func (csp *impl) KeyGen(opts bccsp.KeyGenOpts) (k bccsp.Key, err error) {
 	// Validate arguments
 	if opts == nil {
 		return nil, errors.New("Invalid Opts parameter. It must not be nil.")
 	}
-
+	// 根据具体的 bccsp.KeyGenOpts 获取对应的 keyGenerator
 	keyGenerator, found := csp.keyGenerators[reflect.TypeOf(opts)]
 	if !found {
 		return nil, errors.Errorf("Unsupported 'KeyGenOpts' provided [%v]", opts)
@@ -169,7 +189,7 @@ func (csp *impl) KeyGen(opts bccsp.KeyGenOpts) (k bccsp.Key, err error) {
 	return k, nil
 }
 
-//根据key获取选项opts从k中重新获取一个key
+// 实现KeyDeriv方法，生成密钥
 func (csp *impl) KeyDeriv(k bccsp.Key, opts bccsp.KeyDerivOpts) (dk bccsp.Key, err error) {
 	// Validate arguments
 	if k == nil {
@@ -201,7 +221,7 @@ func (csp *impl) KeyDeriv(k bccsp.Key, opts bccsp.KeyDerivOpts) (dk bccsp.Key, e
 	return k, nil
 }
 
-//根据key导入选项opts从一个key原始的数据中导入一个key
+// 实现KeyImport方法，导入密钥
 func (csp *impl) KeyImport(raw interface{}, opts bccsp.KeyImportOpts) (k bccsp.Key, err error) {
 	// Validate arguments
 	if raw == nil {
@@ -233,7 +253,7 @@ func (csp *impl) KeyImport(raw interface{}, opts bccsp.KeyImportOpts) (k bccsp.K
 	return
 }
 
-//根据SKI返回与该接口实例有联系的key
+// 实现GetKey方法，根据SKI读取存储起来的密钥
 func (csp *impl) GetKey(ski []byte) (k bccsp.Key, err error) {
 	k, err = csp.ks.GetKey(ski)
 	if err != nil {
@@ -243,7 +263,7 @@ func (csp *impl) GetKey(ski []byte) (k bccsp.Key, err error) {
 	return
 }
 
-//根据哈希选项opts哈希一个消息msg，如果opts为空，则使用默认选项
+// 实现Hash方法，对消息进行散列
 func (csp *impl) Hash(msg []byte, opts bccsp.HashOpts) (digest []byte, err error) {
 	// Validate arguments
 	if opts == nil {
@@ -268,7 +288,7 @@ func (csp *impl) Hash(msg []byte, opts bccsp.HashOpts) (digest []byte, err error
 	return
 }
 
-//根据哈希选项opts获取hash.Hash实例，如果opts为空，则使用默认选项
+// 实现GetHash方法，获取hash.Hash实例
 func (csp *impl) GetHash(opts bccsp.HashOpts) (h hash.Hash, err error) {
 	// Validate arguments
 	if opts == nil {
@@ -288,8 +308,9 @@ func (csp *impl) GetHash(opts bccsp.HashOpts) (h hash.Hash, err error) {
 	return
 }
 
-//根据签名者选项opts，使用k对digest进行签名，注意如果需要对一个特别大的消息的hash值
-//进行签名，调用者则负责对该特别大的消息进行hash后将其作为digest传入
+// 根据签名者选项opts，使用k对digest进行签名，注意如果需要对一个特别大的消息的hash值
+// 进行签名，调用者则负责对该特别大的消息进行hash后将其作为digest传入
+// 实现Sign方法，进行签名
 func (csp *impl) Sign(k bccsp.Key, digest []byte, opts bccsp.SignerOpts) (signature []byte, err error) {
 	// Validate arguments
 	if k == nil {
@@ -312,7 +333,8 @@ func (csp *impl) Sign(k bccsp.Key, digest []byte, opts bccsp.SignerOpts) (signat
 	return
 }
 
-//根据鉴定者选项opts，通过对比k和digest，鉴定签名
+// 根据鉴定者选项opts，通过对比k和digest，鉴定签名
+// 实现Verify方法，进行验签
 func (csp *impl) Verify(k bccsp.Key, signature, digest []byte, opts bccsp.SignerOpts) (valid bool, err error) {
 	// Validate arguments
 	if k == nil {
@@ -338,7 +360,9 @@ func (csp *impl) Verify(k bccsp.Key, signature, digest []byte, opts bccsp.Signer
 	return
 }
 
-//根据加密者选项opts，使用k加密plaintext
+// 根据加密者选项opts，使用k加密plaintext
+// 实现Encrypt方法，对plaintext进行加密
+// 注意，对应的sm4的encryptor实现的方法里只做了分组加密，即，没有对明文分组。
 func (csp *impl) Encrypt(k bccsp.Key, plaintext []byte, opts bccsp.EncrypterOpts) (ciphertext []byte, err error) {
 	// Validate arguments
 	if k == nil {
@@ -353,7 +377,9 @@ func (csp *impl) Encrypt(k bccsp.Key, plaintext []byte, opts bccsp.EncrypterOpts
 	return encryptor.Encrypt(k, plaintext, opts)
 }
 
-//根据解密者选项opts，使用k对ciphertext进行解密
+// 根据解密者选项opts，使用k对ciphertext进行解密
+// 实现Decrypt方法，对ciphertext进行解密
+// 注意，对应的sm4的decryptor实现的方法里只做了分组解密，即，没有对密文分组。
 func (csp *impl) Decrypt(k bccsp.Key, ciphertext []byte, opts bccsp.DecrypterOpts) (plaintext []byte, err error) {
 	// Validate arguments
 	if k == nil {

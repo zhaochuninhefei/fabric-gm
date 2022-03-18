@@ -33,6 +33,10 @@ import (
 	"gitee.com/zhaochuninhefei/gmgo/x509"
 )
 
+/*
+ * fileks.go用于key的文件存储读写功能
+ */
+
 // NewFileBasedKeyStore instantiated a file-based key store at a given position.
 // The key store can be encrypted if a non-empty password is specifiec.
 // It can be also be set as read only. In this case, any store operation
@@ -76,17 +80,18 @@ func (ks *fileBasedKeyStore) Init(pwd []byte, path string, readOnly bool) error 
 	// pwd can be nil
 
 	if len(path) == 0 {
-		return errors.New("An invalid KeyStore path provided. Path cannot be an empty string.")
+		return errors.New("an invalid KeyStore path provided. Path cannot be an empty string")
 	}
 
 	ks.m.Lock()
 	defer ks.m.Unlock()
 
 	if ks.isOpen {
-		return errors.New("KeyStore already initilized.")
+		return errors.New("keyStore already initilized")
 	}
 	ks.path = path
 	ks.pwd = utils.Clone(pwd)
+	// 创建keystore目录
 	err := ks.createKeyStoreIfNotExists()
 	if err != nil {
 		return err
@@ -109,49 +114,51 @@ func (ks *fileBasedKeyStore) ReadOnly() bool {
 }
 
 // GetKey returns a key object whose SKI is the one passed.
+// 根据ski读取密钥或公私钥，ski作为别名alias使用
 func (ks *fileBasedKeyStore) GetKey(ski []byte) (k bccsp.Key, err error) {
 	// Validate arguments
 	if len(ski) == 0 {
-		return nil, errors.New("Invalid SKI. Cannot be of zero length.")
+		return nil, errors.New("invalid SKI. Cannot be of zero length")
 	}
-
-	suffix := ks.getSuffix(hex.EncodeToString(ski))
+	alias := hex.EncodeToString(ski)
+	// 根据ski的16进制字符串获取后缀
+	suffix := ks.getSuffix(alias)
 	/*logger.Infof("ka.path---+++---+++%s",ks.path)
 	logger.Infof("suffix---+++---+++%s",suffix)*/
 	switch suffix {
 	case "key":
-		// Load the key
-		key, err := ks.loadKey(hex.EncodeToString(ski))
+		// 读取sm4密钥
+		key, err := ks.loadKey(alias)
 		if err != nil {
-			return nil, fmt.Errorf("Failed loading key [%x] [%s]", ski, err)
+			return nil, fmt.Errorf("failed loading key [%x] [%s]", ski, err)
 		}
 
 		return &gmsm4PrivateKey{key, false}, nil
 	case "sk":
-		// Load the private key
-		key, err := ks.loadPrivateKey(hex.EncodeToString(ski))
+		// 读取sm2私钥
+		key, err := ks.loadPrivateKey(alias)
 		if err != nil {
-			return nil, fmt.Errorf("Failed loading secret key [%x] [%s]", ski, err)
+			return nil, fmt.Errorf("failed loading secret key [%x] [%s]", ski, err)
 		}
 
-		switch key.(type) {
+		switch key := key.(type) {
 		case *sm2.PrivateKey:
-			return &gmsm2PrivateKey{key.(*sm2.PrivateKey)}, nil
+			return &gmsm2PrivateKey{key}, nil
 		default:
-			return nil, errors.New("Secret key type not recognized")
+			return nil, errors.New("secret key type not recognized")
 		}
 	case "pk":
-		// Load the public key
+		// 读取sm2公钥
 		key, err := ks.loadPublicKey(hex.EncodeToString(ski))
 		if err != nil {
-			return nil, fmt.Errorf("Failed loading public key [%x] [%s]", ski, err)
+			return nil, fmt.Errorf("failed loading public key [%x] [%s]", ski, err)
 		}
 
-		switch key.(type) {
+		switch key := key.(type) {
 		case *sm2.PublicKey:
-			return &gmsm2PublicKey{key.(*sm2.PublicKey)}, nil
+			return &gmsm2PublicKey{key}, nil
 		default:
-			return nil, errors.New("Public key type not recognized")
+			return nil, errors.New("public key type not recognized")
 		}
 	default:
 		return ks.searchKeystoreForSKI(ski)
@@ -160,46 +167,44 @@ func (ks *fileBasedKeyStore) GetKey(ski []byte) (k bccsp.Key, err error) {
 
 // StoreKey stores the key k in this KeyStore.
 // If this KeyStore is read only then the method will fail.
+// 将密钥/公私钥存入keystore
 func (ks *fileBasedKeyStore) StoreKey(k bccsp.Key) (err error) {
 	if ks.readOnly {
-		return errors.New("Read only KeyStore")
+		return errors.New("read only KeyStore")
 	}
 
 	if k == nil {
-		return errors.New("Invalid key. It must be different from nil")
+		return errors.New("invalid key. It must be different from nil")
 	}
-	switch k.(type) {
+	switch k := k.(type) {
 	case *gmsm2PrivateKey:
-		kk := k.(*gmsm2PrivateKey)
-
-		err = ks.storePrivateKey(hex.EncodeToString(k.SKI()), kk.privKey)
+		// kk := k.(*gmsm2PrivateKey)
+		err = ks.storePrivateKey(hex.EncodeToString(k.SKI()), k.privKey)
 		if err != nil {
-			return fmt.Errorf("Failed storing SM2 private key [%s]", err)
+			return fmt.Errorf("failed storing SM2 private key [%s]", err)
 		}
-
 	case *gmsm2PublicKey:
-		kk := k.(*gmsm2PublicKey)
-
-		err = ks.storePublicKey(hex.EncodeToString(k.SKI()), kk.pubKey)
+		// kk := k.(*gmsm2PublicKey)
+		err = ks.storePublicKey(hex.EncodeToString(k.SKI()), k.pubKey)
 		if err != nil {
-			return fmt.Errorf("Failed storing SM2 public key [%s]", err)
+			return fmt.Errorf("failed storing SM2 public key [%s]", err)
 		}
 	case *gmsm4PrivateKey:
-		kk := k.(*gmsm4PrivateKey)
-
+		// kk := k.(*gmsm4PrivateKey)
 		// keypath := ks.getPathForAlias(hex.EncodeToString(k.SKI()), "key")
-
-		err = ks.storeKey(hex.EncodeToString(k.SKI()), kk.privKey)
+		err = ks.storeKey(hex.EncodeToString(k.SKI()), k.privKey)
 		if err != nil {
-			return fmt.Errorf("Failed storing SM4 key [%s]", err)
+			return fmt.Errorf("failed storing SM4 key [%s]", err)
 		}
 	default:
-		return fmt.Errorf("Key type not reconigned [%s]", k)
+		return fmt.Errorf("key type not reconigned [%s]", k)
 	}
 
 	return
 }
 
+// 根据ski查找key，仅在alias找不到对应后缀目录时使用。
+// 默认直接存储在path目录下，遍历path下的直接子文件，按照sm2私钥读取，并比较ski是否匹配。
 func (ks *fileBasedKeyStore) searchKeystoreForSKI(ski []byte) (k bccsp.Key, err error) {
 
 	files, _ := ioutil.ReadDir(ks.path)
@@ -211,8 +216,9 @@ func (ks *fileBasedKeyStore) searchKeystoreForSKI(ski []byte) (k bccsp.Key, err 
 		if err != nil {
 			continue
 		}
-
+		// 直接按sm2私钥读取？
 		key, err := x509.ReadPrivateKeyFromMem(raw, nil)
+		// key, err = utils.PEMtoPrivateKey(raw, ks.pwd)
 		if err != nil {
 			continue
 		}
@@ -225,20 +231,27 @@ func (ks *fileBasedKeyStore) searchKeystoreForSKI(ski []byte) (k bccsp.Key, err 
 
 		return k, nil
 	}
-	return nil, errors.New("Key type not recognized")
+	return nil, errors.New("key type not recognized")
 }
 
+// 根据alias获取对应的后缀
 func (ks *fileBasedKeyStore) getSuffix(alias string) string {
+	// 读取到path下的存储子目录
 	files, _ := ioutil.ReadDir(ks.path)
 	for _, f := range files {
+		// alias作为前缀过滤
 		if strings.HasPrefix(f.Name(), alias) {
+			// 获取子目录名的后缀
 			if strings.HasSuffix(f.Name(), "sk") {
+				// 私钥
 				return "sk"
 			}
 			if strings.HasSuffix(f.Name(), "pk") {
+				// 公钥
 				return "pk"
 			}
 			if strings.HasSuffix(f.Name(), "key") {
+				// sm4密钥
 				return "key"
 			}
 			break
@@ -247,13 +260,15 @@ func (ks *fileBasedKeyStore) getSuffix(alias string) string {
 	return ""
 }
 
+// 存储私钥，后缀sk
 func (ks *fileBasedKeyStore) storePrivateKey(alias string, privateKey interface{}) error {
+	// 将私钥转为pem字节流
 	rawKey, err := utils.PrivateKeyToPEM(privateKey, ks.pwd)
 	if err != nil {
 		logger.Errorf("Failed converting private key to PEM [%s]: [%s]", alias, err)
 		return err
 	}
-
+	// 写入keystore存储目录 ${path}/${alias}_sk
 	err = ioutil.WriteFile(ks.getPathForAlias(alias, "sk"), rawKey, 0700)
 	if err != nil {
 		logger.Errorf("Failed storing private key [%s]: [%s]", alias, err)
@@ -263,13 +278,15 @@ func (ks *fileBasedKeyStore) storePrivateKey(alias string, privateKey interface{
 	return nil
 }
 
+// 存储公钥，后缀pk
 func (ks *fileBasedKeyStore) storePublicKey(alias string, publicKey interface{}) error {
+	// 将公钥转为pem字节流
 	rawKey, err := utils.PublicKeyToPEM(publicKey, ks.pwd)
 	if err != nil {
 		logger.Errorf("Failed converting public key to PEM [%s]: [%s]", alias, err)
 		return err
 	}
-
+	// 写入keystore存储目录 ${path}/${alias}_pk
 	err = ioutil.WriteFile(ks.getPathForAlias(alias, "pk"), rawKey, 0700)
 	if err != nil {
 		logger.Errorf("Failed storing private key [%s]: [%s]", alias, err)
@@ -279,19 +296,20 @@ func (ks *fileBasedKeyStore) storePublicKey(alias string, publicKey interface{})
 	return nil
 }
 
+// 存储密钥，后缀key
 func (ks *fileBasedKeyStore) storeKey(alias string, key []byte) error {
 	//pem, err := utils.AEStoEncryptedPEM(key, ks.pwd)
 
 	if len(ks.pwd) == 0 {
 		ks.pwd = nil
 	}
-
+	// sm4密钥转为pem字节流
 	pem, err := sm4.WriteKeytoMem(key, ks.pwd)
 	if err != nil {
 		logger.Errorf("Failed converting key to PEM [%s]: [%s]", alias, err)
 		return err
 	}
-
+	// 写入keystore存储目录 ${path}/${alias}_key
 	err = ioutil.WriteFile(ks.getPathForAlias(alias, "key"), pem, 0700)
 	if err != nil {
 		logger.Errorf("Failed storing key [%s]: [%s]", alias, err)
@@ -301,6 +319,7 @@ func (ks *fileBasedKeyStore) storeKey(alias string, key []byte) error {
 	return nil
 }
 
+// 读取sm2私钥
 func (ks *fileBasedKeyStore) loadPrivateKey(alias string) (interface{}, error) {
 	path := ks.getPathForAlias(alias, "sk")
 	logger.Infof("loadPrivateKey : %s", path)
@@ -313,6 +332,7 @@ func (ks *fileBasedKeyStore) loadPrivateKey(alias string) (interface{}, error) {
 		return nil, err
 	}
 
+	// 将pem字节流转为sm2私钥
 	// privateKey, err := utils.PEMtoPrivateKey(raw, ks.pwd)
 	privateKey, err := x509.ReadPrivateKeyFromMem(raw, nil)
 	if err != nil {
@@ -324,6 +344,7 @@ func (ks *fileBasedKeyStore) loadPrivateKey(alias string) (interface{}, error) {
 	return privateKey, nil
 }
 
+// 读取sm2公钥
 func (ks *fileBasedKeyStore) loadPublicKey(alias string) (interface{}, error) {
 	path := ks.getPathForAlias(alias, "pk")
 	logger.Debugf("Loading public key [%s] at [%s]...", alias, path)
@@ -346,6 +367,7 @@ func (ks *fileBasedKeyStore) loadPublicKey(alias string) (interface{}, error) {
 	return privateKey, nil
 }
 
+// 读取sm4密钥
 func (ks *fileBasedKeyStore) loadKey(alias string) ([]byte, error) {
 	path := ks.getPathForAlias(alias, "key")
 	logger.Infof("loadKey : %s", path)
@@ -372,6 +394,7 @@ func (ks *fileBasedKeyStore) loadKey(alias string) ([]byte, error) {
 	return key, nil
 }
 
+// keystore目录不存在时创建
 func (ks *fileBasedKeyStore) createKeyStoreIfNotExists() error {
 	// Check keystore directory
 	ksPath := ks.path

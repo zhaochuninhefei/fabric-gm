@@ -104,7 +104,7 @@ require (
 	go.uber.org/multierr v1.7.0 // indirect
 	golang.org/x/mod v0.5.1 // indirect
 	golang.org/x/net v0.0.0-20220127200216-cd36cc0744dd // indirect
-	golang.org/x/sys v0.0.0-20220209214540-3681064d5158 // indirect
+	golang.org/x/sys v0.0.0-20220310020820-b874c991c1a5 // indirect
 	golang.org/x/text v0.3.7 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 	google.golang.org/genproto v0.0.0-20211208223120-3a66f561d7aa // indirect
@@ -118,7 +118,7 @@ require (
 replace (
 	// gitee.com/zhaochuninhefei/fabric-chaincode-go-gm => /home/zhaochun/work/sources/gcbaas/fabric-chaincode-go-gm
 	// gitee.com/zhaochuninhefei/fabric-config-gm => /home/zhaochun/work/sources/gcbaas/fabric-config-gm
-	// gitee.com/zhaochuninhefei/gmgo => /home/zhaochun/work/sources/gm-zc/gmgo
+	gitee.com/zhaochuninhefei/gmgo => /home/zhaochun/work/sources/gm-zc/gmgo
 	// gitee.com/zhaochuninhefei/saramagm => /home/zhaochun/work/sources/gcbaas/saramagm
 	github.com/go-kit/kit => github.com/go-kit/kit v0.8.0
 	github.com/hyperledger/fabric-protos-go => github.com/hyperledger/fabric-protos-go v0.0.0-20200506201313-25f6564b9ac4

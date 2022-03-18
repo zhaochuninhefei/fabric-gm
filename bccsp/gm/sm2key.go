@@ -31,6 +31,7 @@ type gmsm2PrivateKey struct {
 
 // Bytes converts this key to its byte representation,
 // if this operation is allowed.
+// 获取sm2私钥的asn1编码结果，未对私钥加密
 func (k *gmsm2PrivateKey) Bytes() (raw []byte, err error) {
 	return x509.MarshalSm2UnecryptedPrivateKey(k.privKey)
 }
@@ -74,10 +75,11 @@ type gmsm2PublicKey struct {
 
 // Bytes converts this key to its byte representation,
 // if this operation is allowed.
+// 返回sm2公钥的asn1编码结果
 func (k *gmsm2PublicKey) Bytes() (raw []byte, err error) {
 	raw, err = x509.MarshalSm2PublicKey(k.pubKey)
 	if err != nil {
-		return nil, fmt.Errorf("Failed marshalling key [%s]", err)
+		return nil, fmt.Errorf("failed marshalling key [%s]", err)
 	}
 	return
 }

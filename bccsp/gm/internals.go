@@ -21,6 +21,16 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
 )
 
+// 定义了 gm 包下的各个接口，包括:
+// KeyGenerator
+// KeyDeriver
+// KeyImporter
+// Encryptor
+// Decryptor
+// Signer
+// Verifier
+// Hasher
+
 // KeyGenerator is a BCCSP-like interface that provides key generation algorithms
 type KeyGenerator interface {
 

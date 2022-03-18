@@ -26,6 +26,8 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
 )
 
+// TODO 国密库中定义 ecdsaPrivateKey 的意义何在?
+
 type ecdsaPrivateKey struct {
 	privKey *ecdsa.PrivateKey
 }
