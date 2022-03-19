@@ -21,6 +21,10 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
 )
 
+/*
+ * bccsp/gm/keyderiv.go 实现`gm.KeyDeriver`接口(bccsp/gm/internals.go)
+ */
+
 // KeyDeriv没有使用，是否有存在的必要？
 
 // 定义国密 Key的驱动 ，实现 KeyDeriver 接口

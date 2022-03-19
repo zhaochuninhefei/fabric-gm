@@ -9,6 +9,10 @@ import (
 	"crypto"
 )
 
+/*
+ * bccsp/idemixopts.go 提供了IDEMIX相关的一些opts接口实现，如 KeyGenOpts, KeyImportOpts, SignerOpts 等
+ */
+
 // RevocationAlgorithm identifies the revocation algorithm
 type RevocationAlgorithm int32
 

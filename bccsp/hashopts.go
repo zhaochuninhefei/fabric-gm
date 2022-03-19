@@ -18,6 +18,11 @@ package bccsp
 
 import "fmt"
 
+/*
+ * bccsp/hashopts.go 提供了一些对`bccsp.HashOpts`的实现:
+ * SHA256Opts, SHA384Opts, SHA3_256Opts, SHA3_384Opts, GMSM3Opts
+ */
+
 // SHA256Opts contains options relating to SHA-256.
 type SHA256Opts struct {
 }
@@ -54,7 +59,6 @@ func (opts *SHA3_384Opts) Algorithm() string {
 	return SHA3_384
 }
 
-
 // GMSM3Opts 国密 SM3.
 type GMSM3Opts struct {
 }
@@ -67,6 +71,8 @@ func (opts *GMSM3Opts) Algorithm() string {
 // GetHashOpt returns the HashOpts corresponding to the passed hash function
 func GetHashOpt(hashFunction string) (HashOpts, error) {
 	switch hashFunction {
+	case GMSM3:
+		return &GMSM3Opts{}, nil
 	case SHA256:
 		return &SHA256Opts{}, nil
 	case SHA384:
@@ -75,8 +81,6 @@ func GetHashOpt(hashFunction string) (HashOpts, error) {
 		return &SHA3_256Opts{}, nil
 	case SHA3_384:
 		return &SHA3_384Opts{}, nil
-	case GMSM3:
-		return &GMSM3Opts{}, nil
 	}
 	return nil, fmt.Errorf("hash function not recognized [%s]", hashFunction)
 }

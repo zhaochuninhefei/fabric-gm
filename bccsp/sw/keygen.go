@@ -59,7 +59,7 @@ func (gm *gmsm4KeyGenerator) KeyGen(opts bccsp.KeyGenOpts) (bccsp.Key, error) {
 	if err != nil {
 		return nil, fmt.Errorf("Failed generating SM4 key for [%v]: [%s]", err)
 	}
-	return &gmsm4PrivateKey{lowLevelKey, false}, nil
+	return &gmsm4Key{lowLevelKey, false}, nil
 }
 
 type aesKeyGenerator struct {

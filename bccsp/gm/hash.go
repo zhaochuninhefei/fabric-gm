@@ -21,6 +21,10 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
 )
 
+/*
+ * bccsp/gm/hash.go 实现`gm.Hasher`接口(bccsp/gm/internals.go)
+ */
+
 // 定义hasher 结构体，实现内部的一个 Hasher 接口
 type hasher struct {
 	hash func() hash.Hash

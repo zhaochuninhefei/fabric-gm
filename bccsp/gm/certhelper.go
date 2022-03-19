@@ -18,13 +18,16 @@ package gm
 import (
 	"crypto/rand"
 	"crypto/x509"
-	"io"
 	"math/big"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
 	"gitee.com/zhaochuninhefei/gmgo/sm2"
 	gx509 "gitee.com/zhaochuninhefei/gmgo/x509"
 )
+
+/*
+ * bccsp/gm/certhelper.go 提供了gmx509证书相关函数
+ */
 
 // //调用SM2接口生成SM2证书
 // func CreateCertificateToMem(template, parent *x509.Certificate,key bccsp.Key) (cert []byte,err error) {
@@ -56,31 +59,41 @@ import (
 // 	return
 // }
 
-//调用SM2接口生成SM2证书
+// 根据证书模板生成证书pem字节流(sm2证书)
+// template : 证书模板
+// parent : 父证书
+// key : 签名私钥
 func CreateCertificateToMem(template, parent *gx509.Certificate, key bccsp.Key) (cert []byte, err error) {
+	// 将参数 key 强转为gmsm2PrivateKey类型
 	pk := key.(*gmsm2PrivateKey).privKey
-
+	// 获取证书模板的公钥并强转为sm2.PublicKey
 	pub, a := template.PublicKey.(*sm2.PublicKey)
 	if a {
+		// 复制一个sm2.PublicKey
 		var puk sm2.PublicKey
-
+		// 强制使用sm2的椭圆曲线
 		puk.Curve = sm2.P256Sm2()
+		// 复制公钥座标
 		puk.X = pub.X
 		puk.Y = pub.Y
+		// 根据证书模板生成证书pem字节流，公钥为证书模板提供的公钥的复制，签名私钥为传入参数key强转后的sm2私钥
 		cert, err = gx509.CreateCertificateToMem(template, parent, &puk, pk)
 
 	}
 	return
 }
 
-//调用SM2接口生成SM2证书请求
+// 根据证书申请模板生成证书申请pem字节流，由申请者自签名
+// certificateRequest : 证书申请模板(*gx509.CertificateRequest)
+// key : 申请者私钥(*gmsm2PrivateKey)
 func CreateSm2CertificateRequestToMem(certificateRequest *gx509.CertificateRequest, key bccsp.Key) (csr []byte, err error) {
 	pk := key.(*gmsm2PrivateKey).privKey
+	// 根据证书申请模板生成证书申请pem字节流，由申请者自签名
 	csr, err = gx509.CreateCertificateRequestToMem(certificateRequest, pk)
 	return
 }
 
-// X509 证书请求转换 SM2证书请求
+// X509 证书请求转换为 gmx509证书请求
 func ParseX509CertificateRequest2Sm2(x509req *x509.CertificateRequest) *gx509.CertificateRequest {
 	sm2req := &gx509.CertificateRequest{
 		Raw:                      x509req.Raw,                      // Complete ASN.1 DER content (CSR, signature algorithm and signature).
@@ -98,7 +111,7 @@ func ParseX509CertificateRequest2Sm2(x509req *x509.CertificateRequest) *gx509.Ce
 		Subject: x509req.Subject,
 
 		// Attributes is the dried husk of a bug and shouldn't be used.
-		Attributes: x509req.Attributes,
+		// Attributes: x509req.Attributes,
 
 		// Extensions contains raw X.509 extensions. When parsing CSRs, this
 		// can be used to extract extensions that are not parsed by this
@@ -122,7 +135,7 @@ func ParseX509CertificateRequest2Sm2(x509req *x509.CertificateRequest) *gx509.Ce
 	return sm2req
 }
 
-// X509证书格式转换为 SM2证书格式
+// X509证书转换为 gmx509证书
 func ParseX509Certificate2Sm2(x509Cert *x509.Certificate) *gx509.Certificate {
 	sm2cert := &gx509.Certificate{
 		Raw:                     x509Cert.Raw,
@@ -191,89 +204,94 @@ func ParseX509Certificate2Sm2(x509Cert *x509.Certificate) *gx509.Certificate {
 	return sm2cert
 }
 
-//sm2 证书转换 x509 证书
-func ParseSm2Certificate2X509(sm2Cert *gx509.Certificate) *x509.Certificate {
-	if sm2Cert == nil {
+// gmx509 证书转换为 x509 证书
+func ParseSm2Certificate2X509(gmx509Cert *gx509.Certificate) *x509.Certificate {
+	if gmx509Cert == nil {
 		return nil
 	}
 	x509cert := &x509.Certificate{
-		Raw:                     sm2Cert.Raw,
-		RawTBSCertificate:       sm2Cert.RawTBSCertificate,
-		RawSubjectPublicKeyInfo: sm2Cert.RawSubjectPublicKeyInfo,
-		RawSubject:              sm2Cert.RawSubject,
-		RawIssuer:               sm2Cert.RawIssuer,
+		Raw:                     gmx509Cert.Raw,
+		RawTBSCertificate:       gmx509Cert.RawTBSCertificate,
+		RawSubjectPublicKeyInfo: gmx509Cert.RawSubjectPublicKeyInfo,
+		RawSubject:              gmx509Cert.RawSubject,
+		RawIssuer:               gmx509Cert.RawIssuer,
 
-		Signature:          sm2Cert.Signature,
-		SignatureAlgorithm: x509.SignatureAlgorithm(sm2Cert.SignatureAlgorithm),
+		Signature:          gmx509Cert.Signature,
+		SignatureAlgorithm: x509.SignatureAlgorithm(gmx509Cert.SignatureAlgorithm),
 
-		PublicKeyAlgorithm: x509.PublicKeyAlgorithm(sm2Cert.PublicKeyAlgorithm),
-		PublicKey:          sm2Cert.PublicKey,
+		PublicKeyAlgorithm: x509.PublicKeyAlgorithm(gmx509Cert.PublicKeyAlgorithm),
+		PublicKey:          gmx509Cert.PublicKey,
 
-		Version:      sm2Cert.Version,
-		SerialNumber: sm2Cert.SerialNumber,
-		Issuer:       sm2Cert.Issuer,
-		Subject:      sm2Cert.Subject,
-		NotBefore:    sm2Cert.NotBefore,
-		NotAfter:     sm2Cert.NotAfter,
-		KeyUsage:     x509.KeyUsage(sm2Cert.KeyUsage),
+		Version:      gmx509Cert.Version,
+		SerialNumber: gmx509Cert.SerialNumber,
+		Issuer:       gmx509Cert.Issuer,
+		Subject:      gmx509Cert.Subject,
+		NotBefore:    gmx509Cert.NotBefore,
+		NotAfter:     gmx509Cert.NotAfter,
+		KeyUsage:     x509.KeyUsage(gmx509Cert.KeyUsage),
 
-		Extensions: sm2Cert.Extensions,
+		Extensions: gmx509Cert.Extensions,
 
-		ExtraExtensions: sm2Cert.ExtraExtensions,
+		ExtraExtensions: gmx509Cert.ExtraExtensions,
 
-		UnhandledCriticalExtensions: sm2Cert.UnhandledCriticalExtensions,
+		UnhandledCriticalExtensions: gmx509Cert.UnhandledCriticalExtensions,
 
 		//ExtKeyUsage:	[]x509.ExtKeyUsage(sm2Cert.ExtKeyUsage) ,
-		UnknownExtKeyUsage: sm2Cert.UnknownExtKeyUsage,
+		UnknownExtKeyUsage: gmx509Cert.UnknownExtKeyUsage,
 
-		BasicConstraintsValid: sm2Cert.BasicConstraintsValid,
-		IsCA:                  sm2Cert.IsCA,
-		MaxPathLen:            sm2Cert.MaxPathLen,
+		BasicConstraintsValid: gmx509Cert.BasicConstraintsValid,
+		IsCA:                  gmx509Cert.IsCA,
+		MaxPathLen:            gmx509Cert.MaxPathLen,
 		// MaxPathLenZero indicates that BasicConstraintsValid==true and
 		// MaxPathLen==0 should be interpreted as an actual maximum path length
 		// of zero. Otherwise, that combination is interpreted as MaxPathLen
 		// not being set.
-		MaxPathLenZero: sm2Cert.MaxPathLenZero,
+		MaxPathLenZero: gmx509Cert.MaxPathLenZero,
 
-		SubjectKeyId:   sm2Cert.SubjectKeyId,
-		AuthorityKeyId: sm2Cert.AuthorityKeyId,
+		SubjectKeyId:   gmx509Cert.SubjectKeyId,
+		AuthorityKeyId: gmx509Cert.AuthorityKeyId,
 
 		// RFC 5280, 4.2.2.1 (Authority Information Access)
-		OCSPServer:            sm2Cert.OCSPServer,
-		IssuingCertificateURL: sm2Cert.IssuingCertificateURL,
+		OCSPServer:            gmx509Cert.OCSPServer,
+		IssuingCertificateURL: gmx509Cert.IssuingCertificateURL,
 
 		// Subject Alternate Name values
-		DNSNames:       sm2Cert.DNSNames,
-		EmailAddresses: sm2Cert.EmailAddresses,
-		IPAddresses:    sm2Cert.IPAddresses,
+		DNSNames:       gmx509Cert.DNSNames,
+		EmailAddresses: gmx509Cert.EmailAddresses,
+		IPAddresses:    gmx509Cert.IPAddresses,
 
 		// Name constraints
-		PermittedDNSDomainsCritical: sm2Cert.PermittedDNSDomainsCritical,
-		PermittedDNSDomains:         sm2Cert.PermittedDNSDomains,
+		PermittedDNSDomainsCritical: gmx509Cert.PermittedDNSDomainsCritical,
+		PermittedDNSDomains:         gmx509Cert.PermittedDNSDomains,
 
 		// CRL Distribution Points
-		CRLDistributionPoints: sm2Cert.CRLDistributionPoints,
+		CRLDistributionPoints: gmx509Cert.CRLDistributionPoints,
 
-		PolicyIdentifiers: sm2Cert.PolicyIdentifiers,
+		PolicyIdentifiers: gmx509Cert.PolicyIdentifiers,
 	}
-	for _, val := range sm2Cert.ExtKeyUsage {
+	for _, val := range gmx509Cert.ExtKeyUsage {
 		x509cert.ExtKeyUsage = append(x509cert.ExtKeyUsage, x509.ExtKeyUsage(val))
 	}
 
 	return x509cert
 }
 
-//随机生成序列号
-func getRandBigInt() *big.Int {
-	serialNumber := make([]byte, 20)
-	_, err := io.ReadFull(rand.Reader, serialNumber)
+// 随机生成序列号
+func GetRandBigInt() *big.Int {
+	sn, err := rand.Int(rand.Reader, new(big.Int).Lsh(big.NewInt(1), 128))
 	if err != nil {
-		//return nil, cferr.Wrap(cferr.CertificateError, cferr.Unknown, err)
+		panic(err)
 	}
-	// SetBytes interprets buf as the bytes of a big-endian
-	// unsigned integer. The leading byte should be masked
-	// off to ensure it isn't negative.
-	serialNumber[0] &= 0x7F
-	//template.SerialNumber = new(big.Int).SetBytes(serialNumber)
-	return new(big.Int).SetBytes(serialNumber)
+	return sn
+	// serialNumber := make([]byte, 20)
+	// _, err := io.ReadFull(rand.Reader, serialNumber)
+	// if err != nil {
+	// 	// return nil, cferr.Wrap(cferr.CertificateError, cferr.Unknown, err)
+	// }
+	// // SetBytes interprets buf as the bytes of a big-endian
+	// // unsigned integer. The leading byte should be masked
+	// // off to ensure it isn't negative.
+	// serialNumber[0] &= 0x7F
+	// //template.SerialNumber = new(big.Int).SetBytes(serialNumber)
+	// return new(big.Int).SetBytes(serialNumber)
 }

@@ -25,6 +25,10 @@ import (
 	"gitee.com/zhaochuninhefei/gmgo/x509"
 )
 
+/*
+ * bccsp/gm/sm2key.go 用来定义国密sm2公私钥结构体，并分别实现`bccsp.Key`(bccsp/bccsp.go)接口
+ */
+
 type gmsm2PrivateKey struct {
 	privKey *sm2.PrivateKey
 }

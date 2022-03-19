@@ -29,7 +29,7 @@ import (
 )
 
 /*
- * 这里是对 bccsp.BCCSP 接口的国密实现。
+ * bccsp/gm/impl.go 是对`bccsp.BCCSP`接口(bccsp/bccsp.go)的国密实现。
  * SM4的接口实现可能有问题，没有看到分组操作，而是直接调用了分组加解密。
  */
 
@@ -72,12 +72,12 @@ func New(securityLevel int, hashFamily string, keyStore bccsp.KeyStore) (bccsp.B
 	// Set the encryptors
 	encryptors := make(map[reflect.Type]Encryptor)
 	// sm4 加密选项，要注意，这里实现的sm4加密只是分组加密，没有对明文做分组操作。
-	encryptors[reflect.TypeOf(&gmsm4PrivateKey{})] = &gmsm4Encryptor{}
+	encryptors[reflect.TypeOf(&gmsm4Key{})] = &gmsm4Encryptor{}
 
 	// Set the decryptors
 	decryptors := make(map[reflect.Type]Decryptor)
 	// sm4 解密选项，要注意，这里实现的sm4解密只是分组解密，没有对密文做分组操作。
-	decryptors[reflect.TypeOf(&gmsm4PrivateKey{})] = &gmsm4Decryptor{}
+	decryptors[reflect.TypeOf(&gmsm4Key{})] = &gmsm4Decryptor{}
 
 	// Set the signers
 	signers := make(map[reflect.Type]Signer)
@@ -122,6 +122,11 @@ func New(securityLevel int, hashFamily string, keyStore bccsp.KeyStore) (bccsp.B
 	// sm4密钥生成器
 	keyGenerators[reflect.TypeOf(&bccsp.GMSM4KeyGenOpts{})] = &gmsm4KeyGenerator{length: 32}
 	// 注意只有国密sm2与sm4的密钥生成器
+	// TODO 这里有问题:
+	// 既然在前面的签名与验签处添加了内部转为sm2签名/验签的ecdsa签名/验签，
+	// 那么这里也应该添加内部参数为sm2参数的ecdsa密钥对生成器:
+	// ecdsa密钥生成器
+	// keyGenerators[reflect.TypeOf(&bccsp.ECDSAKeyGenOpts{})] = &gmecdsaKeyGenerator{}
 	impl.keyGenerators = keyGenerators
 
 	// Set the key derivers

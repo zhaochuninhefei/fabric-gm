@@ -24,6 +24,11 @@ import (
 	"gitee.com/zhaochuninhefei/gmgo/sm4"
 )
 
+/*
+ * bccsp/gm/sm4.go 实现`gm.Encryptor`接口和`gm.Decryptor`接口(bccsp/gm/internals.go)
+ * 目前存在问题: 没有分组逻辑，直接调用了sm4对每组明文/密文的分组加解密函数。
+ */
+
 // GetRandomBytes returns len random looking bytes
 // 生成长度为len的随机字节流。
 // 用于生成sm4密钥的话，长度应该指定16字节
@@ -79,10 +84,10 @@ type gmsm4Encryptor struct{}
 // 实现 Encryptor 接口 分组在哪做?
 func (*gmsm4Encryptor) Encrypt(k bccsp.Key, plaintext []byte, opts bccsp.EncrypterOpts) (ciphertext []byte, err error) {
 
-	return SM4Encrypt(k.(*gmsm4PrivateKey).privKey, plaintext)
+	return SM4Encrypt(k.(*gmsm4Key).privKey, plaintext)
 	//return AESCBCPKCS7Encrypt(k.(*sm4PrivateKey).privKey, plaintext)
 
-	// key := k.(*gmsm4PrivateKey).privKey
+	// key := k.(*gmsm4Key).privKey
 	// var en = make([]byte, 16)
 	// sms4(plaintext, 16, key, en, 1)
 	// return en, nil
@@ -93,9 +98,9 @@ type gmsm4Decryptor struct{}
 // 实现 Decryptor 接口 分组在哪做?
 func (*gmsm4Decryptor) Decrypt(k bccsp.Key, ciphertext []byte, opts bccsp.DecrypterOpts) (plaintext []byte, err error) {
 
-	return SM4Decrypt(k.(*gmsm4PrivateKey).privKey, ciphertext)
+	return SM4Decrypt(k.(*gmsm4Key).privKey, ciphertext)
 	// var dc = make([]byte, 16)
-	// key := k.(*gmsm4PrivateKey).privKey
+	// key := k.(*gmsm4Key).privKey
 	// sms4(ciphertext, 16, key, dc, 0)
 	// return dc, nil
 }

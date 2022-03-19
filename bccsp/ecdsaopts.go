@@ -16,6 +16,11 @@ limitations under the License.
 
 package bccsp
 
+/*
+ * bccsp/ecdsaopts.go 提供对接口`bccsp.KeyGenOpts`的一些ecdsa实现:
+ * ECDSAP256KeyGenOpts, ECDSAP384KeyGenOpts
+ */
+
 // ECDSAP256KeyGenOpts contains options for ECDSA key generation with curve P-256.
 type ECDSAP256KeyGenOpts struct {
 	Temporary bool

@@ -27,6 +27,10 @@ import (
 	"gitee.com/zhaochuninhefei/gmgo/x509"
 )
 
+/*
+ * bccsp/gm/keyimport.go 实现`gm.KeyImporter`接口(bccsp/gm/internals.go)
+ */
+
 //实现内部的 KeyImporter 接口
 type gmsm4ImportKeyOptsKeyImporter struct{}
 
@@ -42,7 +46,7 @@ func (*gmsm4ImportKeyOptsKeyImporter) KeyImport(raw interface{}, opts bccsp.KeyI
 		return nil, errors.New("invalid raw material. It must not be nil")
 	}
 
-	return &gmsm4PrivateKey{utils.Clone(sm4Raw), false}, nil
+	return &gmsm4Key{utils.Clone(sm4Raw), false}, nil
 }
 
 type gmsm2PrivateKeyImportOptsKeyImporter struct{}

@@ -21,15 +21,17 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
 )
 
-// 定义了 gm 包下的各个接口，包括:
-// KeyGenerator
-// KeyDeriver
-// KeyImporter
-// Encryptor
-// Decryptor
-// Signer
-// Verifier
-// Hasher
+/*
+ * bccsp/gm/internals.go 定义了 gm 包下的各个接口，包括:
+ * KeyGenerator : 在 bccsp/gm/keygen.go 实现
+ * KeyDeriver : 在 bccsp/gm/keyderiv.go 实现
+ * KeyImporter : 在 bccsp/gm/keyimport.go 实现
+ * Encryptor : 在 bccsp/gm/sm4.go 实现
+ * Decryptor : 在 bccsp/gm/sm4.go 实现
+ * Signer : 在 bccsp/gm/sm2.go 实现
+ * Verifier : 在 bccsp/gm/sm2.go 实现
+ * Hasher : 在 bccsp/gm/hash.go 实现
+ */
 
 // KeyGenerator is a BCCSP-like interface that provides key generation algorithms
 type KeyGenerator interface {

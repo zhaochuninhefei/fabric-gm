@@ -29,6 +29,10 @@ import (
 	"gitee.com/zhaochuninhefei/gmgo/sm2"
 )
 
+/*
+ * bccsp/gm/sm2.go 实现`gm.Signer`接口和`gm.Verifier`接口(bccsp/gm/internals.go)
+ */
+
 type SM2Signature struct {
 	R, S *big.Int
 }
@@ -101,25 +105,24 @@ func (s *gmsm2Signer) Sign(k bccsp.Key, digest []byte, opts bccsp.SignerOpts) (s
 
 type ecdsaPrivateKeySigner struct{}
 
-// 在ecdsaPrivateKeySigner上绑定Sign签名方法，内部转为sm2签名
+// 在ecdsaPrivateKeySigner上绑定Sign签名方法，内部转为sm2签名。
+// 注意，k明面上是ecdsa私钥，但其实内部所有参数都是sm2的参数(Curve、X、Y、D)。
 func (s *ecdsaPrivateKeySigner) Sign(k bccsp.Key, digest []byte, opts bccsp.SignerOpts) (signature []byte, err error) {
-	// TODO 如果k实际上是sm2的私钥，这里不会出错吗？
-	// 因为sm2的公私钥结构体与ecdsa实际上是一样的，所以没问题？
+	// 如果k的类型不是`ecdsaPrivateKey`，比如是`gmsm2PrivateKey`，那么这里会出错。
+	// 但后续又将ecdsaPrivateKey的Curve、X、Y、D直接拿来当作sm2.PublicKey与sm2.PrivateKey的相关参数，
+	// 因此必须满足条件：k是使用`gm.gmecdsaKeyGenerator`(bccsp/gm/ecdsakey.go)的`KeyGen`方法生成的ecdsa私钥。
+	// 这样，k明面上是ecdsa私钥，但其实内部所有参数都是sm2的。
 	puk := k.(*ecdsaPrivateKey).privKey.PublicKey
 	sm2pk := sm2.PublicKey{
-		// TODO 还用ecdsa的曲线？  不应该用sm2曲线`sm2.P256Sm2()`吗？因为公私钥实际上就是sm2的，所以没问题？
 		Curve: puk.Curve,
 		X:     puk.X,
 		Y:     puk.Y,
 	}
-
 	privKey := k.(*ecdsaPrivateKey).privKey
 	sm2privKey := sm2.PrivateKey{
-		// ecdsa的私钥会不会超过sm2曲线的参数N范围？
 		D:         privKey.D,
 		PublicKey: sm2pk,
 	}
-
 	return signGMSM2(&sm2privKey, digest, opts)
 }
 
@@ -139,11 +142,11 @@ func (v *gmsm2PublicKeyKeyVerifier) Verify(k bccsp.Key, signature, digest []byte
 
 type ecdsaPrivateKeyVerifier struct{}
 
-// 在ecdsaPrivateKeyVerifier上绑定Verify验签方法，内部转为sm2验签
+// 在ecdsaPrivateKeyVerifier上绑定Verify验签方法，内部转为sm2验签。
+// 注意，k明面上是ecdsa私钥，但其实内部所有参数都是sm2的参数(Curve、X、Y、D)。
 func (v *ecdsaPrivateKeyVerifier) Verify(k bccsp.Key, signature, digest []byte, opts bccsp.SignerOpts) (valid bool, err error) {
 	puk := k.(*ecdsaPrivateKey).privKey.PublicKey
 	sm2pk := sm2.PublicKey{
-		// TODO 还用ecdsa的曲线？  不应该用sm2曲线`sm2.P256Sm2()`吗？
 		Curve: puk.Curve,
 		X:     puk.X,
 		Y:     puk.Y,
@@ -153,11 +156,11 @@ func (v *ecdsaPrivateKeyVerifier) Verify(k bccsp.Key, signature, digest []byte, 
 
 type ecdsaPublicKeyKeyVerifier struct{}
 
-// 在ecdsaPublicKeyKeyVerifier上绑定Verify验签方法，内部转为sm2验签
+// 在ecdsaPublicKeyKeyVerifier上绑定Verify验签方法，内部转为sm2验签。
+// 注意，k明面上是ecdsa公钥，但其实内部所有参数都是sm2的参数(Curve、X、Y)。
 func (v *ecdsaPublicKeyKeyVerifier) Verify(k bccsp.Key, signature, digest []byte, opts bccsp.SignerOpts) (valid bool, err error) {
 	puk := k.(*ecdsaPublicKey).pubKey
 	sm2pk := sm2.PublicKey{
-		// TODO 还用ecdsa的曲线？  不应该用sm2曲线`sm2.P256Sm2()`吗？
 		Curve: puk.Curve,
 		X:     puk.X,
 		Y:     puk.Y,
@@ -165,8 +168,8 @@ func (v *ecdsaPublicKeyKeyVerifier) Verify(k bccsp.Key, signature, digest []byte
 	return verifyGMSM2(&sm2pk, signature, digest, opts)
 }
 
-// TODO ecdsa的曲线与sm2曲线不同，所以需要做LowS？
 // 将签名中的s改为lowS
+// 该函数作用目前不明确
 func SignatureToLowS(k *ecdsa.PublicKey, signature []byte) ([]byte, error) {
 	r, s, err := UnmarshalSM2Signature(signature)
 	if err != nil {

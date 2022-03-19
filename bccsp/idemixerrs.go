@@ -10,6 +10,10 @@ import (
 	"fmt"
 )
 
+/*
+ * bccsp/idemixerrs.go 提供了IdemixIssuerPublicKeyImporterError
+ */
+
 type IdemixIIssuerPublicKeyImporterErrorType int
 
 const (

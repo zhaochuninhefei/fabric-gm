@@ -18,6 +18,11 @@ package bccsp
 
 import "io"
 
+/*
+ * bccsp/aesopts.go 提供了`AESCBCPKCS7ModeOpts`，以及对接口`bccsp.KeyGenOpts`的一些aes实现:
+ * AES128KeyGenOpts, AES192KeyGenOpts, AES256KeyGenOpts
+ */
+
 // AES128KeyGenOpts contains options for AES key generation at 128 security level
 type AES128KeyGenOpts struct {
 	Temporary bool

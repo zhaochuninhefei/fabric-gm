@@ -20,8 +20,13 @@ import (
 	"fmt"
 	"hash"
 
+	"gitee.com/zhaochuninhefei/gmgo/sm2"
 	"gitee.com/zhaochuninhefei/gmgo/sm3"
 )
+
+/*
+ * bccsp/gm/conf.go 定义BCCSP的配置
+ */
 
 type config struct {
 	ellipticCurve elliptic.Curve
@@ -38,7 +43,9 @@ func (conf *config) setSecurityLevel(securityLevel int, hashFamily string) (err 
 func (conf *config) setSecurityLevelGMSM3(level int) (err error) {
 	switch level {
 	case 256:
-		conf.ellipticCurve = elliptic.P256()
+		// 椭圆曲线应该选择sm2P256
+		// conf.ellipticCurve = elliptic.P256()
+		conf.ellipticCurve = sm2.P256Sm2()
 		conf.hashFunction = sm3.New
 		conf.rsaBitLength = 2048
 		conf.aesBitLength = 32
@@ -48,7 +55,7 @@ func (conf *config) setSecurityLevelGMSM3(level int) (err error) {
 		conf.rsaBitLength = 3072
 		conf.aesBitLength = 32
 	default:
-		err = fmt.Errorf("Security level not supported [%d]", level)
+		err = fmt.Errorf("security level not supported [%d]", level)
 	}
 	return
 }

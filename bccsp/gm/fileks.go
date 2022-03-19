@@ -34,7 +34,7 @@ import (
 )
 
 /*
- * fileks.go用于key的文件存储读写功能
+ * bccsp/gm/fileks.go 实现`bccsp.KeyStore`接口(bccsp/keystore.go)，用于key的文件存储读写功能
  */
 
 // NewFileBasedKeyStore instantiated a file-based key store at a given position.
@@ -133,7 +133,7 @@ func (ks *fileBasedKeyStore) GetKey(ski []byte) (k bccsp.Key, err error) {
 			return nil, fmt.Errorf("failed loading key [%x] [%s]", ski, err)
 		}
 
-		return &gmsm4PrivateKey{key, false}, nil
+		return &gmsm4Key{key, false}, nil
 	case "sk":
 		// 读取sm2私钥
 		key, err := ks.loadPrivateKey(alias)
@@ -189,8 +189,8 @@ func (ks *fileBasedKeyStore) StoreKey(k bccsp.Key) (err error) {
 		if err != nil {
 			return fmt.Errorf("failed storing SM2 public key [%s]", err)
 		}
-	case *gmsm4PrivateKey:
-		// kk := k.(*gmsm4PrivateKey)
+	case *gmsm4Key:
+		// kk := k.(*gmsm4Key)
 		// keypath := ks.getPathForAlias(hex.EncodeToString(k.SKI()), "key")
 		err = ks.storeKey(hex.EncodeToString(k.SKI()), k.privKey)
 		if err != nil {

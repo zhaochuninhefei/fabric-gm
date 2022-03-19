@@ -166,7 +166,7 @@ func (*gmsm4ImportKeyOptsKeyImporter) KeyImport(raw interface{}, opts bccsp.KeyI
 		return nil, errors.New("Invalid raw material, It must botbe nil")
 	}
 
-	return &gmsm4PrivateKey{utils.Clone(sm4Raw), false}, nil
+	return &gmsm4Key{utils.Clone(sm4Raw), false}, nil
 }
 
 type gmsm2PrivateKeyOptsKeyImporter struct{}

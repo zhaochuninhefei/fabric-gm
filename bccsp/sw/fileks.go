@@ -194,7 +194,7 @@ func (ks *fileBasedKeyStore) StoreKey(k bccsp.Key) (err error) {
 			return fmt.Errorf("failed storing SM2 public key [%s]", err)
 		}
 
-	case *gmsm4PrivateKey:
+	case *gmsm4Key:
 		err = ks.storeKey(hex.EncodeToString(k.SKI()), kk.privKey)
 		if err != nil {
 			return fmt.Errorf("failed storing SM4 key [%s]", err)

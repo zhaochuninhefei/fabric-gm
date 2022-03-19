@@ -16,12 +16,17 @@ limitations under the License.
 package gm
 
 import (
+	"crypto/ecdsa"
 	"crypto/rand"
 	"fmt"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
 	"gitee.com/zhaochuninhefei/gmgo/sm2"
 )
+
+/*
+ * bccsp/gm/keygen.go 实现`gm.KeyGenerator`接口(bccsp/gm/internals.go)
+ */
 
 // 定义国密SM2 keygen 结构体，实现 KeyGenerator 接口
 type gmsm2KeyGenerator struct {
@@ -38,6 +43,27 @@ func (gm *gmsm2KeyGenerator) KeyGen(opts bccsp.KeyGenOpts) (k bccsp.Key, err err
 	return &gmsm2PrivateKey{privKey}, nil
 }
 
+// 定义 gmecdsaKeyGenerator 结构体，实现 KeyGenerator 接口
+type gmecdsaKeyGenerator struct {
+}
+
+// 生成 gmecdsa 私钥，实际就是sm2私钥
+func (gm *gmecdsaKeyGenerator) KeyGen(opts bccsp.KeyGenOpts) (k bccsp.Key, err error) {
+	// 生成sm2私钥
+	privKey, err := sm2.GenerateKey(rand.Reader)
+	if err != nil {
+		return nil, fmt.Errorf("failed generating SM2 key  [%s]", err)
+	}
+	// 另外定义一个 ecdsa.PrivateKey ，将sm2私钥的所有属性设置给它
+	ecdsaPrivKey := &ecdsa.PrivateKey{}
+	ecdsaPrivKey.Curve = privKey.Curve
+	ecdsaPrivKey.D = privKey.D
+	ecdsaPrivKey.X = privKey.X
+	ecdsaPrivKey.Y = privKey.Y
+
+	return &ecdsaPrivateKey{ecdsaPrivKey}, nil
+}
+
 // 定义国密SM4 keygen 结构体，实现 KeyGenerator 接口
 type gmsm4KeyGenerator struct {
 	length int
@@ -51,5 +77,5 @@ func (gm *gmsm4KeyGenerator) KeyGen(opts bccsp.KeyGenOpts) (k bccsp.Key, err err
 		return nil, fmt.Errorf("failed generating SM4 %d key [%s]", gm.length, err)
 	}
 
-	return &gmsm4PrivateKey{lowLevelKey, false}, nil
+	return &gmsm4Key{lowLevelKey, false}, nil
 }

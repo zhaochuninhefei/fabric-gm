@@ -6,6 +6,17 @@ SPDX-License-Identifier: Apache-2.0
 
 package bccsp
 
+/*
+ * bccsp/opts.go 实现部分`bccsp.KeyGenOpts`、`bccsp.KeyImportOpts`与`bccsp.KeyDerivOpts`接口。
+ * ecdsa相关: ECDSAKeyGenOpts, ECDSAPrivateKeyImportOpts, ECDSAPKIXPublicKeyImportOpts, ECDSAGoPublicKeyImportOpts, ECDSAReRandKeyOpts
+ * sm2相关: GMSM2KeyGenOpts, GMSM2PrivateKeyImportOpts, GMSM2PublicKeyImportOpts
+ * sm4相关: GMSM4KeyGenOpts, GMSM4ImportKeyOpts
+ * aes相关: AESKeyGenOpts, AES256ImportKeyOpts
+ * hmac相关: HMACTruncated256AESDeriveKeyOpts, HMACDeriveKeyOpts, HMACImportKeyOpts
+ * sha相关: SHAOpts
+ * x509相关: X509PublicKeyImportOpts
+ */
+
 const (
 	// ECDSA Elliptic Curve Digital Signature Algorithm (key gen, import, sign, verify),
 	// at default security level.
@@ -68,6 +79,7 @@ const (
 	GMSM2 = "SM2"
 )
 
+// 定义 ECDSAKeyGenOpts 并为其实现`bccsp.KeyGenOpts`接口
 // ECDSAKeyGenOpts contains options for ECDSA key generation.
 type ECDSAKeyGenOpts struct {
 	Temporary bool
@@ -84,6 +96,7 @@ func (opts *ECDSAKeyGenOpts) Ephemeral() bool {
 	return opts.Temporary
 }
 
+// 定义 ECDSAPKIXPublicKeyImportOpts 并为其实现`bccsp.KeyImportOpts`接口
 // ECDSAPKIXPublicKeyImportOpts contains options for ECDSA public key importation in PKIX format
 type ECDSAPKIXPublicKeyImportOpts struct {
 	Temporary bool
@@ -100,6 +113,7 @@ func (opts *ECDSAPKIXPublicKeyImportOpts) Ephemeral() bool {
 	return opts.Temporary
 }
 
+// 定义 ECDSAPrivateKeyImportOpts 并为其实现`bccsp.KeyImportOpts`接口
 // ECDSAPrivateKeyImportOpts contains options for ECDSA secret key importation in DER format
 // or PKCS#8 format.
 type ECDSAPrivateKeyImportOpts struct {
@@ -117,6 +131,7 @@ func (opts *ECDSAPrivateKeyImportOpts) Ephemeral() bool {
 	return opts.Temporary
 }
 
+// 定义 ECDSAGoPublicKeyImportOpts 并为其实现 `bccsp.KeyImportOpts`接口
 // ECDSAGoPublicKeyImportOpts contains options for ECDSA key importation from ecdsa.PublicKey
 type ECDSAGoPublicKeyImportOpts struct {
 	Temporary bool
@@ -133,6 +148,7 @@ func (opts *ECDSAGoPublicKeyImportOpts) Ephemeral() bool {
 	return opts.Temporary
 }
 
+// 定义 ECDSAReRandKeyOpts 似乎没有对应接口。。。
 // ECDSAReRandKeyOpts contains options for ECDSA key re-randomization.
 type ECDSAReRandKeyOpts struct {
 	Temporary bool
@@ -155,6 +171,7 @@ func (opts *ECDSAReRandKeyOpts) ExpansionValue() []byte {
 	return opts.Expansion
 }
 
+// 定义 AESKeyGenOpts 并为其实现`bccsp.KeyGenOpts`接口
 // AESKeyGenOpts contains options for AES key generation at default security level
 type AESKeyGenOpts struct {
 	Temporary bool

@@ -15,6 +15,10 @@ limitations under the License.
 */
 package bccsp
 
+/*
+ * bccsp/keystore.go 定义`bccsp.KeyStore`接口
+ */
+
 // KeyStore represents a storage system for cryptographic keys.
 // It allows to store and retrieve bccsp.Key objects.
 // The KeyStore can be read only, in that case StoreKey will return
