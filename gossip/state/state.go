@@ -310,13 +310,13 @@ func (s *GossipStateProviderImpl) receiveAndDispatchDirectMessages(ch <-chan pro
 	for msg := range ch {
 		s.logger.Debug("Dispatching a message", msg)
 		go func(msg protoext.ReceivedMessage) {
-			gm := msg.GetGossipMessage()
+			gossipMsg := msg.GetGossipMessage()
 			// Check type of the message
-			if protoext.IsRemoteStateMessage(gm.GossipMessage) {
+			if protoext.IsRemoteStateMessage(gossipMsg.GossipMessage) {
 				s.logger.Debug("Handling direct state transfer message")
 				// Got state transfer request response
 				s.directMessage(msg)
-			} else if gm.GetPrivateData() != nil {
+			} else if gossipMsg.GetPrivateData() != nil {
 				s.logger.Debug("Handling private data collection message")
 				// Handling private data replication message
 				s.privateDataMessage(msg)

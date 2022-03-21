@@ -24,6 +24,10 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/utils"
 )
 
+/*
+bccsp/sw/ecdsa.go 实现ecdsa的签名与验签器
+*/
+
 func signECDSA(k *ecdsa.PrivateKey, digest []byte, opts bccsp.SignerOpts) ([]byte, error) {
 	r, s, err := ecdsa.Sign(rand.Reader, k, digest)
 	if err != nil {
@@ -41,7 +45,7 @@ func signECDSA(k *ecdsa.PrivateKey, digest []byte, opts bccsp.SignerOpts) ([]byt
 func verifyECDSA(k *ecdsa.PublicKey, signature, digest []byte, opts bccsp.SignerOpts) (bool, error) {
 	r, s, err := utils.UnmarshalECDSASignature(signature)
 	if err != nil {
-		return false, fmt.Errorf("Failed unmashalling signature [%s]", err)
+		return false, fmt.Errorf("failed unmashalling signature [%s]", err)
 	}
 
 	lowS, err := utils.IsLowS(k, s)
@@ -50,7 +54,7 @@ func verifyECDSA(k *ecdsa.PublicKey, signature, digest []byte, opts bccsp.Signer
 	}
 
 	if !lowS {
-		return false, fmt.Errorf("Invalid S. Must be smaller than half the order [%s][%s].", s, utils.GetCurveHalfOrdersAt(k.Curve))
+		return false, fmt.Errorf("invalid S. Must be smaller than half the order [%s][%s]", s, utils.GetCurveHalfOrdersAt(k.Curve))
 	}
 
 	return ecdsa.Verify(k, digest, r, s), nil
@@ -62,14 +66,15 @@ func (s *ecdsaSigner) Sign(k bccsp.Key, digest []byte, opts bccsp.SignerOpts) ([
 	return signECDSA(k.(*ecdsaPrivateKey).privKey, digest, opts)
 }
 
-//type ecdsaPrivateKeyVerifier struct{}
+// ecdsa验签已恢复，没用sm2的验签冒充 --> bccsp/sw/sm2.go
+type ecdsaPrivateKeyVerifier struct{}
 
-//func (v *ecdsaPrivateKeyVerifier) Verify(k bccsp.Key, signature, digest []byte, opts bccsp.SignerOpts) (bool, error) {
-//	return verifyECDSA(&(k.(*ecdsaPrivateKey).privKey.PublicKey), signature, digest, opts)
-//}
+func (v *ecdsaPrivateKeyVerifier) Verify(k bccsp.Key, signature, digest []byte, opts bccsp.SignerOpts) (bool, error) {
+	return verifyECDSA(&(k.(*ecdsaPrivateKey).privKey.PublicKey), signature, digest, opts)
+}
 
-//type ecdsaPublicKeyKeyVerifier struct{}
+type ecdsaPublicKeyKeyVerifier struct{}
 
-//func (v *ecdsaPublicKeyKeyVerifier) Verify(k bccsp.Key, signature, digest []byte, opts bccsp.SignerOpts) (bool, error) {
-//	return verifyECDSA(k.(*ecdsaPublicKey).pubKey, signature, digest, opts)
-//}
+func (v *ecdsaPublicKeyKeyVerifier) Verify(k bccsp.Key, signature, digest []byte, opts bccsp.SignerOpts) (bool, error) {
+	return verifyECDSA(k.(*ecdsaPublicKey).pubKey, signature, digest, opts)
+}

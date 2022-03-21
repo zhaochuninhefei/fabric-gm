@@ -7,7 +7,6 @@ SPDX-License-Identifier: Apache-2.0
 package msp
 
 import (
-	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/gm"
 	"reflect"
 	"runtime"
 	"testing"
@@ -37,7 +36,7 @@ func TestNewInvalidOpts(t *testing.T) {
 }
 
 func TestNew(t *testing.T) {
-	cryptoProvider, err := gm.NewDefaultSecurityLevelWithKeystore(gm.NewDummyKeyStore())
+	cryptoProvider, err := sw.NewDefaultSecurityLevelWithKeystore(sw.NewDummyKeyStore())
 	assert.NoError(t, err)
 
 	i, err := New(&BCCSPNewOpts{NewBaseOpts{Version: MSPv1_0}}, cryptoProvider)

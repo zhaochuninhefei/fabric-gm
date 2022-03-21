@@ -24,6 +24,12 @@ import (
 	"github.com/pkg/errors"
 )
 
+/*
+bccsp/sw/impl.go 定义了`sw.CSP`，并实现了`bccsp.BCCSP`接口(bccsp/bccsp.go)。
+除了对`bccsp.BCCSP`接口的实现，impl只提供了`sw.CSP`的New函数以及AddWrapper方法。
+获取配置好的csp需要调用`bccsp/sw/new.go`提供的相关函数。
+*/
+
 var (
 	logger = flogging.MustGetLogger("bccsp_sw")
 )

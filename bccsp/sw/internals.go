@@ -22,6 +22,18 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
 )
 
+/*
+bccsp/sw/internals.go 定义sw包下的各个接口:
+sw.KeyGenerator : 密钥构造接口
+sw.KeyDeriver : 密钥驱动接口
+sw.KeyImporter : 密钥导入接口
+sw.Encryptor : 对称加密接口
+sw.Decryptor : 对称解密接口
+sw.Signer : 私钥签名接口
+sw.Verifier : 公钥验签接口
+sw.Hasher : 散列接口
+*/
+
 // KeyGenerator is a BCCSP-like interface that provides key generation algorithms
 type KeyGenerator interface {
 

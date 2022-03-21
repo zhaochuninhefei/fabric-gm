@@ -26,6 +26,10 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
 )
 
+/*
+bccsp/sw/ecdsakey.go 定义ecdsa公私钥结构体，并实现`bccsp.Key`(bccsp/bccsp.go)接口
+*/
+
 type ecdsaPrivateKey struct {
 	privKey *ecdsa.PrivateKey
 }
@@ -33,7 +37,7 @@ type ecdsaPrivateKey struct {
 // Bytes converts this key to its byte representation,
 // if this operation is allowed.
 func (k *ecdsaPrivateKey) Bytes() ([]byte, error) {
-	return nil, errors.New("Not supported.")
+	return nil, errors.New("not supported")
 }
 
 // SKI returns the subject key identifier of this key.
@@ -78,7 +82,7 @@ type ecdsaPublicKey struct {
 func (k *ecdsaPublicKey) Bytes() (raw []byte, err error) {
 	raw, err = x509.MarshalPKIXPublicKey(k.pubKey)
 	if err != nil {
-		return nil, fmt.Errorf("Failed marshalling key [%s]", err)
+		return nil, fmt.Errorf("failed marshalling key [%s]", err)
 	}
 	return
 }

@@ -22,6 +22,10 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
 )
 
+/*
+bccsp/sw/aeskey.go 定义AES密钥结构体，并实现`bccsp.Key`(bccsp/bccsp.go)接口
+*/
+
 type aesPrivateKey struct {
 	privKey    []byte
 	exportable bool
@@ -34,7 +38,7 @@ func (k *aesPrivateKey) Bytes() (raw []byte, err error) {
 		return k.privKey, nil
 	}
 
-	return nil, errors.New("Not supported.")
+	return nil, errors.New("not supported")
 }
 
 // SKI returns the subject key identifier of this key.
@@ -60,5 +64,5 @@ func (k *aesPrivateKey) Private() bool {
 // PublicKey returns the corresponding public key part of an asymmetric public/private key pair.
 // This method returns an error in symmetric key schemes.
 func (k *aesPrivateKey) PublicKey() (bccsp.Key, error) {
-	return nil, errors.New("Cannot call this method on a symmetric key.")
+	return nil, errors.New("cannot call this method on a symmetric key")
 }

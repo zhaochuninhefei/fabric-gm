@@ -21,6 +21,7 @@ import (
 	"reflect"
 	"testing"
 
+	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
 	mocks2 "gitee.com/zhaochuninhefei/fabric-gm/bccsp/mocks"
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/sw/mocks"
 	"github.com/stretchr/testify/assert"
@@ -66,11 +67,11 @@ func TestECDSAPublicKeyKeyDeriver(t *testing.T) {
 
 	_, err := kd.KeyDeriv(&mocks2.MockKey{}, nil)
 	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "Invalid opts parameter. It must not be nil.")
+	assert.Contains(t, err.Error(), "invalid opts parameter. It must not be nil")
 
 	_, err = kd.KeyDeriv(&ecdsaPublicKey{}, &mocks2.KeyDerivOpts{})
 	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "Unsupported 'KeyDerivOpts' provided [")
+	assert.Contains(t, err.Error(), "unsupported 'KeyDerivOpts' provided [")
 }
 
 func TestECDSAPrivateKeyKeyDeriver(t *testing.T) {
@@ -80,11 +81,11 @@ func TestECDSAPrivateKeyKeyDeriver(t *testing.T) {
 
 	_, err := kd.KeyDeriv(&mocks2.MockKey{}, nil)
 	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "Invalid opts parameter. It must not be nil.")
+	assert.Contains(t, err.Error(), "invalid opts parameter. It must not be nil")
 
 	_, err = kd.KeyDeriv(&ecdsaPrivateKey{}, &mocks2.KeyDerivOpts{})
 	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "Unsupported 'KeyDerivOpts' provided [")
+	assert.Contains(t, err.Error(), "unsupported 'KeyDerivOpts' provided [")
 }
 
 func TestAESPrivateKeyKeyDeriver(t *testing.T) {
@@ -94,9 +95,38 @@ func TestAESPrivateKeyKeyDeriver(t *testing.T) {
 
 	_, err := kd.KeyDeriv(&mocks2.MockKey{}, nil)
 	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "Invalid opts parameter. It must not be nil.")
+	assert.Contains(t, err.Error(), "invalid opts parameter. It must not be nil")
 
 	_, err = kd.KeyDeriv(&aesPrivateKey{}, &mocks2.KeyDerivOpts{})
 	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "Unsupported 'KeyDerivOpts' provided [")
+	assert.Contains(t, err.Error(), "unsupported 'KeyDerivOpts' provided [")
+}
+
+func Test_smPublicKeyKeyDeriver_KeyDeriv(t *testing.T) {
+	type args struct {
+		key  bccsp.Key
+		opts bccsp.KeyDerivOpts
+	}
+	tests := []struct {
+		name    string
+		kd      *smPublicKeyKeyDeriver
+		args    args
+		want    bccsp.Key
+		wantErr bool
+	}{
+		// Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			kd := &smPublicKeyKeyDeriver{}
+			got, err := kd.KeyDeriv(tt.args.key, tt.args.opts)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("smPublicKeyKeyDeriver.KeyDeriv() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("smPublicKeyKeyDeriver.KeyDeriv() = %v, want %v", got, tt.want)
+			}
+		})
+	}
 }

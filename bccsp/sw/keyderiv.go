@@ -26,10 +26,14 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
 )
 
+/*
+bccsp/sw/keyderiv.go 部分密钥驱动实现
+*/
+
 type smPublicKeyKeyDeriver struct{}
 
 func (kd *smPublicKeyKeyDeriver) KeyDeriv(key bccsp.Key, opts bccsp.KeyDerivOpts) (bccsp.Key, error) {
-	return nil, errors.New("Not implemented")
+	return nil, errors.New("not implemented")
 }
 
 type ecdsaPublicKeyKeyDeriver struct{}
@@ -37,7 +41,7 @@ type ecdsaPublicKeyKeyDeriver struct{}
 func (kd *ecdsaPublicKeyKeyDeriver) KeyDeriv(key bccsp.Key, opts bccsp.KeyDerivOpts) (bccsp.Key, error) {
 	// Validate opts
 	if opts == nil {
-		return nil, errors.New("Invalid opts parameter. It must not be nil.")
+		return nil, errors.New("invalid opts parameter. It must not be nil")
 	}
 
 	ecdsaK := key.(*ecdsaPublicKey)
@@ -45,7 +49,7 @@ func (kd *ecdsaPublicKeyKeyDeriver) KeyDeriv(key bccsp.Key, opts bccsp.KeyDerivO
 	// Re-randomized an ECDSA private key
 	reRandOpts, ok := opts.(*bccsp.ECDSAReRandKeyOpts)
 	if !ok {
-		return nil, fmt.Errorf("Unsupported 'KeyDerivOpts' provided [%v]", opts)
+		return nil, fmt.Errorf("unsupported 'KeyDerivOpts' provided [%v]", opts)
 	}
 
 	tempSK := &ecdsa.PublicKey{
@@ -70,7 +74,7 @@ func (kd *ecdsaPublicKeyKeyDeriver) KeyDeriv(key bccsp.Key, opts bccsp.KeyDerivO
 	// Verify temporary public key is a valid point on the reference curve
 	isOn := tempSK.Curve.IsOnCurve(tempSK.X, tempSK.Y)
 	if !isOn {
-		return nil, errors.New("Failed temporary public key IsOnCurve check.")
+		return nil, errors.New("failed temporary public key IsOnCurve check")
 	}
 
 	return &ecdsaPublicKey{tempSK}, nil
@@ -81,7 +85,7 @@ type ecdsaPrivateKeyKeyDeriver struct{}
 func (kd *ecdsaPrivateKeyKeyDeriver) KeyDeriv(key bccsp.Key, opts bccsp.KeyDerivOpts) (bccsp.Key, error) {
 	// Validate opts
 	if opts == nil {
-		return nil, errors.New("Invalid opts parameter. It must not be nil.")
+		return nil, errors.New("invalid opts parameter. It must not be nil")
 	}
 
 	ecdsaK := key.(*ecdsaPrivateKey)
@@ -89,7 +93,7 @@ func (kd *ecdsaPrivateKeyKeyDeriver) KeyDeriv(key bccsp.Key, opts bccsp.KeyDeriv
 	// Re-randomized an ECDSA private key
 	reRandOpts, ok := opts.(*bccsp.ECDSAReRandKeyOpts)
 	if !ok {
-		return nil, fmt.Errorf("Unsupported 'KeyDerivOpts' provided [%v]", opts)
+		return nil, fmt.Errorf("unsupported 'KeyDerivOpts' provided [%v]", opts)
 	}
 
 	tempSK := &ecdsa.PrivateKey{
@@ -121,7 +125,7 @@ func (kd *ecdsaPrivateKeyKeyDeriver) KeyDeriv(key bccsp.Key, opts bccsp.KeyDeriv
 	// Verify temporary public key is a valid point on the reference curve
 	isOn := tempSK.Curve.IsOnCurve(tempSK.PublicKey.X, tempSK.PublicKey.Y)
 	if !isOn {
-		return nil, errors.New("Failed temporary public key IsOnCurve check.")
+		return nil, errors.New("failed temporary public key IsOnCurve check")
 	}
 
 	return &ecdsaPrivateKey{tempSK}, nil
@@ -134,7 +138,7 @@ type aesPrivateKeyKeyDeriver struct {
 func (kd *aesPrivateKeyKeyDeriver) KeyDeriv(k bccsp.Key, opts bccsp.KeyDerivOpts) (bccsp.Key, error) {
 	// Validate opts
 	if opts == nil {
-		return nil, errors.New("Invalid opts parameter. It must not be nil.")
+		return nil, errors.New("invalid opts parameter. It must not be nil")
 	}
 
 	aesK := k.(*aesPrivateKey)
@@ -151,6 +155,6 @@ func (kd *aesPrivateKeyKeyDeriver) KeyDeriv(k bccsp.Key, opts bccsp.KeyDerivOpts
 		return &aesPrivateKey{mac.Sum(nil), true}, nil
 
 	default:
-		return nil, fmt.Errorf("Unsupported 'KeyDerivOpts' provided [%v]", opts)
+		return nil, fmt.Errorf("unsupported 'KeyDerivOpts' provided [%v]", opts)
 	}
 }

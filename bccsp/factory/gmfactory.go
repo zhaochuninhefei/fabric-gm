@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
-	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/gm"
+	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/sw"
 )
 
 const (
@@ -32,18 +32,18 @@ func (f *GMFactory) Get(config *FactoryOpts) (bccsp.BCCSP, error) {
 
 	var ks bccsp.KeyStore
 	if gmOpts.Ephemeral == true {
-		ks = gm.NewDummyKeyStore()
+		ks = sw.NewDummyKeyStore()
 	} else if gmOpts.FileKeystore != nil {
-		fks, err := gm.NewFileBasedKeyStore(nil, gmOpts.FileKeystore.KeyStorePath, false)
+		fks, err := sw.NewFileBasedKeyStore(nil, gmOpts.FileKeystore.KeyStorePath, false)
 		if err != nil {
 			return nil, fmt.Errorf("Failed to initialize gm software key store: %s", err)
 		}
 		ks = fks
 	} else {
 		// Default to DummyKeystore
-		ks = gm.NewDummyKeyStore()
+		ks = sw.NewDummyKeyStore()
 	}
 
-	return gm.New(gmOpts.SecLevel, "SM3", ks)
+	return sw.NewWithParams(gmOpts.SecLevel, "SM3", ks)
 	//return gm.New(gmOpts.SecLevel, gmOpts.HashFamily, ks)
 }

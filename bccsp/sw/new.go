@@ -19,6 +19,14 @@ import (
 	"golang.org/x/crypto/sha3"
 )
 
+/*
+bccsp/sw/new.go 提供创建`sw.CSP`(bccsp/sw/impl.go)的函数:
+NewDefaultSecurityLevel
+NewDefaultSecurityLevelWithKeystore
+NewWithParams
+默认hashFamily改为SM3
+*/
+
 // NewDefaultSecurityLevel returns a new instance of the software-based BCCSP
 // at security level 256, hash family SHA2 and using FolderBasedKeyStore as KeyStore.
 func NewDefaultSecurityLevel(keyStorePath string) (bccsp.BCCSP, error) {
@@ -26,18 +34,25 @@ func NewDefaultSecurityLevel(keyStorePath string) (bccsp.BCCSP, error) {
 	if err := ks.Init(nil, keyStorePath, false); err != nil {
 		return nil, errors.Wrapf(err, "Failed initializing key store at [%v]", keyStorePath)
 	}
-
-	return NewWithParams(256, "SHA2", ks)
+	// SHA2 改为 SM3
+	// return NewWithParams(256, "SHA2", ks)
+	return NewWithParams(256, "SM3", ks)
 }
 
 // NewDefaultSecurityLevel returns a new instance of the software-based BCCSP
 // at security level 256, hash family SHA2 and using the passed KeyStore.
 func NewDefaultSecurityLevelWithKeystore(keyStore bccsp.KeyStore) (bccsp.BCCSP, error) {
-	return NewWithParams(256, "SHA2", keyStore)
+	// SHA2 改为 SM3
+	// return NewWithParams(256, "SHA2", keyStore)
+	return NewWithParams(256, "SM3", keyStore)
 }
 
 // NewWithParams returns a new instance of the software-based BCCSP
 // set at the passed security level, hash family and KeyStore.
+// 根据参数生成swbccsp
+// 目前存在问题：
+// １．sm4加解密没有分组 --> 该问题已对应，修改了`bccsp/sw/sm4.go`的gmsm4Encryptor与gmsm4Decryptor的接口实现方法
+// ２．ecdsa的密钥、签名都是真实的ecdsa，但验签逻辑内部却转为sm2验签，原因不明 --> 该问题已对应，改回了真实的ecdsa验签
 func NewWithParams(securityLevel int, hashFamily string, keyStore bccsp.KeyStore) (bccsp.BCCSP, error) {
 	// Init config
 	conf := &config{}
@@ -56,20 +71,28 @@ func NewWithParams(securityLevel int, hashFamily string, keyStore bccsp.KeyStore
 
 	// Set the Encryptors
 	swbccsp.AddWrapper(reflect.TypeOf(&aesPrivateKey{}), &aescbcpkcs7Encryptor{})
-	swbccsp.AddWrapper(reflect.TypeOf(&gmsm4Key{}), &gmsm4Decryptor{})
+	// sm4加密，未分组 --> 该问题已对应，修改了`bccsp/sw/sm4.go`的gmsm4Encryptor与gmsm4Decryptor的接口实现方法
+	swbccsp.AddWrapper(reflect.TypeOf(&gmsm4Key{}), &gmsm4Encryptor{})
 
 	// Set the Decryptors
 	swbccsp.AddWrapper(reflect.TypeOf(&aesPrivateKey{}), &aescbcpkcs7Decryptor{})
+	// sm4解密，未分组 --> 该问题已对应，修改了`bccsp/sw/sm4.go`的gmsm4Encryptor与gmsm4Decryptor的接口实现方法
 	swbccsp.AddWrapper(reflect.TypeOf(&gmsm4Key{}), &gmsm4Decryptor{})
 
 	// Set the Signers
+	// ecdsa签名
 	swbccsp.AddWrapper(reflect.TypeOf(&ecdsaPrivateKey{}), &ecdsaSigner{})
+	// sm2签名
 	swbccsp.AddWrapper(reflect.TypeOf(&gmsm2PrivateKey{}), &gmsm2Signer{})
 
 	// Set the Verifiers
+	// ecdsa私钥验签，实际还是公钥验签 已改回真实的ecdsa实现
 	swbccsp.AddWrapper(reflect.TypeOf(&ecdsaPrivateKey{}), &ecdsaPrivateKeyVerifier{})
+	// ecdsa公钥验签 已改回真实的ecdsa实现
 	swbccsp.AddWrapper(reflect.TypeOf(&ecdsaPublicKey{}), &ecdsaPublicKeyKeyVerifier{})
+	// sm2私钥验签，实际还是公钥验签
 	swbccsp.AddWrapper(reflect.TypeOf(&gmsm2PrivateKey{}), &gmsm2PrivateKeyVerifier{})
+	// sm2公钥验签
 	swbccsp.AddWrapper(reflect.TypeOf(&gmsm2PublicKey{}), &gmsm2PublicKeyKeyVerifier{})
 
 	// Set the Hashers
@@ -78,9 +101,11 @@ func NewWithParams(securityLevel int, hashFamily string, keyStore bccsp.KeyStore
 	swbccsp.AddWrapper(reflect.TypeOf(&bccsp.SHA384Opts{}), &hasher{hash: sha512.New384})
 	swbccsp.AddWrapper(reflect.TypeOf(&bccsp.SHA3_256Opts{}), &hasher{hash: sha3.New256})
 	swbccsp.AddWrapper(reflect.TypeOf(&bccsp.SHA3_384Opts{}), &hasher{hash: sha3.New384})
+	// sm3散列
 	swbccsp.AddWrapper(reflect.TypeOf(&bccsp.GMSM3Opts{}), &hasher{hash: sm3.New})
 
 	// Set the key generators
+	// ecdsaKeyGenerator是真实的ecdsa的密钥对构造，不是sm2的密钥对
 	swbccsp.AddWrapper(reflect.TypeOf(&bccsp.ECDSAKeyGenOpts{}), &ecdsaKeyGenerator{curve: conf.ellipticCurve})
 	swbccsp.AddWrapper(reflect.TypeOf(&bccsp.ECDSAP256KeyGenOpts{}), &ecdsaKeyGenerator{curve: elliptic.P256()})
 	swbccsp.AddWrapper(reflect.TypeOf(&bccsp.ECDSAP384KeyGenOpts{}), &ecdsaKeyGenerator{curve: elliptic.P384()})
@@ -88,7 +113,9 @@ func NewWithParams(securityLevel int, hashFamily string, keyStore bccsp.KeyStore
 	swbccsp.AddWrapper(reflect.TypeOf(&bccsp.AES256KeyGenOpts{}), &aesKeyGenerator{length: 32})
 	swbccsp.AddWrapper(reflect.TypeOf(&bccsp.AES192KeyGenOpts{}), &aesKeyGenerator{length: 24})
 	swbccsp.AddWrapper(reflect.TypeOf(&bccsp.AES128KeyGenOpts{}), &aesKeyGenerator{length: 16})
+	// sm2密钥对构造器
 	swbccsp.AddWrapper(reflect.TypeOf(&bccsp.GMSM2KeyGenOpts{}), &gmsm2KeyGenerator{})
+	// sm4密钥构造器
 	swbccsp.AddWrapper(reflect.TypeOf(&bccsp.GMSM4KeyGenOpts{}), &gmsm4KeyGenerator{length: 16})
 
 	// Set the key deriver
@@ -102,9 +129,14 @@ func NewWithParams(securityLevel int, hashFamily string, keyStore bccsp.KeyStore
 	swbccsp.AddWrapper(reflect.TypeOf(&bccsp.ECDSAPKIXPublicKeyImportOpts{}), &ecdsaPKIXPublicKeyImportOptsKeyImporter{})
 	swbccsp.AddWrapper(reflect.TypeOf(&bccsp.ECDSAPrivateKeyImportOpts{}), &ecdsaPrivateKeyImportOptsKeyImporter{})
 	swbccsp.AddWrapper(reflect.TypeOf(&bccsp.ECDSAGoPublicKeyImportOpts{}), &ecdsaGoPublicKeyImportOptsKeyImporter{})
+	// gmx509公钥导入，x509的签名内容的核心是证书拥有者的公钥，与签名算法无关，因此可能是sm2,ecdsa或rsa
 	swbccsp.AddWrapper(reflect.TypeOf(&bccsp.X509PublicKeyImportOpts{}), &x509PublicKeyImportOptsKeyImporter{bccsp: swbccsp})
+	// sm2私钥导入器
 	swbccsp.AddWrapper(reflect.TypeOf(&bccsp.GMSM2PrivateKeyImportOpts{}), &gmsm2PrivateKeyOptsKeyImporter{})
+	// sm2公钥导入器
 	swbccsp.AddWrapper(reflect.TypeOf(&bccsp.GMSM2PublicKeyImportOpts{}), &gmsm2PublicKeyOptsKeyImporter{})
+	swbccsp.AddWrapper(reflect.TypeOf(&bccsp.GMSM2GoPublicKeyImportOpts{}), &gmsm2GoPublicKeyOptsKeyImporter{})
+	// sm4密钥导入器
 	swbccsp.AddWrapper(reflect.TypeOf(&bccsp.GMSM4ImportKeyOpts{}), &gmsm4ImportKeyOptsKeyImporter{})
 	return swbccsp, nil
 }

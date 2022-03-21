@@ -26,11 +26,10 @@ import (
 	"math/big"
 	"time"
 
-	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/gm"
-	_ "gitee.com/zhaochuninhefei/fabric-gm/bccsp/utils"
+	// _ "gitee.com/zhaochuninhefei/fabric-gm/bccsp/utils"
 	"gitee.com/zhaochuninhefei/gmgo/x509"
 
-	//	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/utils"
+	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/utils"
 	"github.com/pkg/errors"
 )
 
@@ -86,7 +85,7 @@ func isECDSASignedCert(cert *x509.Certificate) bool {
 // If the signature is not in low-S, then a new certificate is generated
 // that is equals to cert but the signature that is in low-S.
 //func sanitizeECDSASignedCert(cert *x509.Certificate, parentCert *x509.Certificate) (*x509.Certificate, error) {
-//TODO
+// TODO 需要确认是否写个新的函数代替该函数
 func sanitizeECDSASignedCert(cert *x509.Certificate, parentCert *x509.Certificate) (*x509.Certificate, error) {
 	if cert == nil {
 		return nil, errors.New("certificate must be different from nil")
@@ -95,8 +94,8 @@ func sanitizeECDSASignedCert(cert *x509.Certificate, parentCert *x509.Certificat
 		return nil, errors.New("parent certificate must be different from nil")
 	}
 
-	// TODO ecdsa改为sm2
-	expectedSig, err := gm.SignatureToLowS(parentCert.PublicKey.(*ecdsa.PublicKey), cert.Signature)
+	// TODO sm2 是否需要 SignatureToLowS
+	expectedSig, err := utils.SignatureToLowS(parentCert.PublicKey.(*ecdsa.PublicKey), cert.Signature)
 	if err != nil {
 		return nil, err
 	}

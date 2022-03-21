@@ -337,6 +337,13 @@ func (opts *GMSM4ImportKeyOpts) Ephemeral() bool {
 	return opts.Temporary
 }
 
+type GMSM4EncrypterOpts struct {
+	// sm4的分组模式，目前支持: ECB, CBC, CFB, OFB
+	MODE string
+	// 初始偏移量 在 CBC, CFB, OFB 分组模式下需要
+	IV []byte
+}
+
 //GMSM2PrivateKeyImportOpts  实现  bccsp.KeyImportOpts 接口
 type GMSM2PrivateKeyImportOpts struct {
 	Temporary bool
@@ -366,5 +373,21 @@ func (opts *GMSM2PublicKeyImportOpts) Algorithm() string {
 // Ephemeral returns true if the key generated has to be ephemeral,
 // false otherwise.
 func (opts *GMSM2PublicKeyImportOpts) Ephemeral() bool {
+	return opts.Temporary
+}
+
+//GMSM2GoPublicKeyImportOpts  实现  bccsp.KeyImportOpts 接口
+type GMSM2GoPublicKeyImportOpts struct {
+	Temporary bool
+}
+
+// Algorithm returns the key importation algorithm identifier (to be used).
+func (opts *GMSM2GoPublicKeyImportOpts) Algorithm() string {
+	return GMSM2
+}
+
+// Ephemeral returns true if the key generated has to be ephemeral,
+// false otherwise.
+func (opts *GMSM2GoPublicKeyImportOpts) Ephemeral() bool {
 	return opts.Temporary
 }

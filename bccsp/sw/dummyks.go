@@ -21,6 +21,10 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
 )
 
+/*
+bccsp/sw/dummyks.go 实现`bccsp.KeyStore`接口(bccsp/keystore.go)，用于key的Dummy存储读写功能
+*/
+
 // NewDummyKeyStore instantiate a dummy key store
 // that neither loads nor stores keys
 func NewDummyKeyStore() bccsp.KeyStore {
@@ -39,11 +43,11 @@ func (ks *dummyKeyStore) ReadOnly() bool {
 
 // GetKey returns a key object whose SKI is the one passed.
 func (ks *dummyKeyStore) GetKey(ski []byte) (bccsp.Key, error) {
-	return nil, errors.New("Key not found. This is a dummy KeyStore")
+	return nil, errors.New("key not found. This is a dummy KeyStore")
 }
 
 // StoreKey stores the key k in this KeyStore.
 // If this KeyStore is read only then the method will fail.
 func (ks *dummyKeyStore) StoreKey(k bccsp.Key) error {
-	return errors.New("Cannot store key. This is a dummy read-only KeyStore")
+	return errors.New("cannot store key. This is a dummy read-only KeyStore")
 }

@@ -14,6 +14,10 @@ import (
 	"github.com/pkg/errors"
 )
 
+/*
+bccsp/sw/inmemoryks.go 基于内存的keystore实现
+*/
+
 // NewInMemoryKeyStore instantiates an ephemeral in-memory keystore
 func NewInMemoryKeyStore() bccsp.KeyStore {
 	eks := &inmemoryKeyStore{}

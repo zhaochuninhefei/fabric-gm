@@ -28,10 +28,14 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
 )
 
+/*
+bccsp/sw/aes.go 实现`sw.Encryptor`接口和`sw.Decryptor`接口(bccsp/sw/internals.go)
+*/
+
 // GetRandomBytes returns len random looking bytes
 func GetRandomBytes(len int) ([]byte, error) {
 	if len < 0 {
-		return nil, errors.New("Len must be larger than 0")
+		return nil, errors.New("len must be larger than 0")
 	}
 
 	buffer := make([]byte, len)
@@ -41,7 +45,7 @@ func GetRandomBytes(len int) ([]byte, error) {
 		return nil, err
 	}
 	if n != len {
-		return nil, fmt.Errorf("Buffer not filled. Requested [%d], got [%d]", len, n)
+		return nil, fmt.Errorf("buffer not filled. Requested [%d], got [%d]", len, n)
 	}
 
 	return buffer, nil
@@ -58,13 +62,13 @@ func pkcs7UnPadding(src []byte) ([]byte, error) {
 	unpadding := int(src[length-1])
 
 	if unpadding > aes.BlockSize || unpadding == 0 {
-		return nil, errors.New("Invalid pkcs7 padding (unpadding > aes.BlockSize || unpadding == 0)")
+		return nil, errors.New("invalid pkcs7 padding (unpadding > aes.BlockSize || unpadding == 0)")
 	}
 
 	pad := src[len(src)-unpadding:]
 	for i := 0; i < unpadding; i++ {
 		if pad[i] != byte(unpadding) {
-			return nil, errors.New("Invalid pkcs7 padding (pad[i] != unpadding)")
+			return nil, errors.New("invalid pkcs7 padding (pad[i] != unpadding)")
 		}
 	}
 
@@ -77,7 +81,7 @@ func aesCBCEncrypt(key, s []byte) ([]byte, error) {
 
 func aesCBCEncryptWithRand(prng io.Reader, key, s []byte) ([]byte, error) {
 	if len(s)%aes.BlockSize != 0 {
-		return nil, errors.New("Invalid plaintext. It must be a multiple of the block size")
+		return nil, errors.New("invalid plaintext. It must be a multiple of the block size")
 	}
 
 	block, err := aes.NewCipher(key)
@@ -99,11 +103,11 @@ func aesCBCEncryptWithRand(prng io.Reader, key, s []byte) ([]byte, error) {
 
 func aesCBCEncryptWithIV(IV []byte, key, s []byte) ([]byte, error) {
 	if len(s)%aes.BlockSize != 0 {
-		return nil, errors.New("Invalid plaintext. It must be a multiple of the block size")
+		return nil, errors.New("invalid plaintext. It must be a multiple of the block size")
 	}
 
 	if len(IV) != aes.BlockSize {
-		return nil, errors.New("Invalid IV. It must have length the block size")
+		return nil, errors.New("invalid IV. It must have length the block size")
 	}
 
 	block, err := aes.NewCipher(key)
@@ -127,13 +131,13 @@ func aesCBCDecrypt(key, src []byte) ([]byte, error) {
 	}
 
 	if len(src) < aes.BlockSize {
-		return nil, errors.New("Invalid ciphertext. It must be a multiple of the block size")
+		return nil, errors.New("invalid ciphertext. It must be a multiple of the block size")
 	}
 	iv := src[:aes.BlockSize]
 	src = src[aes.BlockSize:]
 
 	if len(src)%aes.BlockSize != 0 {
-		return nil, errors.New("Invalid ciphertext. It must be a multiple of the block size")
+		return nil, errors.New("invalid ciphertext. It must be a multiple of the block size")
 	}
 
 	mode := cipher.NewCBCDecrypter(block, iv)
@@ -188,7 +192,7 @@ func (e *aescbcpkcs7Encryptor) Encrypt(k bccsp.Key, plaintext []byte, opts bccsp
 		// AES in CBC mode with PKCS7 padding
 
 		if len(o.IV) != 0 && o.PRNG != nil {
-			return nil, errors.New("Invalid options. Either IV or PRNG should be different from nil, or both nil.")
+			return nil, errors.New("invalid options. Either IV or PRNG should be different from nil, or both nil")
 		}
 
 		if len(o.IV) != 0 {
@@ -203,7 +207,7 @@ func (e *aescbcpkcs7Encryptor) Encrypt(k bccsp.Key, plaintext []byte, opts bccsp
 	case bccsp.AESCBCPKCS7ModeOpts:
 		return e.Encrypt(k, plaintext, &o)
 	default:
-		return nil, fmt.Errorf("Mode not recognized [%s]", opts)
+		return nil, fmt.Errorf("mode not recognized [%s]", opts)
 	}
 }
 
@@ -216,6 +220,6 @@ func (*aescbcpkcs7Decryptor) Decrypt(k bccsp.Key, ciphertext []byte, opts bccsp.
 		// AES in CBC mode with PKCS7 padding
 		return AESCBCPKCS7Decrypt(k.(*aesPrivateKey).privKey, ciphertext)
 	default:
-		return nil, fmt.Errorf("Mode not recognized [%s]", opts)
+		return nil, fmt.Errorf("mode not recognized [%s]", opts)
 	}
 }

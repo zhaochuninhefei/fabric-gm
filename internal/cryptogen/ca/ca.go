@@ -24,7 +24,7 @@ import (
 	"time"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
-	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/gm"
+	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/sw"
 	"gitee.com/zhaochuninhefei/gmgo/sm2"
 	gx509 "gitee.com/zhaochuninhefei/gmgo/x509"
 
@@ -90,7 +90,7 @@ func NewCA(
 
 	template.Subject = subject
 	template.SubjectKeyId = computeSKI(priv)
-	templateSm2 := gm.ParseX509Certificate2Sm2(&template)
+	templateSm2 := sw.ParseX509Certificate2Sm2(&template)
 	//TODO important
 	templateSm2.SubjectKeyId = computeSKI(priv)
 	sm2PubKey := priv.PublicKey
@@ -176,7 +176,7 @@ func (ca *CA) SignCertificate(
 		}
 	}
 	template.PublicKey = pub
-	templateSm2 := gm.ParseX509Certificate2Sm2(&template)
+	templateSm2 := sw.ParseX509Certificate2Sm2(&template)
 	templateSm2.SignatureAlgorithm = gx509.SM2WithSM3
 	cert, err := genCertificateGMSM2(
 		baseDir,
@@ -317,7 +317,7 @@ func genCertificateGMSM21(
 	pub *sm2.PublicKey,
 	key bccsp.Key) (*gx509.Certificate, error) {
 	//create the x509 public cert
-	certBytes, err := gm.CreateCertificateToMem(template, parent, key)
+	certBytes, err := sw.CreateCertificateToMem(template, parent, key)
 
 	if err != nil {
 		return nil, err

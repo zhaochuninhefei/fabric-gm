@@ -13,6 +13,7 @@ import (
 	"crypto/x509"
 	"encoding/asn1"
 	"encoding/pem"
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -323,6 +324,34 @@ func TestAESKey(t *testing.T) {
 	assert.NoError(t, err)
 
 	k2, err = pemToAES(pem, k)
+	assert.NoError(t, err)
+	assert.Equal(t, k, k2)
+}
+
+func TestSM4Key(t *testing.T) {
+	k, _ := GetRandomBytes(16)
+	fmt.Printf("生成随机sm4密钥: %v", k)
+
+	pem := sm4ToPEM(k)
+
+	k2, err := pemToSM4(pem, nil)
+	assert.NoError(t, err)
+	assert.Equal(t, k, k2)
+
+	pem, err = sm4ToEncryptedPEM(k, k)
+	assert.NoError(t, err)
+
+	k2, err = pemToSM4(pem, k)
+	assert.NoError(t, err)
+	assert.Equal(t, k, k2)
+
+	_, err = pemToSM4(pem, nil)
+	assert.Error(t, err)
+
+	_, err = sm4ToEncryptedPEM(k, nil)
+	assert.NoError(t, err)
+
+	k2, err = pemToSM4(pem, k)
 	assert.NoError(t, err)
 	assert.Equal(t, k, k2)
 }

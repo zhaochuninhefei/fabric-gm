@@ -20,6 +20,11 @@ import (
 	"gitee.com/zhaochuninhefei/gmgo/sm4"
 )
 
+/*
+bccsp/sw/sm4.go 实现`sw.Encryptor`接口和`sw.Decryptor`接口(bccsp/sw/internals.go)
+目前存在问题: 没有分组逻辑，直接调用了sm4对每组明文/密文的分组加解密函数。
+*/
+
 // GetRandomBytes returns len random looking bytes
 // func GetRandomBytes(len int) ([]byte, error) {
 // 	if len < 0 {
@@ -40,6 +45,8 @@ import (
 // }
 
 // AESCBCPKCS7Encrypt combines CBC encryption and PKCS7 padding
+
+// 直接调用sm4分组加密 分组在哪做?
 func SM4Encrypt(key, src []byte) ([]byte, error) {
 	// // First pad
 	// tmp := pkcs7Padding(src)
@@ -52,6 +59,8 @@ func SM4Encrypt(key, src []byte) ([]byte, error) {
 }
 
 // AESCBCPKCS7Decrypt combines CBC decryption and PKCS7 unpadding
+
+// 直接调用sm4分组解密 分组在哪做?
 func SM4Decrypt(key, src []byte) ([]byte, error) {
 	// First decrypt
 	// pt, err := aesCBCDecrypt(key, src)
@@ -66,12 +75,32 @@ func SM4Decrypt(key, src []byte) ([]byte, error) {
 
 type gmsm4Encryptor struct{}
 
-//实现 Encryptor 接口
-func (*gmsm4Encryptor) Encrypt(k bccsp.Key, plaintext []byte, opts bccsp.EncrypterOpts) (ciphertext []byte, err error) {
-
-	return SM4Encrypt(k.(*gmsm4Key).privKey, plaintext)
+// 实现 Encryptor 接口
+// 不能直接调用 SM4Encrypt 因为没有分组
+func (e *gmsm4Encryptor) Encrypt(k bccsp.Key, plaintext []byte, opts bccsp.EncrypterOpts) (ciphertext []byte, err error) {
+	key := k.(*gmsm4Key).privKey
+	switch o := opts.(type) {
+	case *bccsp.GMSM4EncrypterOpts:
+		iv := o.IV
+		switch o.MODE {
+		case "ECB":
+			return sm4.Sm4Ecb(key, plaintext, true)
+		case "CBC":
+			return sm4.Sm4Cbc(key, iv, plaintext, true)
+		case "CFB":
+			return sm4.Sm4CFB(key, iv, plaintext, true)
+		case "OFB":
+			return sm4.Sm4OFB(key, iv, plaintext, true)
+		default:
+			return sm4.Sm4Ecb(key, plaintext, true)
+		}
+	case bccsp.GMSM4EncrypterOpts:
+		return e.Encrypt(k, plaintext, &o)
+	default:
+		return e.Encrypt(k, plaintext, &bccsp.GMSM4EncrypterOpts{})
+	}
+	// return SM4Encrypt(k.(*gmsm4Key).privKey, plaintext)
 	//return AESCBCPKCS7Encrypt(k.(*sm4PrivateKey).privKey, plaintext)
-
 	// key := k.(*gmsm4Key).privKey
 	// var en = make([]byte, 16)
 	// sms4(plaintext, 16, key, en, 1)
@@ -80,10 +109,31 @@ func (*gmsm4Encryptor) Encrypt(k bccsp.Key, plaintext []byte, opts bccsp.Encrypt
 
 type gmsm4Decryptor struct{}
 
-//实现 Decryptor 接口
-func (*gmsm4Decryptor) Decrypt(k bccsp.Key, ciphertext []byte, opts bccsp.DecrypterOpts) (plaintext []byte, err error) {
-
-	return SM4Decrypt(k.(*gmsm4Key).privKey, ciphertext)
+// 实现 Decryptor 接口
+// 不能直接调用 SM4Decrypt 因为没有分组
+func (e *gmsm4Decryptor) Decrypt(k bccsp.Key, ciphertext []byte, opts bccsp.DecrypterOpts) (plaintext []byte, err error) {
+	key := k.(*gmsm4Key).privKey
+	switch o := opts.(type) {
+	case *bccsp.GMSM4EncrypterOpts:
+		iv := o.IV
+		switch o.MODE {
+		case "ECB":
+			return sm4.Sm4Ecb(key, plaintext, false)
+		case "CBC":
+			return sm4.Sm4Cbc(key, iv, plaintext, false)
+		case "CFB":
+			return sm4.Sm4CFB(key, iv, plaintext, false)
+		case "OFB":
+			return sm4.Sm4OFB(key, iv, plaintext, false)
+		default:
+			return sm4.Sm4Ecb(key, plaintext, false)
+		}
+	case bccsp.GMSM4EncrypterOpts:
+		return e.Decrypt(k, plaintext, &o)
+	default:
+		return e.Decrypt(k, plaintext, &bccsp.GMSM4EncrypterOpts{})
+	}
+	// return SM4Decrypt(k.(*gmsm4Key).privKey, ciphertext)
 	// var dc = make([]byte, 16)
 	// key := k.(*gmsm4Key).privKey
 	// sms4(ciphertext, 16, key, dc, 0)

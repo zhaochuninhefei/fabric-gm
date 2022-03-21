@@ -26,50 +26,66 @@ import (
 	"gitee.com/zhaochuninhefei/gmgo/sm2"
 )
 
+/*
+bccsp/sw/keygen.go 定义各个算法的密钥生成器，实现`sw.KeyGenerator`接口(bccsp/sw/internals.go)
+ecdsaKeyGenerator
+gmsm2KeyGenerator
+gmsm4KeyGenerator
+aesKeyGenerator
+*/
+
+// ecdsa私钥生成器
 type ecdsaKeyGenerator struct {
 	curve elliptic.Curve
 }
 
+// 生成ecdsa私钥
 func (kg *ecdsaKeyGenerator) KeyGen(opts bccsp.KeyGenOpts) (bccsp.Key, error) {
 	privKey, err := ecdsa.GenerateKey(kg.curve, rand.Reader)
 	if err != nil {
-		return nil, fmt.Errorf("Failed generating ECDSA key for [%v]: [%s]", kg.curve, err)
+		return nil, fmt.Errorf("failed generating ECDSA key for [%v]: [%s]", kg.curve, err)
 	}
 
 	return &ecdsaPrivateKey{privKey}, nil
 }
 
+// sm2私钥生成器
 type gmsm2KeyGenerator struct {
 }
 
+// 生成sm2私钥
 func (gm *gmsm2KeyGenerator) KeyGen(opts bccsp.KeyGenOpts) (bccsp.Key, error) {
 	privKey, err := sm2.GenerateKey(rand.Reader)
 	if err != nil {
-		return nil, fmt.Errorf("Failed generating SM2 key for [%v]: [%s]", err)
+		return nil, fmt.Errorf("failed generating SM2 key : [%s]", err)
 	}
 	return &gmsm2PrivateKey{privKey}, nil
 }
 
+// sm4密钥生成器
 type gmsm4KeyGenerator struct {
 	length int
 }
 
-func (gm *gmsm4KeyGenerator) KeyGen(opts bccsp.KeyGenOpts) (bccsp.Key, error) {
-	lowLevelKey, err := GetRandomBytes(int(gm.length))
+// 生成sm4密钥
+func (kg *gmsm4KeyGenerator) KeyGen(opts bccsp.KeyGenOpts) (bccsp.Key, error) {
+	lowLevelKey, err := GetRandomBytes(int(kg.length))
 	if err != nil {
-		return nil, fmt.Errorf("Failed generating SM4 key for [%v]: [%s]", err)
+		return nil, fmt.Errorf("failed generating SM4 %d key for : [%s]", kg.length, err)
 	}
 	return &gmsm4Key{lowLevelKey, false}, nil
 }
 
+// AES密钥生成器
 type aesKeyGenerator struct {
 	length int
 }
 
+// 生成AES密钥
 func (kg *aesKeyGenerator) KeyGen(opts bccsp.KeyGenOpts) (bccsp.Key, error) {
 	lowLevelKey, err := GetRandomBytes(int(kg.length))
 	if err != nil {
-		return nil, fmt.Errorf("Failed generating AES %d key [%s]", kg.length, err)
+		return nil, fmt.Errorf("failed generating AES %d key [%s]", kg.length, err)
 	}
 
 	return &aesPrivateKey{lowLevelKey, false}, nil

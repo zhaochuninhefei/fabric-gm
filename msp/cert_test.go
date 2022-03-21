@@ -26,7 +26,6 @@ import (
 	"testing"
 	"time"
 
-	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/gm"
 	"gitee.com/zhaochuninhefei/gmgo/sm2"
 	"gitee.com/zhaochuninhefei/gmgo/x509"
 
@@ -99,7 +98,7 @@ func TestSanitizeCertInvalidInput(t *testing.T) {
 }*/
 
 func TestCertExpiration(t *testing.T) {
-	cryptoProvider, err := gm.NewDefaultSecurityLevelWithKeystore(sw.NewDummyKeyStore())
+	cryptoProvider, err := sw.NewDefaultSecurityLevelWithKeystore(sw.NewDummyKeyStore())
 	assert.NoError(t, err)
 	msp := &bccspmsp{bccsp: cryptoProvider}
 	msp.opts = &x509.VerifyOptions{}

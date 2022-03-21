@@ -18,7 +18,6 @@ package sw
 import (
 	"crypto/elliptic"
 	"crypto/sha256"
-	"errors"
 	"fmt"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
@@ -26,14 +25,20 @@ import (
 	"gitee.com/zhaochuninhefei/gmgo/x509"
 )
 
+/*
+bccsp/sw/sm2key.go 用来定义国密sm2公私钥结构体，并分别实现`bccsp.Key`(bccsp/bccsp.go)接口
+*/
+
 type gmsm2PrivateKey struct {
 	privKey *sm2.PrivateKey
 }
 
 // Bytes converts this key to its byte representation,
 // if this operation is allowed.
+// 获取sm2私钥的asn1编码结果，未对私钥加密
 func (k *gmsm2PrivateKey) Bytes() (raw []byte, err error) {
-	return nil, errors.New("Not supported.")
+	// return nil, errors.New("not supported")
+	return x509.MarshalSm2UnecryptedPrivateKey(k.privKey)
 }
 
 // SKI returns the subject key identifier of this key.
@@ -75,10 +80,11 @@ type gmsm2PublicKey struct {
 
 // Bytes converts this key to its byte representation,
 // if this operation is allowed.
+// 返回sm2公钥的asn1编码结果
 func (k *gmsm2PublicKey) Bytes() (raw []byte, err error) {
 	raw, err = x509.MarshalSm2PublicKey(k.pubKey)
 	if err != nil {
-		return nil, fmt.Errorf("Failed marshalling key [%s]", err)
+		return nil, fmt.Errorf("failed marshalling key [%s]", err)
 	}
 	return
 }

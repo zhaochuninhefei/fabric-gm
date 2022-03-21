@@ -70,11 +70,11 @@ type gmsm4KeyGenerator struct {
 }
 
 // 生成sm4密钥
-func (gm *gmsm4KeyGenerator) KeyGen(opts bccsp.KeyGenOpts) (k bccsp.Key, err error) {
+func (kg *gmsm4KeyGenerator) KeyGen(opts bccsp.KeyGenOpts) (k bccsp.Key, err error) {
 	// 生成sm4密钥
-	lowLevelKey, err := GetRandomBytes(int(gm.length))
+	lowLevelKey, err := GetRandomBytes(int(kg.length))
 	if err != nil {
-		return nil, fmt.Errorf("failed generating SM4 %d key [%s]", gm.length, err)
+		return nil, fmt.Errorf("failed generating SM4 %d key [%s]", kg.length, err)
 	}
 
 	return &gmsm4Key{lowLevelKey, false}, nil

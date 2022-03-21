@@ -22,7 +22,11 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
 )
 
-//定义国密 SM4 结构体，实现 bccsp Key 的接口
+/*
+bccsp/sw/sm4key.go 定义国密sm4密钥结构体，并实现`bccsp.Key`(bccsp/bccsp.go)接口
+*/
+
+// 定义国密 SM4 结构体，实现 bccsp Key 的接口
 type gmsm4Key struct {
 	privKey    []byte
 	exportable bool
@@ -35,7 +39,7 @@ func (k *gmsm4Key) Bytes() (raw []byte, err error) {
 		return k.privKey, nil
 	}
 
-	return nil, errors.New("Not supported")
+	return nil, errors.New("not supported")
 }
 
 // SKI returns the subject key identifier of this key.
@@ -62,5 +66,5 @@ func (k *gmsm4Key) Private() bool {
 // PublicKey returns the corresponding public key part of an asymmetric public/private key pair.
 // This method returns an error in symmetric key schemes.
 func (k *gmsm4Key) PublicKey() (bccsp.Key, error) {
-	return nil, errors.New("Cannot call this method on a symmetric key")
+	return nil, errors.New("cannot call this method on a symmetric key")
 }

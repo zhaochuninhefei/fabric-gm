@@ -16,6 +16,10 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
 )
 
+/*
+bccsp/sw/rsa.go 定义 rsa公钥结构体并为其实现`bccsp.Key`接口
+*/
+
 // An rsaPublicKey wraps the standard library implementation of an RSA public
 // key with functions that satisfy the bccsp.Key interface.
 //
@@ -30,11 +34,11 @@ func (k *rsaPublicKey) PublicKey() (bccsp.Key, error) { return k, nil }
 // Bytes converts this key to its serialized representation.
 func (k *rsaPublicKey) Bytes() (raw []byte, err error) {
 	if k.pubKey == nil {
-		return nil, errors.New("Failed marshalling key. Key is nil.")
+		return nil, errors.New("failed marshalling key. Key is nil")
 	}
 	raw, err = x509.MarshalPKIXPublicKey(k.pubKey)
 	if err != nil {
-		return nil, fmt.Errorf("Failed marshalling key [%s]", err)
+		return nil, fmt.Errorf("failed marshalling key [%s]", err)
 	}
 	return
 }
