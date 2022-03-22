@@ -82,5 +82,5 @@ func TestAESKeyGeneratorInvalidInputs(t *testing.T) {
 
 	_, err := kg.KeyGen(nil)
 	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "Len must be larger than 0")
+	assert.Contains(t, err.Error(), "len must be larger than 0")
 }

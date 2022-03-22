@@ -54,5 +54,5 @@ func TestRSAPublicKey(t *testing.T) {
 	require.Equal(t, bytes2, bytes, "bytes are not computed in the right way.")
 
 	_, err = (&rsaPublicKey{}).Bytes()
-	require.EqualError(t, err, "Failed marshalling key. Key is nil.")
+	require.EqualError(t, err, "failed marshalling key. Key is nil")
 }
