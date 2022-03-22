@@ -67,4 +67,15 @@ func TestSWFactoryGet(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotNil(t, csp)
 
+	opts = &FactoryOpts{
+		SwOpts: &SwOpts{
+			SecLevel:     256,
+			HashFamily:   "SM3",
+			FileKeystore: &FileKeystoreOpts{KeyStorePath: os.TempDir()},
+		},
+	}
+	csp, err = f.Get(opts)
+	assert.NoError(t, err)
+	assert.NotNil(t, csp)
+
 }

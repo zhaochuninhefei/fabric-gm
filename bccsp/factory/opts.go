@@ -24,8 +24,8 @@ bccsp/factory/opts.go 提供默认 FactoryOpts，并为FactoryOpts绑定方法 F
 // returns a new instance every time
 func GetDefaultOpts() *FactoryOpts {
 	return &FactoryOpts{
-		// TODO: 是否恢复为 SW
-		ProviderName: "GM",
+		// 恢复为 SW
+		ProviderName: "SW",
 		SwOpts: &SwOpts{
 			HashFamily: "SM3",
 			SecLevel:   256,
