@@ -145,12 +145,12 @@ func (kd *aesPrivateKeyKeyDeriver) KeyDeriv(k bccsp.Key, opts bccsp.KeyDerivOpts
 
 	switch hmacOpts := opts.(type) {
 	case *bccsp.HMACTruncated256AESDeriveKeyOpts:
-		mac := hmac.New(kd.conf.hashFunction, aesK.privKey)
+		mac := hmac.New(kd.conf.shaFunction, aesK.privKey)
 		mac.Write(hmacOpts.Argument())
-		return &aesPrivateKey{mac.Sum(nil)[:kd.conf.aesBitLength], false}, nil
+		return &aesPrivateKey{mac.Sum(nil)[:kd.conf.aesByteLength], false}, nil
 
 	case *bccsp.HMACDeriveKeyOpts:
-		mac := hmac.New(kd.conf.hashFunction, aesK.privKey)
+		mac := hmac.New(kd.conf.shaFunction, aesK.privKey)
 		mac.Write(hmacOpts.Argument())
 		return &aesPrivateKey{mac.Sum(nil), true}, nil
 

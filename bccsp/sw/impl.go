@@ -50,6 +50,8 @@ type CSP struct {
 	Signers       map[reflect.Type]Signer
 	Verifiers     map[reflect.Type]Verifier
 	Hashers       map[reflect.Type]Hasher
+
+	Algorithms string
 }
 
 func New(keyStore bccsp.KeyStore) (*CSP, error) {
@@ -68,7 +70,7 @@ func New(keyStore bccsp.KeyStore) (*CSP, error) {
 
 	csp := &CSP{keyStore,
 		keyGenerators, keyDerivers, keyImporters, encryptors,
-		decryptors, signers, verifiers, hashers}
+		decryptors, signers, verifiers, hashers, ""}
 
 	return csp, nil
 }
@@ -310,6 +312,10 @@ func (csp *CSP) Decrypt(k bccsp.Key, ciphertext []byte, opts bccsp.DecrypterOpts
 	}
 
 	return
+}
+
+func (csp *CSP) ShowAlgorithms() string {
+	return csp.Algorithms
 }
 
 // AddWrapper binds the passed type to the passed wrapper.

@@ -29,7 +29,7 @@ func (conf *config) setSecurityLevel(securityLevel int, hashFamily string) (err 
 	case "SHA3":
 		err = conf.setSecurityLevelSHA3(securityLevel)
 	default:
-		err = fmt.Errorf("Hash Family not supported [%s]", hashFamily)
+		err = fmt.Errorf("hash Family not supported [%s]", hashFamily)
 	}
 	return
 }
@@ -45,7 +45,7 @@ func (conf *config) setSecurityLevelSHA2(level int) (err error) {
 		conf.hashFunction = sha512.New384
 		conf.aesBitLength = 32
 	default:
-		err = fmt.Errorf("Security level not supported [%d]", level)
+		err = fmt.Errorf("security level not supported [%d]", level)
 	}
 	return
 }
@@ -61,7 +61,7 @@ func (conf *config) setSecurityLevelSHA3(level int) (err error) {
 		conf.hashFunction = sha3.New384
 		conf.aesBitLength = 32
 	default:
-		err = fmt.Errorf("Security level not supported [%d]", level)
+		err = fmt.Errorf("security level not supported [%d]", level)
 	}
 	return
 }

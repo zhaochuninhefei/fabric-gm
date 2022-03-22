@@ -9,6 +9,7 @@ package sw
 import (
 	"crypto/ecdsa"
 	"crypto/rsa"
+	"crypto/x509"
 
 	// "crypto/rsa"
 	"errors"
@@ -17,7 +18,7 @@ import (
 
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/utils"
 	"gitee.com/zhaochuninhefei/gmgo/sm2"
-	"gitee.com/zhaochuninhefei/gmgo/x509"
+	gmx509 "gitee.com/zhaochuninhefei/gmgo/x509"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
 )
@@ -143,33 +144,57 @@ func (*ecdsaGoPublicKeyImportOptsKeyImporter) KeyImport(raw interface{}, opts bc
 	return &ecdsaPublicKey{lowLevelKey}, nil
 }
 
-// gmx509公钥导入器
+// x509公钥导入器
 type x509PublicKeyImportOptsKeyImporter struct {
 	bccsp *CSP
 }
 
-// 从gmx509证书导入公钥
+// 从x509证书导入公钥
 // raw : *x509.Certificate
-// 支持公钥: *sm2.PublicKey, *ecdsa.PublicKey, *rsa.PublicKey
+// 支持公钥: *ecdsa.PublicKey, *rsa.PublicKey
 func (ki *x509PublicKeyImportOptsKeyImporter) KeyImport(raw interface{}, opts bccsp.KeyImportOpts) (bccsp.Key, error) {
-	sm2Cert, ok := raw.(*x509.Certificate)
+	cert, ok := raw.(*x509.Certificate)
 	if !ok {
 		return nil, errors.New("invalid raw material. Expected *x509.Certificate")
 	}
 
-	pk := sm2Cert.PublicKey
+	pk := cert.PublicKey
+
+	switch pk := pk.(type) {
+	case *ecdsa.PublicKey:
+		return ki.bccsp.KeyImporters[reflect.TypeOf(&bccsp.ECDSAGoPublicKeyImportOpts{})].KeyImport(
+			pk,
+			&bccsp.ECDSAGoPublicKeyImportOpts{Temporary: opts.Ephemeral()})
+	case *rsa.PublicKey:
+		// This path only exists to support environments that use RSA certificate
+		// authorities to issue ECDSA certificates.
+		return &rsaPublicKey{pubKey: pk}, nil
+	default:
+		return nil, errors.New("certificate's public key type not recognized. Supported keys: [SM2, ECDSA, RSA]")
+	}
+}
+
+// gmx509公钥导入器
+type gmx509PublicKeyImportOptsKeyImporter struct {
+	bccsp *CSP
+}
+
+// 从gmx509证书导入公钥
+// raw : *gmx509.Certificate
+// 支持公钥: *sm2.PublicKey, *ecdsa.PublicKey, *rsa.PublicKey
+func (ki *gmx509PublicKeyImportOptsKeyImporter) KeyImport(raw interface{}, opts bccsp.KeyImportOpts) (bccsp.Key, error) {
+	cert, ok := raw.(*gmx509.Certificate)
+	if !ok {
+		return nil, errors.New("invalid raw material. Expected *gmx509.Certificate")
+	}
+
+	pk := cert.PublicKey
 
 	switch pk := pk.(type) {
 	case *sm2.PublicKey:
-		// fmt.Printf("")
-		// sm2PublicKey, ok := pk.(sm2.PublicKey)
 		if !ok {
 			return nil, errors.New("parse interface [] to sm2 pk error")
 		}
-		// der, err := x509.MarshalSm2PublicKey(pk)
-		// if err != nil {
-		// 	return nil, errors.New("MarshalSm2PublicKey error")
-		// }
 		return ki.bccsp.KeyImporters[reflect.TypeOf(&bccsp.SM2GoPublicKeyImportOpts{})].KeyImport(
 			pk,
 			&bccsp.SM2GoPublicKeyImportOpts{Temporary: opts.Ephemeral()})
@@ -217,7 +242,7 @@ func (*sm2PrivateKeyOptsKeyImporter) KeyImport(raw interface{}, opts bccsp.KeyIm
 		return nil, errors.New("invalid raw material, It must botbe nil")
 	}
 
-	sm2SK, err := x509.ParsePKCS8UnecryptedPrivateKey(der)
+	sm2SK, err := gmx509.ParsePKCS8UnecryptedPrivateKey(der)
 
 	if err != nil {
 		return nil, fmt.Errorf("failed converting to SM2 private key [%s]", err)
@@ -241,7 +266,7 @@ func (*sm2PublicKeyOptsKeyImporter) KeyImport(raw interface{}, opts bccsp.KeyImp
 		return nil, errors.New("invalid raw material, It must botbe nil")
 	}
 
-	sm2Pub, err := x509.ParseSm2PublicKey(der)
+	sm2Pub, err := gmx509.ParseSm2PublicKey(der)
 
 	if err != nil {
 		return nil, fmt.Errorf("failed converting to SM2 private key [%s]", err)

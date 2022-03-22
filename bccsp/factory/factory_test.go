@@ -24,8 +24,9 @@ func TestMain(m *testing.M) {
 BCCSP:
     default: SW
     SW:
-        Hash: SM3
+        Hash: SHA2
         Security: 256
+    UsingGM: y
 `
 
 	if pkcs11Enabled {
@@ -34,8 +35,9 @@ BCCSP:
 BCCSP:
     default: PKCS11
     SW:
-        Hash: SM3
+        Hash: SHA2
         Security: 256
+    UsingGM: y
     PKCS11:
         Hash: SHA3
         Security: 256
@@ -62,7 +64,7 @@ BCCSP:
 	cfgVariations := []*FactoryOpts{
 		{},
 		{ProviderName: "SW"},
-		{ProviderName: "SW", SwOpts: &SwOpts{HashFamily: "SM3", SecLevel: 256, Ephemeral: true}},
+		{ProviderName: "SW", SwOpts: &SwOpts{HashFamily: "SHA2", SecLevel: 256, Ephemeral: true}},
 		yamlBCCSP,
 	}
 

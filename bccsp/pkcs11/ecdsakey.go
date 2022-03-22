@@ -32,7 +32,7 @@ type ecdsaPrivateKey struct {
 // Bytes converts this key to its byte representation,
 // if this operation is allowed.
 func (k *ecdsaPrivateKey) Bytes() ([]byte, error) {
-	return nil, errors.New("Not supported.")
+	return nil, errors.New("not supported")
 }
 
 // SKI returns the subject key identifier of this key.
@@ -68,7 +68,7 @@ type ecdsaPublicKey struct {
 func (k *ecdsaPublicKey) Bytes() (raw []byte, err error) {
 	raw, err = x509.MarshalPKIXPublicKey(k.pub)
 	if err != nil {
-		return nil, fmt.Errorf("Failed marshalling key [%s]", err)
+		return nil, fmt.Errorf("failed marshalling key [%s]", err)
 	}
 	return
 }

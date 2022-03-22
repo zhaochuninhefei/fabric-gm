@@ -193,7 +193,7 @@ func TestX509PublicKeyImportOptsKeyImporter(t *testing.T) {
 	cert.PublicKey = "Hello world"
 	_, err = ki.KeyImport(cert, &mocks2.KeyImportOpts{})
 	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "certificate's public key type not recognized. Supported keys: [SM2, ECDSA, RSA]")
+	assert.Contains(t, err.Error(), "invalid raw material. Expected *x509.Certificate")
 }
 
 func TestX509RSAKeyImport(t *testing.T) {
@@ -201,7 +201,7 @@ func TestX509RSAKeyImport(t *testing.T) {
 	assert.NoError(t, err, "key generation failed")
 
 	cert := &gmx509.Certificate{PublicKey: pk.Public()}
-	ki := x509PublicKeyImportOptsKeyImporter{}
+	ki := gmx509PublicKeyImportOptsKeyImporter{}
 	key, err := ki.KeyImport(cert, nil)
 	assert.NoError(t, err, "key import failed")
 	assert.NotNil(t, key, "key must not be nil")

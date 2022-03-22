@@ -73,7 +73,7 @@ func (kg *sm4KeyGenerator) KeyGen(opts bccsp.KeyGenOpts) (bccsp.Key, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed generating SM4 %d key for : [%s]", kg.length, err)
 	}
-	return &sm4Key{lowLevelKey, false}, nil
+	return &sm4Key{lowLevelKey, true}, nil
 }
 
 // AES密钥生成器

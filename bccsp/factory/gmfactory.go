@@ -49,6 +49,6 @@ func (f *GMFactory) Get(config *FactoryOpts) (bccsp.BCCSP, error) {
 		ks = sw.NewDummyKeyStore()
 	}
 
-	return sw.NewWithParams(gmOpts.SecLevel, "SM3", ks)
+	return sw.NewWithParams(true, gmOpts.SecLevel, gmOpts.HashFamily, ks)
 	//return gm.New(gmOpts.SecLevel, gmOpts.HashFamily, ks)
 }

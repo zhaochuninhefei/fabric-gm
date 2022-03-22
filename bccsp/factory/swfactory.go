@@ -64,7 +64,17 @@ func (f *SWFactory) Get(config *FactoryOpts) (bccsp.BCCSP, error) {
 		ks = sw.NewDummyKeyStore()
 	}
 
-	return sw.NewWithParams(swOpts.SecLevel, swOpts.HashFamily, ks)
+	var usingGM bool
+	switch config.UsingGM {
+	case "Y", "y":
+		usingGM = true
+	case "N", "n":
+		usingGM = false
+	default:
+		usingGM = true
+	}
+
+	return sw.NewWithParams(usingGM, swOpts.SecLevel, swOpts.HashFamily, ks)
 }
 
 // SwOpts contains options for the SWFactory

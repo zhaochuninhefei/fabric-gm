@@ -31,7 +31,7 @@ func (csp *impl) signECDSA(k ecdsaPrivateKey, digest []byte, opts bccsp.SignerOp
 func (csp *impl) verifyECDSA(k ecdsaPublicKey, signature, digest []byte, opts bccsp.SignerOpts) (bool, error) {
 	r, s, err := utils.UnmarshalECDSASignature(signature)
 	if err != nil {
-		return false, fmt.Errorf("Failed unmashalling signature [%s]", err)
+		return false, fmt.Errorf("failed unmashalling signature [%s]", err)
 	}
 
 	lowS, err := utils.IsLowS(k.pub, s)
@@ -40,7 +40,7 @@ func (csp *impl) verifyECDSA(k ecdsaPublicKey, signature, digest []byte, opts bc
 	}
 
 	if !lowS {
-		return false, fmt.Errorf("Invalid S. Must be smaller than half the order [%s][%s]", s, utils.GetCurveHalfOrdersAt(k.pub.Curve))
+		return false, fmt.Errorf("invalid S. Must be smaller than half the order [%s][%s]", s, utils.GetCurveHalfOrdersAt(k.pub.Curve))
 	}
 
 	if csp.softVerify {

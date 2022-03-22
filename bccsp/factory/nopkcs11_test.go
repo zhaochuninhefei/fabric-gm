@@ -20,7 +20,7 @@ func TestInitFactories(t *testing.T) {
 		ProviderName: "SW",
 		SwOpts:       &SwOpts{},
 	})
-	assert.EqualError(t, err, "Failed initializing BCCSP: Could not initialize BCCSP SW [Failed initializing configuration at [0,]: Hash Family not supported []]")
+	assert.EqualError(t, err, "Failed initializing BCCSP: Could not initialize BCCSP SW [Failed initializing configuration at [0,]: 非国密的安全级别配置不支持 []]")
 
 	err = initFactories(&FactoryOpts{
 		ProviderName: "PKCS11",

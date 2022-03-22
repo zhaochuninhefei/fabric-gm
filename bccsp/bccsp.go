@@ -145,4 +145,6 @@ type BCCSP interface {
 	// Decrypt decrypts ciphertext using key k.
 	// The opts argument should be appropriate for the algorithm used.
 	Decrypt(k Key, ciphertext []byte, opts DecrypterOpts) (plaintext []byte, err error)
+
+	ShowAlgorithms() string
 }

@@ -49,6 +49,10 @@ type MockBCCSP struct {
 	HashErr error
 }
 
+func (csp *MockBCCSP) ShowAlgorithms() string {
+	return "unkown"
+}
+
 func (*MockBCCSP) KeyGen(opts bccsp.KeyGenOpts) (bccsp.Key, error) {
 	panic("Not yet implemented")
 }

@@ -70,7 +70,8 @@ const (
 
 	// X509Certificate Label for X509 certificate related operation
 	X509Certificate = "X509Certificate"
-
+	// GMX509Certificate
+	GMX509Certificate = "GMX509Certificate"
 	// SM4
 	SM4 = "SM4"
 	// SM3
@@ -286,6 +287,22 @@ func (opts *X509PublicKeyImportOpts) Algorithm() string {
 // Ephemeral returns true if the key to generate has to be ephemeral,
 // false otherwise.
 func (opts *X509PublicKeyImportOpts) Ephemeral() bool {
+	return opts.Temporary
+}
+
+// GMX509PublicKeyImportOpts contains options for importing public keys from an gmx509 certificate
+type GMX509PublicKeyImportOpts struct {
+	Temporary bool
+}
+
+// Algorithm returns the key importation algorithm identifier (to be used).
+func (opts *GMX509PublicKeyImportOpts) Algorithm() string {
+	return GMX509Certificate
+}
+
+// Ephemeral returns true if the key to generate has to be ephemeral,
+// false otherwise.
+func (opts *GMX509PublicKeyImportOpts) Ephemeral() bool {
 	return opts.Temporary
 }
 

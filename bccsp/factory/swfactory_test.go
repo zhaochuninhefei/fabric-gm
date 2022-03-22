@@ -69,8 +69,8 @@ func TestSWFactoryGet(t *testing.T) {
 
 	opts = &FactoryOpts{
 		SwOpts: &SwOpts{
-			SecLevel:     256,
-			HashFamily:   "SM3",
+			SecLevel:     384,
+			HashFamily:   "SHA3",
 			FileKeystore: &FileKeystoreOpts{KeyStorePath: os.TempDir()},
 		},
 	}

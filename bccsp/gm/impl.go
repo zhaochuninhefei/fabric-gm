@@ -165,6 +165,10 @@ type impl struct {
 
 // 为 impl 实现 bccsp.BCCSP 接口
 
+func (csp *impl) ShowAlgorithms() string {
+	return "sm2-sm3-sm4;"
+}
+
 // 实现KeyGen方法，生成密钥
 func (csp *impl) KeyGen(opts bccsp.KeyGenOpts) (k bccsp.Key, err error) {
 	// Validate arguments

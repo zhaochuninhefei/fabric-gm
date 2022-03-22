@@ -29,7 +29,7 @@ import (
 
 func TestKeyGenInvalidInputs(t *testing.T) {
 	// Init a BCCSP instance with a key store that returns an error on store
-	csp, err := NewWithParams(256, "SHA2", &mocks.KeyStore{StoreKeyErr: errors.New("cannot store key")})
+	csp, err := NewWithParams(false, 256, "SHA2", &mocks.KeyStore{StoreKeyErr: errors.New("cannot store key")})
 	assert.NoError(t, err)
 
 	_, err = csp.KeyGen(nil)
@@ -46,7 +46,7 @@ func TestKeyGenInvalidInputs(t *testing.T) {
 }
 
 func TestKeyDerivInvalidInputs(t *testing.T) {
-	csp, err := NewWithParams(256, "SHA2", &mocks.KeyStore{StoreKeyErr: errors.New("cannot store key")})
+	csp, err := NewWithParams(false, 256, "SHA2", &mocks.KeyStore{StoreKeyErr: errors.New("cannot store key")})
 	assert.NoError(t, err)
 
 	_, err = csp.KeyDeriv(nil, &bccsp.ECDSAReRandKeyOpts{})
@@ -75,7 +75,7 @@ func TestKeyDerivInvalidInputs(t *testing.T) {
 }
 
 func TestKeyImportInvalidInputs(t *testing.T) {
-	csp, err := NewWithParams(256, "SHA2", &mocks.KeyStore{})
+	csp, err := NewWithParams(false, 256, "SHA2", &mocks.KeyStore{})
 	assert.NoError(t, err)
 
 	_, err = csp.KeyImport(nil, &bccsp.AES256ImportKeyOpts{})
@@ -93,7 +93,7 @@ func TestKeyImportInvalidInputs(t *testing.T) {
 
 func TestGetKeyInvalidInputs(t *testing.T) {
 	// Init a BCCSP instance with a key store that returns an error on get
-	csp, err := NewWithParams(256, "SHA2", &mocks.KeyStore{GetKeyErr: errors.New("cannot get key")})
+	csp, err := NewWithParams(false, 256, "SHA2", &mocks.KeyStore{GetKeyErr: errors.New("cannot get key")})
 	assert.NoError(t, err)
 
 	_, err = csp.GetKey(nil)
@@ -102,7 +102,7 @@ func TestGetKeyInvalidInputs(t *testing.T) {
 
 	// Init a BCCSP instance with a key store that returns a given key
 	k := &mocks.MockKey{}
-	csp, err = NewWithParams(256, "SHA2", &mocks.KeyStore{GetKeyValue: k})
+	csp, err = NewWithParams(false, 256, "SHA2", &mocks.KeyStore{GetKeyValue: k})
 	assert.NoError(t, err)
 	// No SKI is needed here
 	k2, err := csp.GetKey(nil)
@@ -111,7 +111,7 @@ func TestGetKeyInvalidInputs(t *testing.T) {
 }
 
 func TestSignInvalidInputs(t *testing.T) {
-	csp, err := NewWithParams(256, "SHA2", &mocks.KeyStore{})
+	csp, err := NewWithParams(false, 256, "SHA2", &mocks.KeyStore{})
 	assert.NoError(t, err)
 
 	_, err = csp.Sign(nil, []byte{1, 2, 3, 5}, nil)
@@ -128,7 +128,7 @@ func TestSignInvalidInputs(t *testing.T) {
 }
 
 func TestVerifyInvalidInputs(t *testing.T) {
-	csp, err := NewWithParams(256, "SHA2", &mocks.KeyStore{})
+	csp, err := NewWithParams(false, 256, "SHA2", &mocks.KeyStore{})
 	assert.NoError(t, err)
 
 	_, err = csp.Verify(nil, []byte{1, 2, 3, 5}, []byte{1, 2, 3, 5}, nil)
@@ -149,7 +149,7 @@ func TestVerifyInvalidInputs(t *testing.T) {
 }
 
 func TestEncryptInvalidInputs(t *testing.T) {
-	csp, err := NewWithParams(256, "SHA2", &mocks.KeyStore{})
+	csp, err := NewWithParams(false, 256, "SHA2", &mocks.KeyStore{})
 	assert.NoError(t, err)
 
 	_, err = csp.Encrypt(nil, []byte{1, 2, 3, 4}, &bccsp.AESCBCPKCS7ModeOpts{})
@@ -162,7 +162,7 @@ func TestEncryptInvalidInputs(t *testing.T) {
 }
 
 func TestDecryptInvalidInputs(t *testing.T) {
-	csp, err := NewWithParams(256, "SHA2", &mocks.KeyStore{})
+	csp, err := NewWithParams(false, 256, "SHA2", &mocks.KeyStore{})
 	assert.NoError(t, err)
 
 	_, err = csp.Decrypt(nil, []byte{1, 2, 3, 4}, &bccsp.AESCBCPKCS7ModeOpts{})
@@ -175,7 +175,7 @@ func TestDecryptInvalidInputs(t *testing.T) {
 }
 
 func TestHashInvalidInputs(t *testing.T) {
-	csp, err := NewWithParams(256, "SHA2", &mocks.KeyStore{})
+	csp, err := NewWithParams(false, 256, "SHA2", &mocks.KeyStore{})
 	assert.NoError(t, err)
 
 	_, err = csp.Hash(nil, nil)
@@ -188,7 +188,7 @@ func TestHashInvalidInputs(t *testing.T) {
 }
 
 func TestGetHashInvalidInputs(t *testing.T) {
-	csp, err := NewWithParams(256, "SHA2", &mocks.KeyStore{})
+	csp, err := NewWithParams(false, 256, "SHA2", &mocks.KeyStore{})
 	assert.NoError(t, err)
 
 	_, err = csp.GetHash(nil)

@@ -118,20 +118,20 @@ func (e *sm4Decryptor) Decrypt(k bccsp.Key, ciphertext []byte, opts bccsp.Decryp
 		iv := o.IV
 		switch o.MODE {
 		case "ECB":
-			return sm4.Sm4Ecb(key, plaintext, false)
+			return sm4.Sm4Ecb(key, ciphertext, false)
 		case "CBC":
-			return sm4.Sm4Cbc(key, iv, plaintext, false)
+			return sm4.Sm4Cbc(key, iv, ciphertext, false)
 		case "CFB":
-			return sm4.Sm4CFB(key, iv, plaintext, false)
+			return sm4.Sm4CFB(key, iv, ciphertext, false)
 		case "OFB":
-			return sm4.Sm4OFB(key, iv, plaintext, false)
+			return sm4.Sm4OFB(key, iv, ciphertext, false)
 		default:
-			return sm4.Sm4Ecb(key, plaintext, false)
+			return sm4.Sm4Ecb(key, ciphertext, false)
 		}
 	case bccsp.SM4EncrypterOpts:
-		return e.Decrypt(k, plaintext, &o)
+		return e.Decrypt(k, ciphertext, &o)
 	default:
-		return e.Decrypt(k, plaintext, &bccsp.SM4EncrypterOpts{})
+		return e.Decrypt(k, ciphertext, &bccsp.SM4EncrypterOpts{})
 	}
 	// return SM4Decrypt(k.(*sm4Key).privKey, ciphertext)
 	// var dc = make([]byte, 16)

@@ -26,6 +26,7 @@ const pkcs11Enabled = false
 type FactoryOpts struct {
 	ProviderName string  `mapstructure:"default" json:"default" yaml:"Default"`
 	SwOpts       *SwOpts `mapstructure:"SW,omitempty" json:"SW,omitempty" yaml:"SwOpts"`
+	UsingGM      string  `mapstructure:"usingGM,omitempty" json:"usingGM,omitempty" yaml:"usingGM,omitempty"`
 }
 
 // InitFactories must be called before using factory interfaces
@@ -52,6 +53,10 @@ func initFactories(config *FactoryOpts) error {
 
 	if config.SwOpts == nil {
 		config.SwOpts = GetDefaultOpts().SwOpts
+	}
+
+	if config.UsingGM == "" {
+		config.UsingGM = "Y"
 	}
 
 	// Software-Based BCCSP
