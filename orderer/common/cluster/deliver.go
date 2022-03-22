@@ -433,7 +433,7 @@ func (p *BlockPuller) seekLastEnvelope() (*common.Envelope, error) {
 		last(),
 		int32(0),
 		uint64(0),
-		util.ComputeGMSM3(p.TLSCert),
+		util.ComputeSM3(p.TLSCert),
 	)
 }
 
@@ -445,7 +445,7 @@ func (p *BlockPuller) seekNextEnvelope(startSeq uint64) (*common.Envelope, error
 		nextSeekInfo(startSeq),
 		int32(0),
 		uint64(0),
-		util.ComputeGMSM3(p.TLSCert),
+		util.ComputeSM3(p.TLSCert),
 	)
 }
 

@@ -14,6 +14,10 @@ import (
 	"github.com/pkg/errors"
 )
 
+/*
+bccsp/factory/factory.go 定义 factory.BCCSPFactory 接口
+*/
+
 var (
 	defaultBCCSP       bccsp.BCCSP // default BCCSP
 	factoriesInitOnce  sync.Once   // factories' Sync on Initialization

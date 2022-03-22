@@ -18,6 +18,11 @@ import (
 	"github.com/pkg/errors"
 )
 
+/*
+bccsp/factory/pkcs11factory.go 定义 PKCS11Factory 结构体并为其实现`factory.BCCSPFactory`接口(bccsp/factory/factory.go)
+需要添加编译条件: `pkcs11`
+*/
+
 const (
 	// PKCS11BasedFactoryName is the name of the factory of the hsm-based BCCSP implementation
 	PKCS11BasedFactoryName = "PKCS11"

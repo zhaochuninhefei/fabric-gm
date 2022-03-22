@@ -51,7 +51,7 @@ func NewDefaultSecurityLevelWithKeystore(keyStore bccsp.KeyStore) (bccsp.BCCSP, 
 // set at the passed security level, hash family and KeyStore.
 // 根据参数生成swbccsp
 // 目前存在问题：
-// １．sm4加解密没有分组 --> 该问题已对应，修改了`bccsp/sw/sm4.go`的gmsm4Encryptor与gmsm4Decryptor的接口实现方法
+// １．sm4加解密没有分组 --> 该问题已对应，修改了`bccsp/sw/sm4.go`的sm4Encryptor与sm4Decryptor的接口实现方法
 // ２．ecdsa的密钥、签名都是真实的ecdsa，但验签逻辑内部却转为sm2验签，原因不明 --> 该问题已对应，改回了真实的ecdsa验签
 func NewWithParams(securityLevel int, hashFamily string, keyStore bccsp.KeyStore) (bccsp.BCCSP, error) {
 	// Init config
@@ -71,19 +71,19 @@ func NewWithParams(securityLevel int, hashFamily string, keyStore bccsp.KeyStore
 
 	// Set the Encryptors
 	swbccsp.AddWrapper(reflect.TypeOf(&aesPrivateKey{}), &aescbcpkcs7Encryptor{})
-	// sm4加密，未分组 --> 该问题已对应，修改了`bccsp/sw/sm4.go`的gmsm4Encryptor与gmsm4Decryptor的接口实现方法
-	swbccsp.AddWrapper(reflect.TypeOf(&gmsm4Key{}), &gmsm4Encryptor{})
+	// sm4加密，未分组 --> 该问题已对应，修改了`bccsp/sw/sm4.go`的sm4Encryptor与sm4Decryptor的接口实现方法
+	swbccsp.AddWrapper(reflect.TypeOf(&sm4Key{}), &sm4Encryptor{})
 
 	// Set the Decryptors
 	swbccsp.AddWrapper(reflect.TypeOf(&aesPrivateKey{}), &aescbcpkcs7Decryptor{})
-	// sm4解密，未分组 --> 该问题已对应，修改了`bccsp/sw/sm4.go`的gmsm4Encryptor与gmsm4Decryptor的接口实现方法
-	swbccsp.AddWrapper(reflect.TypeOf(&gmsm4Key{}), &gmsm4Decryptor{})
+	// sm4解密，未分组 --> 该问题已对应，修改了`bccsp/sw/sm4.go`的sm4Encryptor与sm4Decryptor的接口实现方法
+	swbccsp.AddWrapper(reflect.TypeOf(&sm4Key{}), &sm4Decryptor{})
 
 	// Set the Signers
 	// ecdsa签名
 	swbccsp.AddWrapper(reflect.TypeOf(&ecdsaPrivateKey{}), &ecdsaSigner{})
 	// sm2签名
-	swbccsp.AddWrapper(reflect.TypeOf(&gmsm2PrivateKey{}), &gmsm2Signer{})
+	swbccsp.AddWrapper(reflect.TypeOf(&sm2PrivateKey{}), &sm2Signer{})
 
 	// Set the Verifiers
 	// ecdsa私钥验签，实际还是公钥验签 已改回真实的ecdsa实现
@@ -91,9 +91,9 @@ func NewWithParams(securityLevel int, hashFamily string, keyStore bccsp.KeyStore
 	// ecdsa公钥验签 已改回真实的ecdsa实现
 	swbccsp.AddWrapper(reflect.TypeOf(&ecdsaPublicKey{}), &ecdsaPublicKeyKeyVerifier{})
 	// sm2私钥验签，实际还是公钥验签
-	swbccsp.AddWrapper(reflect.TypeOf(&gmsm2PrivateKey{}), &gmsm2PrivateKeyVerifier{})
+	swbccsp.AddWrapper(reflect.TypeOf(&sm2PrivateKey{}), &sm2PrivateKeyVerifier{})
 	// sm2公钥验签
-	swbccsp.AddWrapper(reflect.TypeOf(&gmsm2PublicKey{}), &gmsm2PublicKeyKeyVerifier{})
+	swbccsp.AddWrapper(reflect.TypeOf(&sm2PublicKey{}), &sm2PublicKeyKeyVerifier{})
 
 	// Set the Hashers
 	swbccsp.AddWrapper(reflect.TypeOf(&bccsp.SHAOpts{}), &hasher{hash: conf.hashFunction})
@@ -102,7 +102,7 @@ func NewWithParams(securityLevel int, hashFamily string, keyStore bccsp.KeyStore
 	swbccsp.AddWrapper(reflect.TypeOf(&bccsp.SHA3_256Opts{}), &hasher{hash: sha3.New256})
 	swbccsp.AddWrapper(reflect.TypeOf(&bccsp.SHA3_384Opts{}), &hasher{hash: sha3.New384})
 	// sm3散列
-	swbccsp.AddWrapper(reflect.TypeOf(&bccsp.GMSM3Opts{}), &hasher{hash: sm3.New})
+	swbccsp.AddWrapper(reflect.TypeOf(&bccsp.SM3Opts{}), &hasher{hash: sm3.New})
 
 	// Set the key generators
 	// ecdsaKeyGenerator是真实的ecdsa的密钥对构造，不是sm2的密钥对
@@ -114,9 +114,9 @@ func NewWithParams(securityLevel int, hashFamily string, keyStore bccsp.KeyStore
 	swbccsp.AddWrapper(reflect.TypeOf(&bccsp.AES192KeyGenOpts{}), &aesKeyGenerator{length: 24})
 	swbccsp.AddWrapper(reflect.TypeOf(&bccsp.AES128KeyGenOpts{}), &aesKeyGenerator{length: 16})
 	// sm2密钥对构造器
-	swbccsp.AddWrapper(reflect.TypeOf(&bccsp.GMSM2KeyGenOpts{}), &gmsm2KeyGenerator{})
+	swbccsp.AddWrapper(reflect.TypeOf(&bccsp.SM2KeyGenOpts{}), &sm2KeyGenerator{})
 	// sm4密钥构造器
-	swbccsp.AddWrapper(reflect.TypeOf(&bccsp.GMSM4KeyGenOpts{}), &gmsm4KeyGenerator{length: 16})
+	swbccsp.AddWrapper(reflect.TypeOf(&bccsp.SM4KeyGenOpts{}), &sm4KeyGenerator{length: 16})
 
 	// Set the key deriver
 	swbccsp.AddWrapper(reflect.TypeOf(&ecdsaPrivateKey{}), &ecdsaPrivateKeyKeyDeriver{})
@@ -132,11 +132,11 @@ func NewWithParams(securityLevel int, hashFamily string, keyStore bccsp.KeyStore
 	// gmx509公钥导入，x509的签名内容的核心是证书拥有者的公钥，与签名算法无关，因此可能是sm2,ecdsa或rsa
 	swbccsp.AddWrapper(reflect.TypeOf(&bccsp.X509PublicKeyImportOpts{}), &x509PublicKeyImportOptsKeyImporter{bccsp: swbccsp})
 	// sm2私钥导入器
-	swbccsp.AddWrapper(reflect.TypeOf(&bccsp.GMSM2PrivateKeyImportOpts{}), &gmsm2PrivateKeyOptsKeyImporter{})
+	swbccsp.AddWrapper(reflect.TypeOf(&bccsp.SM2PrivateKeyImportOpts{}), &sm2PrivateKeyOptsKeyImporter{})
 	// sm2公钥导入器
-	swbccsp.AddWrapper(reflect.TypeOf(&bccsp.GMSM2PublicKeyImportOpts{}), &gmsm2PublicKeyOptsKeyImporter{})
-	swbccsp.AddWrapper(reflect.TypeOf(&bccsp.GMSM2GoPublicKeyImportOpts{}), &gmsm2GoPublicKeyOptsKeyImporter{})
+	swbccsp.AddWrapper(reflect.TypeOf(&bccsp.SM2PublicKeyImportOpts{}), &sm2PublicKeyOptsKeyImporter{})
+	swbccsp.AddWrapper(reflect.TypeOf(&bccsp.SM2GoPublicKeyImportOpts{}), &sm2GoPublicKeyOptsKeyImporter{})
 	// sm4密钥导入器
-	swbccsp.AddWrapper(reflect.TypeOf(&bccsp.GMSM4ImportKeyOpts{}), &gmsm4ImportKeyOptsKeyImporter{})
+	swbccsp.AddWrapper(reflect.TypeOf(&bccsp.SM4ImportKeyOpts{}), &sm4ImportKeyOptsKeyImporter{})
 	return swbccsp, nil
 }

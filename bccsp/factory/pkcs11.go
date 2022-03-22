@@ -15,6 +15,11 @@ import (
 	"github.com/pkg/errors"
 )
 
+/*
+bccsp/factory/pkcs11.go 为 PKCS11Factory 提供 FactoryOpts 及相关的函数
+需要添加编译条件: `pkcs11`
+*/
+
 const pkcs11Enabled = false
 
 // FactoryOpts holds configuration information used to initialize factory implementations

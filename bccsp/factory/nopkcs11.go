@@ -14,6 +14,11 @@ import (
 	"github.com/pkg/errors"
 )
 
+/*
+bccsp/factory/nopkcs11.go 为 SWFactory 提供 FactoryOpts 以及相关函数。
+在不添加编译条件`pkcs11`时生效
+*/
+
 const pkcs11Enabled = false
 
 // TODO 注意这里定义的FactoryOpts不会与`pkcs11.go`里定义的FactoryOpts冲突，因为该文件头声明了编译条件是 `!pkcs11`，而`pkcs11.go`的编译条件是`pkcs11`

@@ -15,6 +15,10 @@ import (
 	"math/big"
 )
 
+/*
+bccsp/utils/ecdsa.go 定义 ECDSASignature 结构体，提供ecdsa签名的asn1字节流转换函数，以及SignatureToLowS相关函数
+*/
+
 type ECDSASignature struct {
 	R, S *big.Int
 }

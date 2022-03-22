@@ -106,7 +106,7 @@ func NewCA(
 	// 	priv,
 	// )
 	templateSm2.SignatureAlgorithm = gx509.SM2WithSM3
-	sm2Cert, err := genCertificateGMSM2(
+	sm2Cert, err := genCertificateSM2(
 		baseDir,
 		name,
 		templateSm2,
@@ -178,7 +178,7 @@ func (ca *CA) SignCertificate(
 	template.PublicKey = pub
 	templateSm2 := sw.ParseX509Certificate2Sm2(&template)
 	templateSm2.SignatureAlgorithm = gx509.SM2WithSM3
-	cert, err := genCertificateGMSM2(
+	cert, err := genCertificateSM2(
 		baseDir,
 		name,
 		templateSm2,
@@ -309,8 +309,8 @@ func genCertificateECDSA(
 	return x509Cert, nil
 }
 
-//generate a signed X509 certficate using GMSM2
-func genCertificateGMSM21(
+//generate a signed X509 certficate using SM2
+func genCertificateSM21(
 	baseDir,
 	name string,
 	template, parent *gx509.Certificate,
@@ -349,7 +349,7 @@ func genCertificateGMSM21(
 }
 
 // TODO generate a signed sm2 certificate using SM2
-func genCertificateGMSM2(
+func genCertificateSM2(
 	baseDir,
 	name string,
 	template,
@@ -415,8 +415,8 @@ func LoadCertificateECDSA(certPath string) (*x509.Certificate, error) {
 	return cert, err
 }
 
-// LoadCertificateGMSM2 load a ecdsa cert from a file in cert path
-func LoadCertificateGMSM2(certPath string) (*gx509.Certificate, error) {
+// LoadCertificateSM2 load a ecdsa cert from a file in cert path
+func LoadCertificateSM2(certPath string) (*gx509.Certificate, error) {
 	var cert *gx509.Certificate
 	var err error
 

@@ -17,6 +17,7 @@ limitations under the License.
 package bccsp
 
 import (
+	"fmt"
 	"reflect"
 	"strings"
 	"testing"
@@ -41,6 +42,27 @@ func TestAESOpts(t *testing.T) {
 
 	opts := &AESKeyGenOpts{true}
 	assert.Equal(t, "AES", opts.Algorithm())
+	assert.True(t, opts.Ephemeral())
+	opts.Temporary = false
+	assert.False(t, opts.Ephemeral())
+}
+
+func TestSM4Opts(t *testing.T) {
+	test := func(ephemeral bool) {
+		for _, opts := range []KeyGenOpts{
+			&SM4KeyGenOpts{ephemeral},
+		} {
+			fmt.Println(reflect.TypeOf(opts).String())
+			expectedAlgorithm := reflect.TypeOf(opts).String()[7:10]
+			assert.Equal(t, expectedAlgorithm, opts.Algorithm())
+			assert.Equal(t, ephemeral, opts.Ephemeral())
+		}
+	}
+	test(true)
+	test(false)
+
+	opts := &SM4KeyGenOpts{true}
+	assert.Equal(t, "SM4", opts.Algorithm())
 	assert.True(t, opts.Ephemeral())
 	opts.Temporary = false
 	assert.False(t, opts.Ephemeral())
@@ -82,8 +104,36 @@ func TestECDSAOpts(t *testing.T) {
 	assert.Empty(t, opts.ExpansionValue())
 }
 
+func TestSM2Opts(t *testing.T) {
+	test := func(ephemeral bool) {
+		for _, opts := range []KeyGenOpts{
+			&SM2KeyGenOpts{ephemeral},
+		} {
+			expectedAlgorithm := reflect.TypeOf(opts).String()[7:10]
+			assert.Equal(t, expectedAlgorithm, opts.Algorithm())
+			assert.Equal(t, ephemeral, opts.Ephemeral())
+		}
+	}
+	test(true)
+	test(false)
+
+	test = func(ephemeral bool) {
+		for _, opts := range []KeyGenOpts{
+			&SM2KeyGenOpts{ephemeral},
+			&SM2PublicKeyImportOpts{ephemeral},
+			&SM2PrivateKeyImportOpts{ephemeral},
+			&SM2GoPublicKeyImportOpts{ephemeral},
+		} {
+			assert.Equal(t, "SM2", opts.Algorithm())
+			assert.Equal(t, ephemeral, opts.Ephemeral())
+		}
+	}
+	test(true)
+	test(false)
+}
+
 func TestHashOpts(t *testing.T) {
-	for _, ho := range []HashOpts{&SHA256Opts{}, &SHA384Opts{}, &SHA3_256Opts{}, &SHA3_384Opts{}} {
+	for _, ho := range []HashOpts{&SHA256Opts{}, &SHA384Opts{}, &SHA3_256Opts{}, &SHA3_384Opts{}, &SM3Opts{}} {
 		s := strings.Replace(reflect.TypeOf(ho).String(), "*bccsp.", "", -1)
 		algorithm := strings.Replace(s, "Opts", "", -1)
 		assert.Equal(t, algorithm, ho.Algorithm())
@@ -96,6 +146,7 @@ func TestHashOpts(t *testing.T) {
 	assert.Contains(t, err.Error(), "hash function not recognized")
 
 	assert.Equal(t, "SHA", (&SHAOpts{}).Algorithm())
+	assert.Equal(t, "SM3", (&SM3Opts{}).Algorithm())
 }
 
 func TestHMAC(t *testing.T) {
@@ -119,12 +170,14 @@ func TestKeyGenOpts(t *testing.T) {
 		reflect.TypeOf(&HMACImportKeyOpts{}):       "HMAC",
 		reflect.TypeOf(&X509PublicKeyImportOpts{}): "X509Certificate",
 		reflect.TypeOf(&AES256ImportKeyOpts{}):     "AES",
+		reflect.TypeOf(&SM4ImportKeyOpts{}):        "SM4",
 	}
 	test := func(ephemeral bool) {
 		for _, opts := range []KeyGenOpts{
 			&HMACImportKeyOpts{ephemeral},
 			&X509PublicKeyImportOpts{ephemeral},
 			&AES256ImportKeyOpts{ephemeral},
+			&SM4ImportKeyOpts{ephemeral},
 		} {
 			expectedAlgorithm := expectedAlgorithms[reflect.TypeOf(opts)]
 			assert.Equal(t, expectedAlgorithm, opts.Algorithm())

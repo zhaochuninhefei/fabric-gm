@@ -1,12 +1,17 @@
 package factory
 
 import (
-	"errors"
-	"fmt"
+	// "errors"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/sw"
+	"github.com/pkg/errors"
 )
+
+/*
+bccsp/factory/gmfactory.go 定义 GMFactory 结构体并为其实现`factory.BCCSPFactory`接口(bccsp/factory/factory.go)
+TODO SWFactory已经支持国密，是否还有维持 GMFactory 的必要？
+*/
 
 const (
 	// GuomiBasedFactoryName is the name of the factory of the software-based BCCSP implementation
@@ -31,12 +36,12 @@ func (f *GMFactory) Get(config *FactoryOpts) (bccsp.BCCSP, error) {
 	gmOpts := config.SwOpts
 
 	var ks bccsp.KeyStore
-	if gmOpts.Ephemeral == true {
+	if gmOpts.Ephemeral {
 		ks = sw.NewDummyKeyStore()
 	} else if gmOpts.FileKeystore != nil {
 		fks, err := sw.NewFileBasedKeyStore(nil, gmOpts.FileKeystore.KeyStorePath, false)
 		if err != nil {
-			return nil, fmt.Errorf("Failed to initialize gm software key store: %s", err)
+			return nil, errors.Wrapf(err, "Failed to initialize gm software key store.")
 		}
 		ks = fks
 	} else {

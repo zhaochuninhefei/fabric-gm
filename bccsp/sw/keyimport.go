@@ -31,10 +31,10 @@ ecdsaPKIXPublicKeyImportOptsKeyImporter
 ecdsaPrivateKeyImportOptsKeyImporter
 ecdsaGoPublicKeyImportOptsKeyImporter
 x509PublicKeyImportOptsKeyImporter
-gmsm4ImportKeyOptsKeyImporter
-gmsm2PrivateKeyOptsKeyImporter
-gmsm2PublicKeyOptsKeyImporter
-gmsm2GoPublicKeyOptsKeyImporter
+sm4ImportKeyOptsKeyImporter
+sm2PrivateKeyOptsKeyImporter
+sm2PublicKeyOptsKeyImporter
+sm2GoPublicKeyOptsKeyImporter
 */
 
 // AES256位对称密钥导入器
@@ -170,9 +170,9 @@ func (ki *x509PublicKeyImportOptsKeyImporter) KeyImport(raw interface{}, opts bc
 		// if err != nil {
 		// 	return nil, errors.New("MarshalSm2PublicKey error")
 		// }
-		return ki.bccsp.KeyImporters[reflect.TypeOf(&bccsp.GMSM2GoPublicKeyImportOpts{})].KeyImport(
+		return ki.bccsp.KeyImporters[reflect.TypeOf(&bccsp.SM2GoPublicKeyImportOpts{})].KeyImport(
 			pk,
-			&bccsp.GMSM2GoPublicKeyImportOpts{Temporary: opts.Ephemeral()})
+			&bccsp.SM2GoPublicKeyImportOpts{Temporary: opts.Ephemeral()})
 	case *ecdsa.PublicKey:
 		return ki.bccsp.KeyImporters[reflect.TypeOf(&bccsp.ECDSAGoPublicKeyImportOpts{})].KeyImport(
 			pk,
@@ -187,9 +187,9 @@ func (ki *x509PublicKeyImportOptsKeyImporter) KeyImport(raw interface{}, opts bc
 }
 
 // sm4对称密钥导入器
-type gmsm4ImportKeyOptsKeyImporter struct{}
+type sm4ImportKeyOptsKeyImporter struct{}
 
-func (*gmsm4ImportKeyOptsKeyImporter) KeyImport(raw interface{}, opts bccsp.KeyImportOpts) (k bccsp.Key, err error) {
+func (*sm4ImportKeyOptsKeyImporter) KeyImport(raw interface{}, opts bccsp.KeyImportOpts) (k bccsp.Key, err error) {
 	sm4Raw, ok := raw.([]byte)
 	if !ok {
 		return nil, errors.New("invalid raw material, Expected byte array")
@@ -199,15 +199,15 @@ func (*gmsm4ImportKeyOptsKeyImporter) KeyImport(raw interface{}, opts bccsp.KeyI
 		return nil, errors.New("invalid raw material, It must botbe nil")
 	}
 
-	return &gmsm4Key{utils.Clone(sm4Raw), false}, nil
+	return &sm4Key{utils.Clone(sm4Raw), false}, nil
 }
 
 // sm2私钥(PKCS#8标准的der字节流)导入器
-type gmsm2PrivateKeyOptsKeyImporter struct{}
+type sm2PrivateKeyOptsKeyImporter struct{}
 
 // sm2私钥导入
 // raw : PKCS#8标准的der字节流
-func (*gmsm2PrivateKeyOptsKeyImporter) KeyImport(raw interface{}, opts bccsp.KeyImportOpts) (k bccsp.Key, err error) {
+func (*sm2PrivateKeyOptsKeyImporter) KeyImport(raw interface{}, opts bccsp.KeyImportOpts) (k bccsp.Key, err error) {
 	der, ok := raw.([]byte)
 	if !ok {
 		return nil, errors.New("invalid raw material, Expected byte array")
@@ -217,21 +217,21 @@ func (*gmsm2PrivateKeyOptsKeyImporter) KeyImport(raw interface{}, opts bccsp.Key
 		return nil, errors.New("invalid raw material, It must botbe nil")
 	}
 
-	gmsm2SK, err := x509.ParsePKCS8UnecryptedPrivateKey(der)
+	sm2SK, err := x509.ParsePKCS8UnecryptedPrivateKey(der)
 
 	if err != nil {
 		return nil, fmt.Errorf("failed converting to SM2 private key [%s]", err)
 	}
 
-	return &gmsm2PrivateKey{gmsm2SK}, nil
+	return &sm2PrivateKey{sm2SK}, nil
 }
 
 // sm2公钥(PKIX标准的der字节流)导入器
-type gmsm2PublicKeyOptsKeyImporter struct{}
+type sm2PublicKeyOptsKeyImporter struct{}
 
 // sm2公钥导入
 // raw : PKIX标准的der字节流
-func (*gmsm2PublicKeyOptsKeyImporter) KeyImport(raw interface{}, opts bccsp.KeyImportOpts) (k bccsp.Key, err error) {
+func (*sm2PublicKeyOptsKeyImporter) KeyImport(raw interface{}, opts bccsp.KeyImportOpts) (k bccsp.Key, err error) {
 	der, ok := raw.([]byte)
 	if !ok {
 		return nil, errors.New("invalid raw material, Expected byte array")
@@ -241,25 +241,25 @@ func (*gmsm2PublicKeyOptsKeyImporter) KeyImport(raw interface{}, opts bccsp.KeyI
 		return nil, errors.New("invalid raw material, It must botbe nil")
 	}
 
-	gmsm2SK, err := x509.ParseSm2PublicKey(der)
+	sm2Pub, err := x509.ParseSm2PublicKey(der)
 
 	if err != nil {
 		return nil, fmt.Errorf("failed converting to SM2 private key [%s]", err)
 	}
 
-	return &gmsm2PublicKey{gmsm2SK}, nil
+	return &sm2PublicKey{sm2Pub}, nil
 }
 
 // sm2公钥(Go结构体*sm2.PublicKey)导入器
-type gmsm2GoPublicKeyOptsKeyImporter struct{}
+type sm2GoPublicKeyOptsKeyImporter struct{}
 
 // sm2公钥导入
 // raw : *sm2.PublicKey
-func (*gmsm2GoPublicKeyOptsKeyImporter) KeyImport(raw interface{}, opts bccsp.KeyImportOpts) (bccsp.Key, error) {
+func (*sm2GoPublicKeyOptsKeyImporter) KeyImport(raw interface{}, opts bccsp.KeyImportOpts) (bccsp.Key, error) {
 	lowLevelKey, ok := raw.(*sm2.PublicKey)
 	if !ok {
 		return nil, errors.New("invalid raw material. Expected *ecdsa.PublicKey")
 	}
 
-	return &gmsm2PublicKey{lowLevelKey}, nil
+	return &sm2PublicKey{lowLevelKey}, nil
 }

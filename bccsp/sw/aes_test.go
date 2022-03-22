@@ -546,7 +546,7 @@ func TestPkcs7UnPaddingInvalidInputs(t *testing.T) {
 
 	_, err := pkcs7UnPadding([]byte{1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16})
 	assert.Error(t, err)
-	assert.Equal(t, "Invalid pkcs7 padding (pad[i] != unpadding)", err.Error())
+	assert.Equal(t, "invalid pkcs7 padding (pad[i] != unpadding)", err.Error())
 }
 
 func TestAESCBCEncryptInvalidInputs(t *testing.T) {
@@ -554,7 +554,7 @@ func TestAESCBCEncryptInvalidInputs(t *testing.T) {
 
 	_, err := aesCBCEncrypt(nil, []byte{0, 1, 2, 3})
 	assert.Error(t, err)
-	assert.Equal(t, "Invalid plaintext. It must be a multiple of the block size", err.Error())
+	assert.Equal(t, "invalid plaintext. It must be a multiple of the block size", err.Error())
 
 	_, err = aesCBCEncrypt([]byte{0}, []byte{1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15})
 	assert.Error(t, err)
@@ -595,11 +595,11 @@ func TestAESCBCPKCS7EncryptorDecrypt(t *testing.T) {
 
 	_, err = encryptor.Encrypt(k, msg, &bccsp.AESCBCPKCS7ModeOpts{IV: []byte{1}})
 	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "Invalid IV. It must have length the block size")
+	assert.Contains(t, err.Error(), "invalid IV. It must have length the block size")
 
 	_, err = encryptor.Encrypt(k, msg, &bccsp.AESCBCPKCS7ModeOpts{IV: []byte{1}, PRNG: rand.Reader})
 	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "Invalid options. Either IV or PRNG should be different from nil, or both nil.")
+	assert.Contains(t, err.Error(), "invalid options. Either IV or PRNG should be different from nil, or both nil")
 
 	_, err = encryptor.Encrypt(k, msg, bccsp.AESCBCPKCS7ModeOpts{})
 	assert.NoError(t, err)

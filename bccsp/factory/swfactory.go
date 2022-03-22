@@ -21,6 +21,10 @@ import (
 	"github.com/pkg/errors"
 )
 
+/*
+bccsp/factory/swfactory.go 定义 SWFactory 结构体并为其实现`factory.BCCSPFactory`接口(bccsp/factory/factory.go)
+*/
+
 const (
 	// SoftwareBasedFactoryName is the name of the factory of the software-based BCCSP implementation
 	SoftwareBasedFactoryName = "SW"
@@ -64,12 +68,17 @@ func (f *SWFactory) Get(config *FactoryOpts) (bccsp.BCCSP, error) {
 }
 
 // SwOpts contains options for the SWFactory
+// 用于 SWFactory 的相关配置
 type SwOpts struct {
 	// Default algorithms when not specified (Deprecated?)
-	SecLevel   int    `mapstructure:"security" json:"security" yaml:"Security"`
+	// 算法强度，如 256
+	SecLevel int `mapstructure:"security" json:"security" yaml:"Security"`
+	// 散列算法，如 SM3
 	HashFamily string `mapstructure:"hash" json:"hash" yaml:"Hash"`
 
 	// Keystore Options
+	// Ephemeral为true时使用DummyKeystore
+	// Ephemeral、FileKeystore、InmemKeystore相互之间互斥
 	Ephemeral     bool               `mapstructure:"tempkeys,omitempty" json:"tempkeys,omitempty"`
 	FileKeystore  *FileKeystoreOpts  `mapstructure:"filekeystore,omitempty" json:"filekeystore,omitempty" yaml:"FileKeyStore"`
 	DummyKeystore *DummyKeystoreOpts `mapstructure:"dummykeystore,omitempty" json:"dummykeystore,omitempty"`

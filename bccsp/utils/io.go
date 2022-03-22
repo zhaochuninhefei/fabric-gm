@@ -21,6 +21,10 @@ import (
 	"os"
 )
 
+/*
+bccsp/utils/io.go 提供本地目录相关操作
+*/
+
 // DirMissingOrEmpty checks is a directory is missing or empty
 func DirMissingOrEmpty(path string) (bool, error) {
 	dirExists, err := DirExists(path)

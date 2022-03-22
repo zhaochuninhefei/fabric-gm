@@ -100,7 +100,7 @@ func New(securityLevel int, hashFamily string, keyStore bccsp.KeyStore) (bccsp.B
 	hashers := make(map[reflect.Type]Hasher)
 	hashers[reflect.TypeOf(&bccsp.SHAOpts{})] = &hasher{hash: conf.hashFunction}
 	//sm3 Hash选项
-	hashers[reflect.TypeOf(&bccsp.GMSM3Opts{})] = &hasher{hash: sm3.New}
+	hashers[reflect.TypeOf(&bccsp.SM3Opts{})] = &hasher{hash: sm3.New}
 	hashers[reflect.TypeOf(&bccsp.SHA256Opts{})] = &hasher{hash: sha256.New}
 	hashers[reflect.TypeOf(&bccsp.SHA384Opts{})] = &hasher{hash: sha512.New384}
 	hashers[reflect.TypeOf(&bccsp.SHA3_256Opts{})] = &hasher{hash: sha3.New256}
@@ -118,9 +118,9 @@ func New(securityLevel int, hashFamily string, keyStore bccsp.KeyStore) (bccsp.B
 	// Set the key generators
 	keyGenerators := make(map[reflect.Type]KeyGenerator)
 	// sm2密钥对生成器
-	keyGenerators[reflect.TypeOf(&bccsp.GMSM2KeyGenOpts{})] = &gmsm2KeyGenerator{}
+	keyGenerators[reflect.TypeOf(&bccsp.SM2KeyGenOpts{})] = &gmsm2KeyGenerator{}
 	// sm4密钥生成器
-	keyGenerators[reflect.TypeOf(&bccsp.GMSM4KeyGenOpts{})] = &gmsm4KeyGenerator{length: 32}
+	keyGenerators[reflect.TypeOf(&bccsp.SM4KeyGenOpts{})] = &gmsm4KeyGenerator{length: 32}
 	// 注意只有国密sm2与sm4的密钥生成器
 	// TODO 这里有问题:
 	// 既然在前面的签名与验签处添加了内部转为sm2签名/验签的ecdsa签名/验签，
@@ -137,9 +137,9 @@ func New(securityLevel int, hashFamily string, keyStore bccsp.KeyStore) (bccsp.B
 	// Set the key importers
 	keyImporters := make(map[reflect.Type]KeyImporter)
 	// 导入在 `bccsp/gm/keyimport.go`中定义的系列keyimporter
-	keyImporters[reflect.TypeOf(&bccsp.GMSM4ImportKeyOpts{})] = &gmsm4ImportKeyOptsKeyImporter{}
-	keyImporters[reflect.TypeOf(&bccsp.GMSM2PrivateKeyImportOpts{})] = &gmsm2PrivateKeyImportOptsKeyImporter{}
-	keyImporters[reflect.TypeOf(&bccsp.GMSM2PublicKeyImportOpts{})] = &gmsm2PublicKeyImportOptsKeyImporter{}
+	keyImporters[reflect.TypeOf(&bccsp.SM4ImportKeyOpts{})] = &gmsm4ImportKeyOptsKeyImporter{}
+	keyImporters[reflect.TypeOf(&bccsp.SM2PrivateKeyImportOpts{})] = &gmsm2PrivateKeyImportOptsKeyImporter{}
+	keyImporters[reflect.TypeOf(&bccsp.SM2PublicKeyImportOpts{})] = &gmsm2PublicKeyImportOptsKeyImporter{}
 	keyImporters[reflect.TypeOf(&bccsp.X509PublicKeyImportOpts{})] = &x509PublicKeyImportOptsKeyImporter{bccsp: impl}
 	keyImporters[reflect.TypeOf(&bccsp.ECDSAGoPublicKeyImportOpts{})] = &ecdsaGoPublicKeyImportOptsKeyImporter{}
 	keyImporters[reflect.TypeOf(&bccsp.ECDSAPrivateKeyImportOpts{})] = &ecdsaPrivateKeyImportOptsKeyImporter{}

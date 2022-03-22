@@ -38,8 +38,8 @@ import (
 var logger = flogging.MustGetLogger("kvledger")
 
 var (
-	rwsetHashOpts    = &bccsp.GMSM3Opts{}
-	snapshotHashOpts = &bccsp.GMSM3Opts{}
+	rwsetHashOpts    = &bccsp.SM3Opts{}
+	snapshotHashOpts = &bccsp.SM3Opts{}
 )
 
 // kvLedger provides an implementation of `ledger.PeerLedger`.

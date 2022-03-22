@@ -73,14 +73,14 @@ func SM4Decrypt(key, src []byte) ([]byte, error) {
 	return dst, nil
 }
 
-type gmsm4Encryptor struct{}
+type sm4Encryptor struct{}
 
 // 实现 Encryptor 接口
 // 不能直接调用 SM4Encrypt 因为没有分组
-func (e *gmsm4Encryptor) Encrypt(k bccsp.Key, plaintext []byte, opts bccsp.EncrypterOpts) (ciphertext []byte, err error) {
-	key := k.(*gmsm4Key).privKey
+func (e *sm4Encryptor) Encrypt(k bccsp.Key, plaintext []byte, opts bccsp.EncrypterOpts) (ciphertext []byte, err error) {
+	key := k.(*sm4Key).privKey
 	switch o := opts.(type) {
-	case *bccsp.GMSM4EncrypterOpts:
+	case *bccsp.SM4EncrypterOpts:
 		iv := o.IV
 		switch o.MODE {
 		case "ECB":
@@ -94,27 +94,27 @@ func (e *gmsm4Encryptor) Encrypt(k bccsp.Key, plaintext []byte, opts bccsp.Encry
 		default:
 			return sm4.Sm4Ecb(key, plaintext, true)
 		}
-	case bccsp.GMSM4EncrypterOpts:
+	case bccsp.SM4EncrypterOpts:
 		return e.Encrypt(k, plaintext, &o)
 	default:
-		return e.Encrypt(k, plaintext, &bccsp.GMSM4EncrypterOpts{})
+		return e.Encrypt(k, plaintext, &bccsp.SM4EncrypterOpts{})
 	}
-	// return SM4Encrypt(k.(*gmsm4Key).privKey, plaintext)
+	// return SM4Encrypt(k.(*sm4Key).privKey, plaintext)
 	//return AESCBCPKCS7Encrypt(k.(*sm4PrivateKey).privKey, plaintext)
-	// key := k.(*gmsm4Key).privKey
+	// key := k.(*sm4Key).privKey
 	// var en = make([]byte, 16)
 	// sms4(plaintext, 16, key, en, 1)
 	// return en, nil
 }
 
-type gmsm4Decryptor struct{}
+type sm4Decryptor struct{}
 
 // 实现 Decryptor 接口
 // 不能直接调用 SM4Decrypt 因为没有分组
-func (e *gmsm4Decryptor) Decrypt(k bccsp.Key, ciphertext []byte, opts bccsp.DecrypterOpts) (plaintext []byte, err error) {
-	key := k.(*gmsm4Key).privKey
+func (e *sm4Decryptor) Decrypt(k bccsp.Key, ciphertext []byte, opts bccsp.DecrypterOpts) (plaintext []byte, err error) {
+	key := k.(*sm4Key).privKey
 	switch o := opts.(type) {
-	case *bccsp.GMSM4EncrypterOpts:
+	case *bccsp.SM4EncrypterOpts:
 		iv := o.IV
 		switch o.MODE {
 		case "ECB":
@@ -128,14 +128,14 @@ func (e *gmsm4Decryptor) Decrypt(k bccsp.Key, ciphertext []byte, opts bccsp.Decr
 		default:
 			return sm4.Sm4Ecb(key, plaintext, false)
 		}
-	case bccsp.GMSM4EncrypterOpts:
+	case bccsp.SM4EncrypterOpts:
 		return e.Decrypt(k, plaintext, &o)
 	default:
-		return e.Decrypt(k, plaintext, &bccsp.GMSM4EncrypterOpts{})
+		return e.Decrypt(k, plaintext, &bccsp.SM4EncrypterOpts{})
 	}
-	// return SM4Decrypt(k.(*gmsm4Key).privKey, ciphertext)
+	// return SM4Decrypt(k.(*sm4Key).privKey, ciphertext)
 	// var dc = make([]byte, 16)
-	// key := k.(*gmsm4Key).privKey
+	// key := k.(*sm4Key).privKey
 	// sms4(ciphertext, 16, key, dc, 0)
 	// return dc, nil
 }

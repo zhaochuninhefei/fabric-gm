@@ -41,7 +41,7 @@ func NewClient(conf Config) (*Client, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &Client{GRPCClient: cl, TLSCertHash: util.ComputeGMSM3(sop.Certificate)}, nil
+	return &Client{GRPCClient: cl, TLSCertHash: util.ComputeSM3(sop.Certificate)}, nil
 }
 
 // NewDialer creates a new dialer from the given endpoint

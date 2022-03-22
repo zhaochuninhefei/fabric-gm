@@ -16,10 +16,15 @@ limitations under the License.
 
 package factory
 
+/*
+bccsp/factory/opts.go 提供默认 FactoryOpts，并为FactoryOpts绑定方法 FactoryName
+*/
+
 // GetDefaultOpts offers a default implementation for Opts
 // returns a new instance every time
 func GetDefaultOpts() *FactoryOpts {
 	return &FactoryOpts{
+		// TODO: 是否恢复为 SW
 		ProviderName: "GM",
 		SwOpts: &SwOpts{
 			HashFamily: "SM3",

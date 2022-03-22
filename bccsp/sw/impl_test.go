@@ -32,6 +32,9 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/utils"
 	"github.com/stretchr/testify/assert"
 	"golang.org/x/crypto/sha3"
+
+	"gitee.com/zhaochuninhefei/gmgo/sm3"
+	gmx509 "gitee.com/zhaochuninhefei/gmgo/x509"
 )
 
 var (
@@ -60,6 +63,7 @@ func TestMain(m *testing.M) {
 		os.Exit(code)
 	}()
 	tests := []testConfig{
+		{256, "SM3"},
 		{256, "SHA2"},
 		{256, "SHA3"},
 		{384, "SHA2"},
@@ -352,7 +356,16 @@ func TestECDSAGetKeyBySKI(t *testing.T) {
 	provider, _, cleanup := currentTestConfig.Provider(t)
 	defer cleanup()
 
-	k, err := provider.KeyGen(&bccsp.ECDSAKeyGenOpts{Temporary: false})
+	var k bccsp.Key
+	var err error
+	switch currentTestConfig.hashFamily {
+	case "SM3":
+		fmt.Println("生成 SM2 key")
+		k, err = provider.KeyGen(&bccsp.SM2KeyGenOpts{Temporary: false})
+	default:
+		fmt.Println("生成 ECDSA key")
+		k, err = provider.KeyGen(&bccsp.ECDSAKeyGenOpts{Temporary: false})
+	}
 	if err != nil {
 		t.Fatalf("Failed generating ECDSA key [%s]", err)
 	}
@@ -407,7 +420,16 @@ func TestECDSAPublicKeyBytes(t *testing.T) {
 	provider, _, cleanup := currentTestConfig.Provider(t)
 	defer cleanup()
 
-	k, err := provider.KeyGen(&bccsp.ECDSAKeyGenOpts{Temporary: false})
+	var k bccsp.Key
+	var err error
+	switch currentTestConfig.hashFamily {
+	case "SM3":
+		fmt.Println("生成 SM2 key")
+		k, err = provider.KeyGen(&bccsp.SM2KeyGenOpts{Temporary: false})
+	default:
+		fmt.Println("生成 ECDSA key")
+		k, err = provider.KeyGen(&bccsp.ECDSAKeyGenOpts{Temporary: false})
+	}
 	if err != nil {
 		t.Fatalf("Failed generating ECDSA key [%s]", err)
 	}
@@ -451,6 +473,10 @@ func TestECDSAKeyReRand(t *testing.T) {
 	t.Parallel()
 	provider, _, cleanup := currentTestConfig.Provider(t)
 	defer cleanup()
+
+	if currentTestConfig.hashFamily == "SM3" {
+		return
+	}
 
 	k, err := provider.KeyGen(&bccsp.ECDSAKeyGenOpts{Temporary: false})
 	if err != nil {
@@ -501,14 +527,34 @@ func TestECDSASign(t *testing.T) {
 	provider, _, cleanup := currentTestConfig.Provider(t)
 	defer cleanup()
 
-	k, err := provider.KeyGen(&bccsp.ECDSAKeyGenOpts{Temporary: false})
+	var k bccsp.Key
+	var err error
+	switch currentTestConfig.hashFamily {
+	case "SM3":
+		fmt.Println("生成 SM2 key")
+		k, err = provider.KeyGen(&bccsp.SM2KeyGenOpts{Temporary: false})
+	default:
+		fmt.Println("生成 ECDSA key")
+		k, err = provider.KeyGen(&bccsp.ECDSAKeyGenOpts{Temporary: false})
+	}
 	if err != nil {
 		t.Fatalf("Failed generating ECDSA key [%s]", err)
 	}
 
 	msg := []byte("Hello World")
 
-	digest, err := provider.Hash(msg, &bccsp.SHAOpts{})
+	var digest []byte
+	switch currentTestConfig.hashFamily {
+	case "SM3":
+		fmt.Println("SM2 不需要预先对签名内容做摘要")
+		digest = msg
+	default:
+		fmt.Println("ECDSA 需要预先对签名内容做摘要")
+		digest, err = provider.Hash(msg, &bccsp.SHAOpts{})
+		if err != nil {
+			t.Fatalf("Failed computing HASH [%s]", err)
+		}
+	}
 	if err != nil {
 		t.Fatalf("Failed computing HASH [%s]", err)
 	}
@@ -527,14 +573,33 @@ func TestECDSAVerify(t *testing.T) {
 	provider, ks, cleanup := currentTestConfig.Provider(t)
 	defer cleanup()
 
-	k, err := provider.KeyGen(&bccsp.ECDSAKeyGenOpts{Temporary: false})
+	var k bccsp.Key
+	var err error
+	switch currentTestConfig.hashFamily {
+	case "SM3":
+		fmt.Println("生成 SM2 key")
+		k, err = provider.KeyGen(&bccsp.SM2KeyGenOpts{Temporary: false})
+	default:
+		fmt.Println("生成 ECDSA key")
+		k, err = provider.KeyGen(&bccsp.ECDSAKeyGenOpts{Temporary: false})
+	}
 	if err != nil {
 		t.Fatalf("Failed generating ECDSA key [%s]", err)
 	}
 
 	msg := []byte("Hello World")
-
-	digest, err := provider.Hash(msg, &bccsp.SHAOpts{})
+	var digest []byte
+	switch currentTestConfig.hashFamily {
+	case "SM3":
+		fmt.Println("SM2 不需要预先对签名内容做摘要")
+		digest = msg
+	default:
+		fmt.Println("ECDSA 需要预先对签名内容做摘要")
+		digest, err = provider.Hash(msg, &bccsp.SHAOpts{})
+		if err != nil {
+			t.Fatalf("Failed computing HASH [%s]", err)
+		}
+	}
 	if err != nil {
 		t.Fatalf("Failed computing HASH [%s]", err)
 	}
@@ -590,6 +655,10 @@ func TestECDSAKeyDeriv(t *testing.T) {
 	provider, _, cleanup := currentTestConfig.Provider(t)
 	defer cleanup()
 
+	if currentTestConfig.hashFamily == "SM3" {
+		return
+	}
+
 	k, err := provider.KeyGen(&bccsp.ECDSAKeyGenOpts{Temporary: false})
 	if err != nil {
 		t.Fatalf("Failed generating ECDSA key [%s]", err)
@@ -626,51 +695,77 @@ func TestECDSAKeyImportFromExportedKey(t *testing.T) {
 	provider, _, cleanup := currentTestConfig.Provider(t)
 	defer cleanup()
 
-	// Generate an ECDSA key
-	k, err := provider.KeyGen(&bccsp.ECDSAKeyGenOpts{Temporary: false})
+	var k bccsp.Key
+	var err error
+	switch currentTestConfig.hashFamily {
+	case "SM3":
+		// 生成sm2 key
+		fmt.Println("生成 SM2 key")
+		k, err = provider.KeyGen(&bccsp.SM2KeyGenOpts{Temporary: false})
+	default:
+		// Generate an ECDSA key
+		fmt.Println("生成 ECDSA key")
+		k, err = provider.KeyGen(&bccsp.ECDSAKeyGenOpts{Temporary: false})
+	}
 	if err != nil {
-		t.Fatalf("Failed generating ECDSA key [%s]", err)
+		t.Fatalf("Failed generating ECDSA/SM2 key [%s]", err)
 	}
 
 	// Export the public key
 	pk, err := k.PublicKey()
 	if err != nil {
-		t.Fatalf("Failed getting ECDSA public key [%s]", err)
+		t.Fatalf("Failed getting ECDSA/SM2 public key [%s]", err)
 	}
 
 	pkRaw, err := pk.Bytes()
 	if err != nil {
-		t.Fatalf("Failed getting ECDSA raw public key [%s]", err)
+		t.Fatalf("Failed getting ECDSA/SM2 raw public key [%s]", err)
 	}
 
 	// Import the exported public key
-	pk2, err := provider.KeyImport(pkRaw, &bccsp.ECDSAPKIXPublicKeyImportOpts{Temporary: false})
+	var pk2 bccsp.Key
+	switch currentTestConfig.hashFamily {
+	case "SM3":
+		fmt.Println("SM2 KeyImport")
+		pk2, err = provider.KeyImport(pkRaw, &bccsp.SM2PublicKeyImportOpts{Temporary: false})
+	default:
+		fmt.Println("ECDSA KeyImport")
+		pk2, err = provider.KeyImport(pkRaw, &bccsp.ECDSAPKIXPublicKeyImportOpts{Temporary: false})
+	}
 	if err != nil {
-		t.Fatalf("Failed importing ECDSA public key [%s]", err)
+		t.Fatalf("Failed importing ECDSA/SM2 public key [%s]", err)
 	}
 	if pk2 == nil {
-		t.Fatal("Failed importing ECDSA public key. Return BCCSP key cannot be nil.")
+		t.Fatal("Failed importing ECDSA/SM2 public key. Return BCCSP key cannot be nil.")
 	}
 
 	// Sign and verify with the imported public key
 	msg := []byte("Hello World")
 
-	digest, err := provider.Hash(msg, &bccsp.SHAOpts{})
-	if err != nil {
-		t.Fatalf("Failed computing HASH [%s]", err)
+	var digest []byte
+	switch currentTestConfig.hashFamily {
+	case "SM3":
+		fmt.Println("SM2 不需要预先对签名内容做摘要")
+		digest = msg
+	default:
+		fmt.Println("ECDSA 需要预先对签名内容做摘要")
+		digest, err = provider.Hash(msg, &bccsp.SHAOpts{})
+		if err != nil {
+			t.Fatalf("Failed computing HASH [%s]", err)
+		}
 	}
 
 	signature, err := provider.Sign(k, digest, nil)
 	if err != nil {
-		t.Fatalf("Failed generating ECDSA signature [%s]", err)
+		t.Fatalf("Failed generating ECDSA/SM2 signature [%s]", err)
 	}
 
 	valid, err := provider.Verify(pk2, signature, digest, nil)
 	if err != nil {
-		t.Fatalf("Failed verifying ECDSA signature [%s]", err)
+		t.Fatalf("Failed verifying ECDSA/SM2 signature [%s]", err)
 	}
 	if !valid {
-		t.Fatal("Failed verifying ECDSA signature. Signature not valid.")
+		t.Fatal("Failed verifying ECDSA/SM2 signature. Signature not valid.")
 	}
 }
 
@@ -679,8 +774,16 @@ func TestECDSAKeyImportFromECDSAPublicKey(t *testing.T) {
 	provider, _, cleanup := currentTestConfig.Provider(t)
 	defer cleanup()
 
-	// Generate an ECDSA key
-	k, err := provider.KeyGen(&bccsp.ECDSAKeyGenOpts{Temporary: false})
+	var k bccsp.Key
+	var err error
+	switch currentTestConfig.hashFamily {
+	case "SM3":
+		fmt.Println("生成 SM2 key")
+		k, err = provider.KeyGen(&bccsp.SM2KeyGenOpts{Temporary: false})
+	default:
+		fmt.Println("生成 ECDSA key")
+		k, err = provider.KeyGen(&bccsp.ECDSAKeyGenOpts{Temporary: false})
+	}
 	if err != nil {
 		t.Fatalf("Failed generating ECDSA key [%s]", err)
 	}
@@ -701,8 +804,15 @@ func TestECDSAKeyImportFromECDSAPublicKey(t *testing.T) {
 		t.Fatalf("Failed converting raw to ecdsa.PublicKey [%s]", err)
 	}
 
-	// Import the ecdsa.PublicKey
-	pk2, err := provider.KeyImport(pub, &bccsp.ECDSAGoPublicKeyImportOpts{Temporary: false})
+	var pk2 bccsp.Key
+	switch currentTestConfig.hashFamily {
+	case "SM3":
+		fmt.Println("导入 SM2 key")
+		pk2, err = provider.KeyImport(pub, &bccsp.SM2GoPublicKeyImportOpts{Temporary: false})
+	default:
+		fmt.Println("导入 ECDSA key")
+		pk2, err = provider.KeyImport(pub, &bccsp.ECDSAGoPublicKeyImportOpts{Temporary: false})
+	}
 	if err != nil {
 		t.Fatalf("Failed importing ECDSA public key [%s]", err)
 	}
@@ -713,9 +823,17 @@ func TestECDSAKeyImportFromECDSAPublicKey(t *testing.T) {
 	// Sign and verify with the imported public key
 	msg := []byte("Hello World")
 
-	digest, err := provider.Hash(msg, &bccsp.SHAOpts{})
-	if err != nil {
-		t.Fatalf("Failed computing HASH [%s]", err)
+	var digest []byte
+	switch currentTestConfig.hashFamily {
+	case "SM3":
+		fmt.Println("SM2 不需要预先对签名内容做摘要")
+		digest = msg
+	default:
+		fmt.Println("ECDSA 需要预先对签名内容做摘要")
+		digest, err = provider.Hash(msg, &bccsp.SHAOpts{})
+		if err != nil {
+			t.Fatalf("Failed computing HASH [%s]", err)
+		}
 	}
 
 	signature, err := provider.Sign(k, digest, nil)
@@ -794,47 +912,51 @@ func TestECDSAKeyImportFromECDSAPrivateKey(t *testing.T) {
 	}
 }
 
-func TestKeyImportFromX509ECDSAPublicKey(t *testing.T) {
+func TestKeyImportFromX509Sm2PublicKey(t *testing.T) {
+	// func TestKeyImportFromX509ECDSAPublicKey(t *testing.T) {
 	t.Parallel()
 	provider, _, cleanup := currentTestConfig.Provider(t)
 	defer cleanup()
 
-	// Generate an ECDSA key
-	k, err := provider.KeyGen(&bccsp.ECDSAKeyGenOpts{Temporary: false})
+	// TODO 将ecdsa改为sm2
+	// Generate an SM2 key
+	k, err := provider.KeyGen(&bccsp.SM2KeyGenOpts{Temporary: false})
 	if err != nil {
-		t.Fatalf("Failed generating ECDSA key [%s]", err)
+		t.Fatalf("Failed generating SM2 key [%s]", err)
 	}
 
+	// TODO 将x509改为 gmx509
 	// Generate a self-signed certificate
-	testExtKeyUsage := []x509.ExtKeyUsage{x509.ExtKeyUsageClientAuth, x509.ExtKeyUsageServerAuth}
+	testExtKeyUsage := []gmx509.ExtKeyUsage{gmx509.ExtKeyUsageClientAuth, gmx509.ExtKeyUsageServerAuth}
 	testUnknownExtKeyUsage := []asn1.ObjectIdentifier{[]int{1, 2, 3}, []int{2, 59, 1}}
 	extraExtensionData := []byte("extra extension")
 	commonName := "test.example.com"
-	template := x509.Certificate{
+	template := gmx509.Certificate{
 		SerialNumber: big.NewInt(1),
 		Subject: pkix.Name{
-			CommonName:   commonName,
-			Organization: []string{"Σ Acme Co"},
-			Country:      []string{"US"},
+			CommonName: commonName,
+			// Organization: []string{"Σ Acme Co"},
+			Organization: []string{"gcsoft"},
+			Country:      []string{"CN"},
 			ExtraNames: []pkix.AttributeTypeAndValue{
 				{
 					Type:  []int{2, 5, 4, 42},
-					Value: "Gopher",
+					Value: "zhaochun",
 				},
 				// This should override the Country, above.
 				{
 					Type:  []int{2, 5, 4, 6},
-					Value: "NL",
+					Value: "CN",
 				},
 			},
 		},
 		NotBefore: time.Now().Add(-1 * time.Hour),
 		NotAfter:  time.Now().Add(1 * time.Hour),
 
-		SignatureAlgorithm: x509.ECDSAWithSHA256,
+		SignatureAlgorithm: gmx509.SM2WithSM3,
 
 		SubjectKeyId: []byte{1, 2, 3, 4},
-		KeyUsage:     x509.KeyUsageCertSign,
+		KeyUsage:     gmx509.KeyUsageCertSign,
 
 		ExtKeyUsage:        testExtKeyUsage,
 		UnknownExtKeyUsage: testUnknownExtKeyUsage,
@@ -878,17 +1000,19 @@ func TestKeyImportFromX509ECDSAPublicKey(t *testing.T) {
 		t.Fatalf("Failed getting ECDSA raw public key [%s]", err)
 	}
 
-	pub, err := derToPublicKey(pkRaw)
+	// pub, err := derToPublicKey(pkRaw)
+	pub, err := derToSm2PublicKey(pkRaw)
 	if err != nil {
 		t.Fatalf("Failed converting raw to ECDSA.PublicKey [%s]", err)
 	}
-
-	certRaw, err := x509.CreateCertificate(rand.Reader, &template, &template, pub, cryptoSigner)
+	// gmx509只支持对 sm2公钥进行 签名
+	certRaw, err := gmx509.CreateCertificate(&template, &template, pub, cryptoSigner)
+	// certRaw, err := x509.CreateCertificate(rand.Reader, &template, &template, pub, cryptoSigner)
 	if err != nil {
 		t.Fatalf("Failed generating self-signed certificate [%s]", err)
 	}
 
-	cert, err := x509.ParseCertificate(certRaw)
+	cert, err := gmx509.ParseCertificate(certRaw)
 	if err != nil {
 		t.Fatalf("Failed generating X509 certificate object from raw [%s]", err)
 	}
@@ -970,6 +1094,10 @@ func TestECDSALowS(t *testing.T) {
 	provider, _, cleanup := currentTestConfig.Provider(t)
 	defer cleanup()
 
+	if currentTestConfig.hashFamily == "SM3" {
+		// sm2的签名没有做Low-S判断
+		return
+	}
 	// Ensure that signature with low-S are generated
 	k, err := provider.KeyGen(&bccsp.ECDSAKeyGenOpts{Temporary: false})
 	if err != nil {
@@ -1007,6 +1135,7 @@ func TestECDSALowS(t *testing.T) {
 
 	// Ensure that signature with high-S are rejected.
 	var R *big.Int
+	// 不断签名，直到获取一个高S值的签名
 	for {
 		R, S, err = ecdsa.Sign(rand.Reader, k.(*ecdsaPrivateKey).privKey, digest)
 		if err != nil {
@@ -1024,6 +1153,7 @@ func TestECDSALowS(t *testing.T) {
 	}
 
 	valid, err = provider.Verify(k, sig, digest, nil)
+	// 高S值的签名必须验签失败
 	if err == nil {
 		t.Fatal("Failed verifying ECDSA signature. It must fail for a signature with high-S")
 	}
@@ -1326,12 +1456,15 @@ func TestSHA(t *testing.T) {
 			default:
 				t.Fatalf("Invalid security level [%d]", currentTestConfig.securityLevel)
 			}
+		case "SM3":
+			h = sm3.New()
 		default:
 			t.Fatalf("Invalid hash family [%s]", currentTestConfig.hashFamily)
 		}
 
 		h.Write(b)
 		h2 := h.Sum(nil)
+		// fmt.Printf("h1 : %s \nh2 : %s \n", hex.EncodeToString(h1), hex.EncodeToString(h2))
 		if !bytes.Equal(h1, h2) {
 			t.Fatalf("Discrempancy found in HASH result [%x], [%x]!=[%x]", b, h1, h2)
 		}

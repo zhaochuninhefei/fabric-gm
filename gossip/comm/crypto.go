@@ -18,7 +18,7 @@ func certHashFromRawCert(rawCert []byte) []byte {
 	if len(rawCert) == 0 {
 		return nil
 	}
-	return util.ComputeGMSM3(rawCert)
+	return util.ComputeSM3(rawCert)
 }
 
 // ExtractCertificateHash extracts the hash of the certificate from the stream

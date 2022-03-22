@@ -16,6 +16,10 @@ limitations under the License.
 
 package utils
 
+/*
+bccsp/utils/slice.go 切片相关操作
+*/
+
 // Clone clones the passed slice
 func Clone(src []byte) []byte {
 	clone := make([]byte, len(src))

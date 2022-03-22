@@ -141,7 +141,7 @@ func (d *deliverServiceImpl) StartDeliverForChannel(chainID string, ledgerInfo b
 	}
 
 	if d.conf.DeliverGRPCClient.MutualTLSRequired() {
-		dc.TLSCertHash = util.ComputeGMSM3(d.conf.DeliverGRPCClient.Certificate().Certificate[0])
+		dc.TLSCertHash = util.ComputeSM3(d.conf.DeliverGRPCClient.Certificate().Certificate[0])
 	}
 
 	d.blockProviders[chainID] = dc

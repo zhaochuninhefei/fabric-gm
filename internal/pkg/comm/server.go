@@ -239,7 +239,7 @@ func (gServer *GRPCServer) Stop() {
 
 // internal function to add a PEM-encoded clientRootCA
 func (gServer *GRPCServer) appendClientRootCA(clientRoot []byte) error {
-	certs, err := pemToGMSM2Certs(clientRoot)
+	certs, err := pemToSM2Certs(clientRoot)
 	if err != nil {
 		return errors.WithMessage(err, "failed to append client root certificate(s)")
 	}
@@ -264,7 +264,7 @@ func (gServer *GRPCServer) SetClientRootCAs(clientRoots [][]byte) error {
 	certPool := x509.NewCertPool()
 
 	for _, clientRoot := range clientRoots {
-		certs, err := pemToGMSM2Certs(clientRoot)
+		certs, err := pemToSM2Certs(clientRoot)
 		if err != nil {
 			return errors.WithMessage(err, "failed to set client root certificate(s)")
 		}

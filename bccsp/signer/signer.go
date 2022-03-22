@@ -15,6 +15,10 @@ import (
 	"github.com/pkg/errors"
 )
 
+/*
+bccsp/signer/signer.go 定义 bccspCryptoSigner 结构体并为其实现`crypto.Signer`接口
+*/
+
 // bccspCryptoSigner is the BCCSP-based implementation of a crypto.Signer
 type bccspCryptoSigner struct {
 	csp bccsp.BCCSP

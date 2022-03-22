@@ -82,23 +82,23 @@ func UnmarshalSM2Signature(raw []byte) (*big.Int, *big.Int, error) {
 }
 
 // 国密sm2签名，digest是明文不是摘要，opts实际没有使用
-func signGMSM2(k *sm2.PrivateKey, digest []byte, opts bccsp.SignerOpts) (signature []byte, err error) {
+func signSM2(k *sm2.PrivateKey, digest []byte, opts bccsp.SignerOpts) (signature []byte, err error) {
 	signature, err = k.Sign(rand.Reader, digest, opts)
 	return
 }
 
 // 国密sm2验签，digest是签名内容明文，signature是被验签的签名，opts实际没有使用
-func verifyGMSM2(k *sm2.PublicKey, signature, digest []byte, opts bccsp.SignerOpts) (valid bool, err error) {
+func verifySM2(k *sm2.PublicKey, signature, digest []byte, opts bccsp.SignerOpts) (valid bool, err error) {
 	valid = k.Verify(digest, signature)
 	/*fmt.Printf("valid+++,%v", valid)*/
 	return
 }
 
-type gmsm2Signer struct{}
+type sm2Signer struct{}
 
-// 在gmsm2Signer上绑定Sign签名方法
-func (s *gmsm2Signer) Sign(k bccsp.Key, digest []byte, opts bccsp.SignerOpts) (signature []byte, err error) {
-	return signGMSM2(k.(*gmsm2PrivateKey).privKey, digest, opts)
+// 在sm2Signer上绑定Sign签名方法
+func (s *sm2Signer) Sign(k bccsp.Key, digest []byte, opts bccsp.SignerOpts) (signature []byte, err error) {
+	return signSM2(k.(*sm2PrivateKey).privKey, digest, opts)
 }
 
 // TODO 下面这种明面上是ecdsa实际上是sm2的做法没有意义。
@@ -109,10 +109,9 @@ func (s *gmsm2Signer) Sign(k bccsp.Key, digest []byte, opts bccsp.SignerOpts) (s
 // // 在ecdsaPrivateKeySigner上绑定Sign签名方法，内部转为sm2签名。
 // // 注意，k明面上是ecdsa私钥，但其实内部所有参数都是sm2的参数(Curve、X、Y、D)。
 // func (s *ecdsaPrivateKeySigner) Sign(k bccsp.Key, digest []byte, opts bccsp.SignerOpts) (signature []byte, err error) {
-// 	// 如果k的类型不是`ecdsaPrivateKey`，比如是`gmsm2PrivateKey`，那么这里会出错。
+// 	// 如果k的类型不是`ecdsaPrivateKey`，比如是`sm2PrivateKey`，那么这里会出错。
 // 	// 但后续又将ecdsaPrivateKey的Curve、X、Y、D直接拿来当作sm2.PublicKey与sm2.PrivateKey的相关参数，
-// 	// 因此必须满足条件：k是使用`gm.gmecdsaKeyGenerator`(bccsp/gm/ecdsakey.go)的`KeyGen`方法生成的ecdsa私钥。
-// 	// 这样，k明面上是ecdsa私钥，但其实内部所有参数都是sm2的。
+// 	// 因此必须满足条件：k明面上是ecdsa私钥，但其实内部所有参数(Curve、X、Y、D)都是sm2的。
 // 	puk := k.(*ecdsaPrivateKey).privKey.PublicKey
 // 	sm2pk := sm2.PublicKey{
 // 		Curve: puk.Curve,
@@ -124,21 +123,21 @@ func (s *gmsm2Signer) Sign(k bccsp.Key, digest []byte, opts bccsp.SignerOpts) (s
 // 		D:         privKey.D,
 // 		PublicKey: sm2pk,
 // 	}
-// 	return signGMSM2(&sm2privKey, digest, opts)
+// 	return signSM2(&sm2privKey, digest, opts)
 // }
 
-type gmsm2PrivateKeyVerifier struct{}
+type sm2PrivateKeyVerifier struct{}
 
-// 在gmsm2PrivateKeyVerifier上绑定验签方法
-func (v *gmsm2PrivateKeyVerifier) Verify(k bccsp.Key, signature, digest []byte, opts bccsp.SignerOpts) (valid bool, err error) {
-	return verifyGMSM2(&(k.(*gmsm2PrivateKey).privKey.PublicKey), signature, digest, opts)
+// 在sm2PrivateKeyVerifier上绑定验签方法
+func (v *sm2PrivateKeyVerifier) Verify(k bccsp.Key, signature, digest []byte, opts bccsp.SignerOpts) (valid bool, err error) {
+	return verifySM2(&(k.(*sm2PrivateKey).privKey.PublicKey), signature, digest, opts)
 }
 
-type gmsm2PublicKeyKeyVerifier struct{}
+type sm2PublicKeyKeyVerifier struct{}
 
-// 在gmsm2PublicKeyKeyVerifier上绑定验签方法
-func (v *gmsm2PublicKeyKeyVerifier) Verify(k bccsp.Key, signature, digest []byte, opts bccsp.SignerOpts) (valid bool, err error) {
-	return verifyGMSM2(k.(*gmsm2PublicKey).pubKey, signature, digest, opts)
+// 在sm2PublicKeyKeyVerifier上绑定验签方法
+func (v *sm2PublicKeyKeyVerifier) Verify(k bccsp.Key, signature, digest []byte, opts bccsp.SignerOpts) (valid bool, err error) {
+	return verifySM2(k.(*sm2PublicKey).pubKey, signature, digest, opts)
 }
 
 // TODO 下面这种明面上是ecdsa实际上是sm2的做法没有意义。
@@ -155,7 +154,7 @@ func (v *gmsm2PublicKeyKeyVerifier) Verify(k bccsp.Key, signature, digest []byte
 // 		X:     puk.X,
 // 		Y:     puk.Y,
 // 	}
-// 	return verifyGMSM2(&sm2pk, signature, digest, opts)
+// 	return verifySM2(&sm2pk, signature, digest, opts)
 // }
 
 // type ecdsaPublicKeyKeyVerifier struct{}
@@ -169,5 +168,5 @@ func (v *gmsm2PublicKeyKeyVerifier) Verify(k bccsp.Key, signature, digest []byte
 // 		X:     puk.X,
 // 		Y:     puk.Y,
 // 	}
-// 	return verifyGMSM2(&sm2pk, signature, digest, opts)
+// 	return verifySM2(&sm2pk, signature, digest, opts)
 // }

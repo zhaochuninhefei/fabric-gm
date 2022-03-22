@@ -27,7 +27,7 @@ func AddPemToCertPool(pemCerts []byte, pool *x509.CertPool) error {
 	//TODO
 	block, _ := pem.Decode(pemCerts)
 	if block != nil {
-		certs, err := pemToGMSM2Certs(pemCerts)
+		certs, err := pemToSM2Certs(pemCerts)
 		if err != nil {
 			return err
 		}
@@ -62,7 +62,7 @@ func pemToX509Certs(pemCerts []byte) ([]*x509.Certificate, error) {
 }
 
 // parse PEM-encoded certs
-func pemToGMSM2Certs(pemCerts []byte) ([]*x509.Certificate, error) {
+func pemToSM2Certs(pemCerts []byte) ([]*x509.Certificate, error) {
 	var certs []*x509.Certificate
 	var subjects []string
 

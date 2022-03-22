@@ -61,7 +61,7 @@ func TestVerifyECDSA(t *testing.T) {
 
 	_, err = verifyECDSA(&lowLevelKey.PublicKey, nil, msg, nil)
 	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "Failed unmashalling signature [")
+	assert.Contains(t, err.Error(), "failed unmashalling signature [")
 
 	R, S, err := utils.UnmarshalECDSASignature(sigma)
 	assert.NoError(t, err)
@@ -70,7 +70,7 @@ func TestVerifyECDSA(t *testing.T) {
 	assert.NoError(t, err)
 	_, err = verifyECDSA(&lowLevelKey.PublicKey, sigmaWrongS, msg, nil)
 	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "Invalid S. Must be smaller than half the order [")
+	assert.Contains(t, err.Error(), "invalid S. Must be smaller than half the order [")
 }
 
 func TestEcdsaSignerSign(t *testing.T) {
@@ -119,7 +119,7 @@ func TestEcdsaPrivateKey(t *testing.T) {
 
 	_, err = k.Bytes()
 	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "Not supported.")
+	assert.Contains(t, err.Error(), "not supported")
 
 	k.privKey = nil
 	ski := k.SKI()
@@ -178,5 +178,5 @@ func TestEcdsaPublicKey(t *testing.T) {
 	k.pubKey = &ecdsa.PublicKey{Curve: invalidCurve, X: big.NewInt(1), Y: big.NewInt(1)}
 	_, err = k.Bytes()
 	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "Failed marshalling key [")
+	assert.Contains(t, err.Error(), "failed marshalling key [")
 }

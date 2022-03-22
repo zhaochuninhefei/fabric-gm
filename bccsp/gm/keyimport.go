@@ -208,9 +208,9 @@ func (ki *x509PublicKeyImportOptsKeyImporter) KeyImport(raw interface{}, opts bc
 		if err != nil {
 			return nil, errors.New("MarshalSm2PublicKey error")
 		}
-		return ki.bccsp.keyImporters[reflect.TypeOf(&bccsp.GMSM2PublicKeyImportOpts{})].KeyImport(
+		return ki.bccsp.keyImporters[reflect.TypeOf(&bccsp.SM2PublicKeyImportOpts{})].KeyImport(
 			der,
-			&bccsp.GMSM2PublicKeyImportOpts{Temporary: opts.Ephemeral()})
+			&bccsp.SM2PublicKeyImportOpts{Temporary: opts.Ephemeral()})
 	case *sm2.PublicKey:
 		fmt.Printf("bccsp gm keyimport pk is *sm2.PublicKey")
 		// TODO 逻辑没有问题吗？不应该和`case sm2.PublicKey`分支一样，先转为der吗？
@@ -221,9 +221,9 @@ func (ki *x509PublicKeyImportOptsKeyImporter) KeyImport(raw interface{}, opts bc
 		if err != nil {
 			return nil, errors.New("MarshalSm2PublicKey error")
 		}
-		return ki.bccsp.keyImporters[reflect.TypeOf(&bccsp.GMSM2PublicKeyImportOpts{})].KeyImport(
+		return ki.bccsp.keyImporters[reflect.TypeOf(&bccsp.SM2PublicKeyImportOpts{})].KeyImport(
 			der,
-			&bccsp.GMSM2PublicKeyImportOpts{Temporary: opts.Ephemeral()})
+			&bccsp.SM2PublicKeyImportOpts{Temporary: opts.Ephemeral()})
 	case *ecdsa.PublicKey:
 		// 这里没有先转为PKIX标准的公钥字节流，是因为使用的是ECDSAGoPublicKeyImportOpts
 		return ki.bccsp.keyImporters[reflect.TypeOf(&bccsp.ECDSAGoPublicKeyImportOpts{})].KeyImport(

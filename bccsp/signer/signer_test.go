@@ -20,10 +20,17 @@ import (
 	"crypto/elliptic"
 	"crypto/rand"
 	"crypto/x509"
+	"encoding/hex"
 	"errors"
+	"fmt"
 	"testing"
 
+	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/mocks"
+	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/sw"
+	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/utils"
+	"gitee.com/zhaochuninhefei/gmgo/sm2"
+	gmx509 "gitee.com/zhaochuninhefei/gmgo/x509"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -62,8 +69,32 @@ func TestInit(t *testing.T) {
 	// Test public key
 	R, S, err := ecdsa.Sign(rand.Reader, k, []byte{0, 1, 2, 3})
 	assert.NoError(t, err)
+	fmt.Printf("签名: %d, %d\n", R, S)
+	sign, _ := utils.MarshalECDSASignature(R, S)
+	fmt.Printf("签名: %s", hex.EncodeToString(sign))
 
 	assert.True(t, ecdsa.Verify(signer.Public().(*ecdsa.PublicKey), []byte{0, 1, 2, 3}, R, S))
+}
+
+func TestInitSm2(t *testing.T) {
+	k, err := sm2.GenerateKey(rand.Reader)
+	assert.NoError(t, err)
+	pkRaw, err := gmx509.MarshalPKIXPublicKey(&k.PublicKey)
+	assert.NoError(t, err)
+
+	signer, err := New(&mocks.MockBCCSP{}, &mocks.MockKey{PK: &mocks.MockKey{BytesValue: pkRaw}})
+	assert.NoError(t, err)
+	assert.NotNil(t, signer)
+
+	// Test public key
+	R, S, err := sm2.Sm2Sign(k, []byte{0, 1, 2, 3}, nil, rand.Reader)
+	assert.NoError(t, err)
+	fmt.Printf("签名: %d, %d\n", R, S)
+	sign, _ := sw.MarshalSM2Signature(R, S)
+	fmt.Printf("签名: %s", hex.EncodeToString(sign))
+
+	assert.True(t, sm2.Sm2Verify(signer.Public().(*sm2.PublicKey), []byte{0, 1, 2, 3}, nil, R, S))
+
 }
 
 func TestPublic(t *testing.T) {
@@ -118,4 +149,40 @@ func TestSign(t *testing.T) {
 	_, err = signer.Sign(nil, expectedDigest, nil)
 	assert.Error(t, err)
 	assert.Equal(t, err.Error(), "invalid opts")
+}
+
+func TestSignSm2(t *testing.T) {
+	expectedDigest := []byte{0, 1, 2, 3, 4, 5}
+	csp, err := sw.NewDefaultSecurityLevelWithKeystore(sw.NewDummyKeyStore())
+	if err != nil {
+		t.Fatalf("获取csp失败: %s\n", err)
+	}
+	key, err := csp.KeyGen(&bccsp.SM2KeyGenOpts{Temporary: true})
+	if err != nil {
+		t.Fatalf("生成key失败: %s\n", err)
+	}
+	signer := &bccspCryptoSigner{
+		key: key,
+		csp: csp,
+	}
+	sign, err := signer.Sign(rand.Reader, expectedDigest, nil)
+	if err != nil {
+		t.Fatalf("签名失败: %s\n", err)
+	}
+	fmt.Printf("签名: %s", hex.EncodeToString(sign))
+	r, s, err := sw.UnmarshalSM2Signature(sign)
+	if err != nil {
+		t.Fatalf("签名转rs失败: %s\n", err)
+	}
+	fmt.Printf("签名: %d, %d\n", r, s)
+
+	pub, err := key.PublicKey()
+	if err != nil {
+		t.Fatalf("签名转rs失败: %s\n", err)
+	}
+	ok, err := csp.Verify(pub, sign, expectedDigest, nil)
+	if err != nil {
+		t.Fatalf("签名转rs失败: %s\n", err)
+	}
+	fmt.Printf("验签结果: %v\n", ok)
 }

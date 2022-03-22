@@ -16,6 +16,10 @@ limitations under the License.
 
 package utils
 
+/*
+bccsp/utils/errs.go 提供 error 相关处理函数
+*/
+
 // ErrToString converts and error to a string. If the error is nil, it returns the string "<clean>"
 func ErrToString(err error) string {
 	if err != nil {

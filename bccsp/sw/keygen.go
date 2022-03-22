@@ -29,8 +29,8 @@ import (
 /*
 bccsp/sw/keygen.go 定义各个算法的密钥生成器，实现`sw.KeyGenerator`接口(bccsp/sw/internals.go)
 ecdsaKeyGenerator
-gmsm2KeyGenerator
-gmsm4KeyGenerator
+sm2KeyGenerator
+sm4KeyGenerator
 aesKeyGenerator
 */
 
@@ -50,30 +50,30 @@ func (kg *ecdsaKeyGenerator) KeyGen(opts bccsp.KeyGenOpts) (bccsp.Key, error) {
 }
 
 // sm2私钥生成器
-type gmsm2KeyGenerator struct {
+type sm2KeyGenerator struct {
 }
 
 // 生成sm2私钥
-func (gm *gmsm2KeyGenerator) KeyGen(opts bccsp.KeyGenOpts) (bccsp.Key, error) {
+func (gm *sm2KeyGenerator) KeyGen(opts bccsp.KeyGenOpts) (bccsp.Key, error) {
 	privKey, err := sm2.GenerateKey(rand.Reader)
 	if err != nil {
 		return nil, fmt.Errorf("failed generating SM2 key : [%s]", err)
 	}
-	return &gmsm2PrivateKey{privKey}, nil
+	return &sm2PrivateKey{privKey}, nil
 }
 
 // sm4密钥生成器
-type gmsm4KeyGenerator struct {
+type sm4KeyGenerator struct {
 	length int
 }
 
 // 生成sm4密钥
-func (kg *gmsm4KeyGenerator) KeyGen(opts bccsp.KeyGenOpts) (bccsp.Key, error) {
+func (kg *sm4KeyGenerator) KeyGen(opts bccsp.KeyGenOpts) (bccsp.Key, error) {
 	lowLevelKey, err := GetRandomBytes(int(kg.length))
 	if err != nil {
 		return nil, fmt.Errorf("failed generating SM4 %d key for : [%s]", kg.length, err)
 	}
-	return &gmsm4Key{lowLevelKey, false}, nil
+	return &sm4Key{lowLevelKey, false}, nil
 }
 
 // AES密钥生成器

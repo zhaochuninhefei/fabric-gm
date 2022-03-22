@@ -31,7 +31,7 @@ import (
 
 // //调用SM2接口生成SM2证书
 // func CreateCertificateToMem(template, parent *x509.Certificate,key bccsp.Key) (cert []byte,err error) {
-// 	pk := key.(*gmsm2PrivateKey).privKey
+// 	pk := key.(*sm2PrivateKey).privKey
 // 	bigint := getRandBigInt()
 // 	if(template.SerialNumber == nil){
 // 		template.SerialNumber = bigint
@@ -53,7 +53,7 @@ import (
 
 // //调用SM2接口生成SM2证书请求
 // func CreateCertificateRequestToMem(certificateRequest *x509.CertificateRequest,key bccsp.Key) (csr []byte,err error) {
-// 	pk := key.(*gmsm2PrivateKey).privKey
+// 	pk := key.(*sm2PrivateKey).privKey
 // 	sm2Req := ParseX509CertificateRequest2Sm2(certificateRequest)
 // 	csr,err = sm2.CreateCertificateRequestToMem(sm2Req,pk)
 // 	return
@@ -64,8 +64,8 @@ import (
 // parent : 父证书
 // key : 签名私钥
 func CreateCertificateToMem(template, parent *gx509.Certificate, key bccsp.Key) (cert []byte, err error) {
-	// 将参数 key 强转为gmsm2PrivateKey类型
-	pk := key.(*gmsm2PrivateKey).privKey
+	// 将参数 key 强转为sm2PrivateKey类型
+	pk := key.(*sm2PrivateKey).privKey
 	// 获取证书模板的公钥并强转为sm2.PublicKey
 	pub, a := template.PublicKey.(*sm2.PublicKey)
 	if a {
@@ -85,9 +85,9 @@ func CreateCertificateToMem(template, parent *gx509.Certificate, key bccsp.Key) 
 
 // 根据证书申请模板生成证书申请pem字节流，由申请者自签名
 // certificateRequest : 证书申请模板(*gx509.CertificateRequest)
-// key : 申请者私钥(*gmsm2PrivateKey)
+// key : 申请者私钥(*sm2PrivateKey)
 func CreateSm2CertificateRequestToMem(certificateRequest *gx509.CertificateRequest, key bccsp.Key) (csr []byte, err error) {
-	pk := key.(*gmsm2PrivateKey).privKey
+	pk := key.(*sm2PrivateKey).privKey
 	// 根据证书申请模板生成证书申请pem字节流，由申请者自签名
 	csr, err = gx509.CreateCertificateRequestToMem(certificateRequest, pk)
 	return

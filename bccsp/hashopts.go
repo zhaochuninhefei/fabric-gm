@@ -20,7 +20,7 @@ import "fmt"
 
 /*
  * bccsp/hashopts.go 提供了一些对`bccsp.HashOpts`的实现:
- * SHA256Opts, SHA384Opts, SHA3_256Opts, SHA3_384Opts, GMSM3Opts
+ * SHA256Opts, SHA384Opts, SHA3_256Opts, SHA3_384Opts, SM3Opts
  */
 
 // SHA256Opts contains options relating to SHA-256.
@@ -59,20 +59,20 @@ func (opts *SHA3_384Opts) Algorithm() string {
 	return SHA3_384
 }
 
-// GMSM3Opts 国密 SM3.
-type GMSM3Opts struct {
+// SM3Opts 国密 SM3.
+type SM3Opts struct {
 }
 
 // Algorithm 国密 sm3 算法
-func (opts *GMSM3Opts) Algorithm() string {
-	return GMSM3
+func (opts *SM3Opts) Algorithm() string {
+	return SM3
 }
 
 // GetHashOpt returns the HashOpts corresponding to the passed hash function
 func GetHashOpt(hashFunction string) (HashOpts, error) {
 	switch hashFunction {
-	case GMSM3:
-		return &GMSM3Opts{}, nil
+	case SM3:
+		return &SM3Opts{}, nil
 	case SHA256:
 		return &SHA256Opts{}, nil
 	case SHA384:
