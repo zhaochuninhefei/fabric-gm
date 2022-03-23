@@ -74,6 +74,10 @@ func (k *sm2PrivateKey) PublicKey() (bccsp.Key, error) {
 	return &sm2PublicKey{&k.privKey.PublicKey}, nil
 }
 
+func (k *sm2PrivateKey) InsideKey() interface{} {
+	return k.privKey
+}
+
 type sm2PublicKey struct {
 	pubKey *sm2.PublicKey
 }
@@ -120,4 +124,8 @@ func (k *sm2PublicKey) Private() bool {
 // This method returns an error in symmetric key schemes.
 func (k *sm2PublicKey) PublicKey() (bccsp.Key, error) {
 	return k, nil
+}
+
+func (k *sm2PublicKey) InsideKey() interface{} {
+	return k.pubKey
 }

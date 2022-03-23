@@ -52,6 +52,10 @@ func (k *revocationSecretKey) SKI() []byte {
 	return hash.Sum(nil)
 }
 
+func (k *revocationSecretKey) InsideKey() interface{} {
+	return k.privKey
+}
+
 // Symmetric returns true if this key is a symmetric key,
 // false if this key is asymmetric
 func (k *revocationSecretKey) Symmetric() bool {
@@ -83,9 +87,13 @@ func NewRevocationPublicKey(pubKey *sm2.PublicKey) *revocationPublicKey {
 func (k *revocationPublicKey) Bytes() (raw []byte, err error) {
 	raw, err = x509.MarshalPKIXPublicKey(k.pubKey)
 	if err != nil {
-		return nil, fmt.Errorf("Failed marshalling key [%s]", err)
+		return nil, fmt.Errorf("failed marshalling key [%s]", err)
 	}
 	return
+}
+
+func (k *revocationPublicKey) InsideKey() interface{} {
+	return k.pubKey
 }
 
 // SKI returns the subject key identifier of this key.

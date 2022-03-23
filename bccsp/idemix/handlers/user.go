@@ -32,6 +32,10 @@ func (k *userSecretKey) Bytes() ([]byte, error) {
 	return nil, errors.New("not exportable")
 }
 
+func (k *userSecretKey) InsideKey() interface{} {
+	return k.sk
+}
+
 func (k *userSecretKey) SKI() []byte {
 	raw, err := k.sk.Bytes()
 	if err != nil {

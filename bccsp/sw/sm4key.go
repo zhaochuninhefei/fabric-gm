@@ -68,3 +68,7 @@ func (k *sm4Key) Private() bool {
 func (k *sm4Key) PublicKey() (bccsp.Key, error) {
 	return nil, errors.New("cannot call this method on a symmetric key")
 }
+
+func (k *sm4Key) InsideKey() interface{} {
+	return k.privKey
+}

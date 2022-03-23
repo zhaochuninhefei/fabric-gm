@@ -45,6 +45,9 @@ type Key interface {
 	// PublicKey returns the corresponding public key part of an asymmetric public/private key pair.
 	// This method returns an error in symmetric key schemes.
 	PublicKey() (Key, error)
+
+	// 返回内部密钥
+	InsideKey() interface{}
 }
 
 // KeyGenOpts contains options for key-generation with a CSP.

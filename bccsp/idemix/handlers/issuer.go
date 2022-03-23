@@ -52,10 +52,18 @@ func (k *issuerSecretKey) PublicKey() (bccsp.Key, error) {
 	return &issuerPublicKey{k.sk.Public()}, nil
 }
 
+func (k *issuerSecretKey) InsideKey() interface{} {
+	return k.sk
+}
+
 // issuerPublicKey contains the issuer public key
 // and implements the bccsp.Key interface
 type issuerPublicKey struct {
 	pk IssuerPublicKey
+}
+
+func (k *issuerPublicKey) InsideKey() interface{} {
+	return k.pk
 }
 
 func NewIssuerPublicKey(pk IssuerPublicKey) *issuerPublicKey {

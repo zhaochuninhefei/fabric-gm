@@ -66,3 +66,7 @@ func (k *aesPrivateKey) Private() bool {
 func (k *aesPrivateKey) PublicKey() (bccsp.Key, error) {
 	return nil, errors.New("cannot call this method on a symmetric key")
 }
+
+func (k *aesPrivateKey) InsideKey() interface{} {
+	return k.privKey
+}

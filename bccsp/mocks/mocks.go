@@ -151,6 +151,10 @@ func (m *MockKey) PublicKey() (bccsp.Key, error) {
 	return m.PK, m.PKErr
 }
 
+func (k *MockKey) InsideKey() interface{} {
+	return k.PK
+}
+
 type SignerOpts struct {
 	HashFuncValue crypto.Hash
 }

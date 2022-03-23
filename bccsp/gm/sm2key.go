@@ -73,6 +73,10 @@ func (k *gmsm2PrivateKey) PublicKey() (bccsp.Key, error) {
 	return &gmsm2PublicKey{&k.privKey.PublicKey}, nil
 }
 
+func (k *gmsm2PrivateKey) InsideKey() interface{} {
+	return k.privKey
+}
+
 type gmsm2PublicKey struct {
 	pubKey *sm2.PublicKey
 }
@@ -119,4 +123,8 @@ func (k *gmsm2PublicKey) Private() bool {
 // This method returns an error in symmetric key schemes.
 func (k *gmsm2PublicKey) PublicKey() (bccsp.Key, error) {
 	return k, nil
+}
+
+func (k *gmsm2PublicKey) InsideKey() interface{} {
+	return k.pubKey
 }

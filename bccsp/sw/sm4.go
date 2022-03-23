@@ -80,7 +80,7 @@ type sm4Encryptor struct{}
 func (e *sm4Encryptor) Encrypt(k bccsp.Key, plaintext []byte, opts bccsp.EncrypterOpts) (ciphertext []byte, err error) {
 	key := k.(*sm4Key).privKey
 	switch o := opts.(type) {
-	case *bccsp.SM4EncrypterOpts:
+	case *bccsp.SM4EncrypterDecrypterOpts:
 		iv := o.IV
 		switch o.MODE {
 		case "ECB":
@@ -94,10 +94,10 @@ func (e *sm4Encryptor) Encrypt(k bccsp.Key, plaintext []byte, opts bccsp.Encrypt
 		default:
 			return sm4.Sm4Ecb(key, plaintext, true)
 		}
-	case bccsp.SM4EncrypterOpts:
+	case bccsp.SM4EncrypterDecrypterOpts:
 		return e.Encrypt(k, plaintext, &o)
 	default:
-		return e.Encrypt(k, plaintext, &bccsp.SM4EncrypterOpts{})
+		return e.Encrypt(k, plaintext, &bccsp.SM4EncrypterDecrypterOpts{})
 	}
 	// return SM4Encrypt(k.(*sm4Key).privKey, plaintext)
 	//return AESCBCPKCS7Encrypt(k.(*sm4PrivateKey).privKey, plaintext)
@@ -114,7 +114,7 @@ type sm4Decryptor struct{}
 func (e *sm4Decryptor) Decrypt(k bccsp.Key, ciphertext []byte, opts bccsp.DecrypterOpts) (plaintext []byte, err error) {
 	key := k.(*sm4Key).privKey
 	switch o := opts.(type) {
-	case *bccsp.SM4EncrypterOpts:
+	case *bccsp.SM4EncrypterDecrypterOpts:
 		iv := o.IV
 		switch o.MODE {
 		case "ECB":
@@ -128,10 +128,10 @@ func (e *sm4Decryptor) Decrypt(k bccsp.Key, ciphertext []byte, opts bccsp.Decryp
 		default:
 			return sm4.Sm4Ecb(key, ciphertext, false)
 		}
-	case bccsp.SM4EncrypterOpts:
+	case bccsp.SM4EncrypterDecrypterOpts:
 		return e.Decrypt(k, ciphertext, &o)
 	default:
-		return e.Decrypt(k, ciphertext, &bccsp.SM4EncrypterOpts{})
+		return e.Decrypt(k, ciphertext, &bccsp.SM4EncrypterDecrypterOpts{})
 	}
 	// return SM4Decrypt(k.(*sm4Key).privKey, ciphertext)
 	// var dc = make([]byte, 16)

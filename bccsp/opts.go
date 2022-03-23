@@ -354,7 +354,7 @@ func (opts *SM4ImportKeyOpts) Ephemeral() bool {
 	return opts.Temporary
 }
 
-type SM4EncrypterOpts struct {
+type SM4EncrypterDecrypterOpts struct {
 	// sm4的分组模式，目前支持: ECB, CBC, CFB, OFB
 	MODE string
 	// 初始偏移量 在 CBC, CFB, OFB 分组模式下需要

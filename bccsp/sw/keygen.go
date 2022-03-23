@@ -88,5 +88,5 @@ func (kg *aesKeyGenerator) KeyGen(opts bccsp.KeyGenOpts) (bccsp.Key, error) {
 		return nil, fmt.Errorf("failed generating AES %d key [%s]", kg.length, err)
 	}
 
-	return &aesPrivateKey{lowLevelKey, false}, nil
+	return &aesPrivateKey{lowLevelKey, true}, nil
 }

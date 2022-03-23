@@ -54,3 +54,7 @@ func (k *rsaPublicKey) SKI() []byte {
 	hash := sha256.Sum256(raw)
 	return hash[:]
 }
+
+func (k *rsaPublicKey) InsideKey() interface{} {
+	return k.pubKey
+}
