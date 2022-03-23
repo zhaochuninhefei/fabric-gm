@@ -26,14 +26,14 @@ import (
 bccsp/sw/aeskey.go 定义AES密钥结构体，并实现`bccsp.Key`(bccsp/bccsp.go)接口
 */
 
-type aesPrivateKey struct {
+type AESPrivateKey struct {
 	privKey    []byte
 	exportable bool
 }
 
 // Bytes converts this key to its byte representation,
 // if this operation is allowed.
-func (k *aesPrivateKey) Bytes() (raw []byte, err error) {
+func (k *AESPrivateKey) Bytes() (raw []byte, err error) {
 	if k.exportable {
 		return k.privKey, nil
 	}
@@ -42,7 +42,7 @@ func (k *aesPrivateKey) Bytes() (raw []byte, err error) {
 }
 
 // SKI returns the subject key identifier of this key.
-func (k *aesPrivateKey) SKI() (ski []byte) {
+func (k *AESPrivateKey) SKI() (ski []byte) {
 	hash := sha256.New()
 	hash.Write([]byte{0x01})
 	hash.Write(k.privKey)
@@ -51,22 +51,22 @@ func (k *aesPrivateKey) SKI() (ski []byte) {
 
 // Symmetric returns true if this key is a symmetric key,
 // false if this key is asymmetric
-func (k *aesPrivateKey) Symmetric() bool {
+func (k *AESPrivateKey) Symmetric() bool {
 	return true
 }
 
 // Private returns true if this key is a private key,
 // false otherwise.
-func (k *aesPrivateKey) Private() bool {
+func (k *AESPrivateKey) Private() bool {
 	return true
 }
 
 // PublicKey returns the corresponding public key part of an asymmetric public/private key pair.
 // This method returns an error in symmetric key schemes.
-func (k *aesPrivateKey) PublicKey() (bccsp.Key, error) {
+func (k *AESPrivateKey) PublicKey() (bccsp.Key, error) {
 	return nil, errors.New("cannot call this method on a symmetric key")
 }
 
-func (k *aesPrivateKey) InsideKey() interface{} {
+func (k *AESPrivateKey) InsideKey() interface{} {
 	return k.privKey
 }

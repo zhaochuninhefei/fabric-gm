@@ -582,7 +582,7 @@ func TestAESCBCPKCS7EncryptorDecrypt(t *testing.T) {
 	raw, err := GetRandomBytes(32)
 	assert.NoError(t, err)
 
-	k := &aesPrivateKey{privKey: raw, exportable: false}
+	k := &AESPrivateKey{privKey: raw, exportable: false}
 
 	msg := []byte("Hello World")
 	encryptor := &aescbcpkcs7Encryptor{}
@@ -626,7 +626,7 @@ func TestAESCBCPKCS7EncryptorWithIVSameCiphertext(t *testing.T) {
 	raw, err := GetRandomBytes(32)
 	assert.NoError(t, err)
 
-	k := &aesPrivateKey{privKey: raw, exportable: false}
+	k := &AESPrivateKey{privKey: raw, exportable: false}
 
 	msg := []byte("Hello World")
 	encryptor := &aescbcpkcs7Encryptor{}
@@ -652,7 +652,7 @@ func TestAESCBCPKCS7EncryptorWithRandSameCiphertext(t *testing.T) {
 	raw, err := GetRandomBytes(32)
 	assert.NoError(t, err)
 
-	k := &aesPrivateKey{privKey: raw, exportable: false}
+	k := &AESPrivateKey{privKey: raw, exportable: false}
 
 	msg := []byte("Hello World")
 	encryptor := &aescbcpkcs7Encryptor{}

@@ -176,7 +176,7 @@ func TestKeyGenECDSAOpts(t *testing.T) {
 		t.Fatal("Failed generating ECDSA P256 key. Key should be asymmetric")
 	}
 
-	ecdsaKey := k.(*ecdsaPrivateKey).privKey
+	ecdsaKey := k.(*ECDSAPrivateKey).privKey
 	if !elliptic.P256().IsOnCurve(ecdsaKey.X, ecdsaKey.Y) {
 		t.Fatal("P256 generated key in invalid. The public key must be on the P256 curve.")
 	}
@@ -202,7 +202,7 @@ func TestKeyGenECDSAOpts(t *testing.T) {
 		t.Fatal("Failed generating ECDSA P384 key. Key should be asymmetric")
 	}
 
-	ecdsaKey = k.(*ecdsaPrivateKey).privKey
+	ecdsaKey = k.(*ECDSAPrivateKey).privKey
 	if !elliptic.P384().IsOnCurve(ecdsaKey.X, ecdsaKey.Y) {
 		t.Fatal("P256 generated key in invalid. The public key must be on the P384 curve.")
 	}
@@ -235,7 +235,7 @@ func TestKeyGenAESOpts(t *testing.T) {
 		t.Fatal("Failed generating AES 128 key. Key should be symmetric")
 	}
 
-	aesKey := k.(*aesPrivateKey).privKey
+	aesKey := k.(*AESPrivateKey).privKey
 	if len(aesKey) != 16 {
 		t.Fatal("AES Key generated key in invalid. The key must have length 16.")
 	}
@@ -255,7 +255,7 @@ func TestKeyGenAESOpts(t *testing.T) {
 		t.Fatal("Failed generating AES 192 key. Key should be symmetric")
 	}
 
-	aesKey = k.(*aesPrivateKey).privKey
+	aesKey = k.(*AESPrivateKey).privKey
 	if len(aesKey) != 24 {
 		t.Fatal("AES Key generated key in invalid. The key must have length 16.")
 	}
@@ -275,7 +275,7 @@ func TestKeyGenAESOpts(t *testing.T) {
 		t.Fatal("Failed generating AES 256 key. Key should be symmetric")
 	}
 
-	aesKey = k.(*aesPrivateKey).privKey
+	aesKey = k.(*AESPrivateKey).privKey
 	if len(aesKey) != 32 {
 		t.Fatal("AES Key generated key in invalid. The key must have length 16.")
 	}
@@ -1265,7 +1265,7 @@ func TestECDSALowS(t *testing.T) {
 		t.Fatalf("Failed unmarshalling signature [%s]", err)
 	}
 
-	if S.Cmp(utils.GetCurveHalfOrdersAt(k.(*ecdsaPrivateKey).privKey.Curve)) >= 0 {
+	if S.Cmp(utils.GetCurveHalfOrdersAt(k.(*ECDSAPrivateKey).privKey.Curve)) >= 0 {
 		t.Fatal("Invalid signature. It must have low-S")
 	}
 
@@ -1281,12 +1281,12 @@ func TestECDSALowS(t *testing.T) {
 	var R *big.Int
 	// 不断签名，直到获取一个高S值的签名
 	for {
-		R, S, err = ecdsa.Sign(rand.Reader, k.(*ecdsaPrivateKey).privKey, digest)
+		R, S, err = ecdsa.Sign(rand.Reader, k.(*ECDSAPrivateKey).privKey, digest)
 		if err != nil {
 			t.Fatalf("Failed generating signature [%s]", err)
 		}
 
-		if S.Cmp(utils.GetCurveHalfOrdersAt(k.(*ecdsaPrivateKey).privKey.Curve)) > 0 {
+		if S.Cmp(utils.GetCurveHalfOrdersAt(k.(*ECDSAPrivateKey).privKey.Curve)) > 0 {
 			break
 		}
 	}

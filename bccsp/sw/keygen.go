@@ -46,7 +46,7 @@ func (kg *ecdsaKeyGenerator) KeyGen(opts bccsp.KeyGenOpts) (bccsp.Key, error) {
 		return nil, fmt.Errorf("failed generating ECDSA key for [%v]: [%s]", kg.curve, err)
 	}
 
-	return &ecdsaPrivateKey{privKey}, nil
+	return &ECDSAPrivateKey{privKey}, nil
 }
 
 // sm2私钥生成器
@@ -59,7 +59,7 @@ func (gm *sm2KeyGenerator) KeyGen(opts bccsp.KeyGenOpts) (bccsp.Key, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed generating SM2 key : [%s]", err)
 	}
-	return &sm2PrivateKey{privKey}, nil
+	return &SM2PrivateKey{privKey}, nil
 }
 
 // sm4密钥生成器
@@ -73,7 +73,7 @@ func (kg *sm4KeyGenerator) KeyGen(opts bccsp.KeyGenOpts) (bccsp.Key, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed generating SM4 %d key for : [%s]", kg.length, err)
 	}
-	return &sm4Key{lowLevelKey, true}, nil
+	return &SM4Key{lowLevelKey, true}, nil
 }
 
 // AES密钥生成器
@@ -88,5 +88,5 @@ func (kg *aesKeyGenerator) KeyGen(opts bccsp.KeyGenOpts) (bccsp.Key, error) {
 		return nil, fmt.Errorf("failed generating AES %d key [%s]", kg.length, err)
 	}
 
-	return &aesPrivateKey{lowLevelKey, true}, nil
+	return &AESPrivateKey{lowLevelKey, true}, nil
 }

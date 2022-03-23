@@ -69,7 +69,7 @@ func TestECDSAPublicKeyKeyDeriver(t *testing.T) {
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "invalid opts parameter. It must not be nil")
 
-	_, err = kd.KeyDeriv(&ecdsaPublicKey{}, &mocks2.KeyDerivOpts{})
+	_, err = kd.KeyDeriv(&ECDSAPublicKey{}, &mocks2.KeyDerivOpts{})
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "unsupported 'KeyDerivOpts' provided [")
 }
@@ -83,7 +83,7 @@ func TestECDSAPrivateKeyKeyDeriver(t *testing.T) {
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "invalid opts parameter. It must not be nil")
 
-	_, err = kd.KeyDeriv(&ecdsaPrivateKey{}, &mocks2.KeyDerivOpts{})
+	_, err = kd.KeyDeriv(&ECDSAPrivateKey{}, &mocks2.KeyDerivOpts{})
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "unsupported 'KeyDerivOpts' provided [")
 }
@@ -97,7 +97,7 @@ func TestAESPrivateKeyKeyDeriver(t *testing.T) {
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "invalid opts parameter. It must not be nil")
 
-	_, err = kd.KeyDeriv(&aesPrivateKey{}, &mocks2.KeyDerivOpts{})
+	_, err = kd.KeyDeriv(&AESPrivateKey{}, &mocks2.KeyDerivOpts{})
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "unsupported 'KeyDerivOpts' provided [")
 }

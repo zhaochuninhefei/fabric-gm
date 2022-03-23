@@ -27,14 +27,14 @@ bccsp/sw/sm4key.go 定义国密sm4密钥结构体，并实现`bccsp.Key`(bccsp/b
 */
 
 // 定义国密 SM4 结构体，实现 bccsp Key 的接口
-type sm4Key struct {
+type SM4Key struct {
 	privKey    []byte
 	exportable bool
 }
 
 // Bytes converts this key to its byte representation,
 // if this operation is allowed.
-func (k *sm4Key) Bytes() (raw []byte, err error) {
+func (k *SM4Key) Bytes() (raw []byte, err error) {
 	if k.exportable {
 		return k.privKey, nil
 	}
@@ -43,7 +43,7 @@ func (k *sm4Key) Bytes() (raw []byte, err error) {
 }
 
 // SKI returns the subject key identifier of this key.
-func (k *sm4Key) SKI() (ski []byte) {
+func (k *SM4Key) SKI() (ski []byte) {
 	hash := sha256.New()
 	//hash := NewSM3()
 	hash.Write([]byte{0x01})
@@ -53,22 +53,22 @@ func (k *sm4Key) SKI() (ski []byte) {
 
 // Symmetric returns true if this key is a symmetric key,
 // false if this key is asymmetric
-func (k *sm4Key) Symmetric() bool {
+func (k *SM4Key) Symmetric() bool {
 	return true
 }
 
 // Private returns true if this key is a private key,
 // false otherwise.
-func (k *sm4Key) Private() bool {
+func (k *SM4Key) Private() bool {
 	return true
 }
 
 // PublicKey returns the corresponding public key part of an asymmetric public/private key pair.
 // This method returns an error in symmetric key schemes.
-func (k *sm4Key) PublicKey() (bccsp.Key, error) {
+func (k *SM4Key) PublicKey() (bccsp.Key, error) {
 	return nil, errors.New("cannot call this method on a symmetric key")
 }
 
-func (k *sm4Key) InsideKey() interface{} {
+func (k *SM4Key) InsideKey() interface{} {
 	return k.privKey
 }

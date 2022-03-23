@@ -197,13 +197,13 @@ func (e *aescbcpkcs7Encryptor) Encrypt(k bccsp.Key, plaintext []byte, opts bccsp
 
 		if len(o.IV) != 0 {
 			// Encrypt with the passed IV
-			return AESCBCPKCS7EncryptWithIV(o.IV, k.(*aesPrivateKey).privKey, plaintext)
+			return AESCBCPKCS7EncryptWithIV(o.IV, k.(*AESPrivateKey).privKey, plaintext)
 		} else if o.PRNG != nil {
 			// Encrypt with PRNG
-			return AESCBCPKCS7EncryptWithRand(o.PRNG, k.(*aesPrivateKey).privKey, plaintext)
+			return AESCBCPKCS7EncryptWithRand(o.PRNG, k.(*AESPrivateKey).privKey, plaintext)
 		}
 		// AES in CBC mode with PKCS7 padding
-		return AESCBCPKCS7Encrypt(k.(*aesPrivateKey).privKey, plaintext)
+		return AESCBCPKCS7Encrypt(k.(*AESPrivateKey).privKey, plaintext)
 	case bccsp.AESCBCPKCS7ModeOpts:
 		return e.Encrypt(k, plaintext, &o)
 	default:
@@ -218,7 +218,7 @@ func (*aescbcpkcs7Decryptor) Decrypt(k bccsp.Key, ciphertext []byte, opts bccsp.
 	switch opts.(type) {
 	case *bccsp.AESCBCPKCS7ModeOpts, bccsp.AESCBCPKCS7ModeOpts:
 		// AES in CBC mode with PKCS7 padding
-		return AESCBCPKCS7Decrypt(k.(*aesPrivateKey).privKey, ciphertext)
+		return AESCBCPKCS7Decrypt(k.(*AESPrivateKey).privKey, ciphertext)
 	default:
 		return nil, fmt.Errorf("mode not recognized [%s]", opts)
 	}

@@ -55,7 +55,7 @@ func (*aes256ImportKeyOptsKeyImporter) KeyImport(raw interface{}, opts bccsp.Key
 		return nil, fmt.Errorf("invalid Key Length [%d]. Must be 32 bytes", len(aesRaw))
 	}
 
-	return &aesPrivateKey{aesRaw, false}, nil
+	return &AESPrivateKey{aesRaw, false}, nil
 }
 
 // HMac认证码导入器
@@ -71,8 +71,24 @@ func (*hmacImportKeyOptsKeyImporter) KeyImport(raw interface{}, opts bccsp.KeyIm
 		return nil, errors.New("invalid raw material. It must not be nil")
 	}
 
-	return &aesPrivateKey{aesRaw, false}, nil
+	return &AESPrivateKey{aesRaw, false}, nil
 }
+
+// // 国密HMac认证码导入器
+// type gmHmacImportKeyOptsKeyImporter struct{}
+
+// func (*gmHmacImportKeyOptsKeyImporter) KeyImport(raw interface{}, opts bccsp.KeyImportOpts) (bccsp.Key, error) {
+// 	sm4Raw, ok := raw.([]byte)
+// 	if !ok {
+// 		return nil, errors.New("invalid raw material. Expected byte array")
+// 	}
+
+// 	if len(sm4Raw) == 0 {
+// 		return nil, errors.New("invalid raw material. It must not be nil")
+// 	}
+
+// 	return &SM4Key{sm4Raw, false}, nil
+// }
 
 // ECDSA公钥(PKIX标准der字节流)导入器
 type ecdsaPKIXPublicKeyImportOptsKeyImporter struct{}
@@ -99,7 +115,7 @@ func (*ecdsaPKIXPublicKeyImportOptsKeyImporter) KeyImport(raw interface{}, opts 
 		return nil, errors.New("failed casting to ECDSA public key. Invalid raw material")
 	}
 
-	return &ecdsaPublicKey{ecdsaPK}, nil
+	return &ECDSAPublicKey{ecdsaPK}, nil
 }
 
 // ECDSA私钥(PKCS#8标准der字节流)导入器
@@ -127,7 +143,7 @@ func (*ecdsaPrivateKeyImportOptsKeyImporter) KeyImport(raw interface{}, opts bcc
 		return nil, errors.New("failed casting to ECDSA private key. Invalid raw material")
 	}
 
-	return &ecdsaPrivateKey{ecdsaSK}, nil
+	return &ECDSAPrivateKey{ecdsaSK}, nil
 }
 
 // ECDSA公钥(Go结构体*ecdsa.PublicKey)导入器
@@ -141,7 +157,7 @@ func (*ecdsaGoPublicKeyImportOptsKeyImporter) KeyImport(raw interface{}, opts bc
 		return nil, errors.New("invalid raw material. Expected *ecdsa.PublicKey")
 	}
 
-	return &ecdsaPublicKey{lowLevelKey}, nil
+	return &ECDSAPublicKey{lowLevelKey}, nil
 }
 
 // x509公钥导入器
@@ -224,7 +240,7 @@ func (*sm4ImportKeyOptsKeyImporter) KeyImport(raw interface{}, opts bccsp.KeyImp
 		return nil, errors.New("invalid raw material, It must botbe nil")
 	}
 
-	return &sm4Key{utils.Clone(sm4Raw), false}, nil
+	return &SM4Key{utils.Clone(sm4Raw), false}, nil
 }
 
 // sm2私钥(PKCS#8标准的der字节流)导入器
@@ -248,7 +264,7 @@ func (*sm2PrivateKeyOptsKeyImporter) KeyImport(raw interface{}, opts bccsp.KeyIm
 		return nil, fmt.Errorf("failed converting to SM2 private key [%s]", err)
 	}
 
-	return &sm2PrivateKey{sm2SK}, nil
+	return &SM2PrivateKey{sm2SK}, nil
 }
 
 // sm2公钥(PKIX标准的der字节流)导入器
@@ -272,7 +288,7 @@ func (*sm2PublicKeyOptsKeyImporter) KeyImport(raw interface{}, opts bccsp.KeyImp
 		return nil, fmt.Errorf("failed converting to SM2 private key [%s]", err)
 	}
 
-	return &sm2PublicKey{sm2Pub}, nil
+	return &SM2PublicKey{sm2Pub}, nil
 }
 
 // sm2公钥(Go结构体*sm2.PublicKey)导入器
@@ -286,5 +302,5 @@ func (*sm2GoPublicKeyOptsKeyImporter) KeyImport(raw interface{}, opts bccsp.KeyI
 		return nil, errors.New("invalid raw material. Expected *ecdsa.PublicKey")
 	}
 
-	return &sm2PublicKey{lowLevelKey}, nil
+	return &SM2PublicKey{lowLevelKey}, nil
 }

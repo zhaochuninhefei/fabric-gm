@@ -52,7 +52,7 @@ func TestStoreLoad(t *testing.T) {
 	// generate a key for the keystore to find
 	privKey, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
 	assert.NoError(t, err)
-	cspKey := &ecdsaPrivateKey{privKey}
+	cspKey := &ECDSAPrivateKey{privKey}
 
 	// store key
 	err = ks.StoreKey(cspKey)
@@ -80,7 +80,7 @@ func TestStoreExisting(t *testing.T) {
 	// generate a key for the keystore to find
 	privKey, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
 	assert.NoError(t, err)
-	cspKey := &ecdsaPrivateKey{privKey}
+	cspKey := &ECDSAPrivateKey{privKey}
 
 	// store key
 	err = ks.StoreKey(cspKey)

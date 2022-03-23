@@ -83,7 +83,7 @@ func TestEcdsaSignerSign(t *testing.T) {
 	// Generate a key
 	lowLevelKey, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
 	assert.NoError(t, err)
-	k := &ecdsaPrivateKey{lowLevelKey}
+	k := &ECDSAPrivateKey{lowLevelKey}
 	pk, err := k.PublicKey()
 	assert.NoError(t, err)
 
@@ -112,7 +112,7 @@ func TestEcdsaPrivateKey(t *testing.T) {
 
 	lowLevelKey, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
 	assert.NoError(t, err)
-	k := &ecdsaPrivateKey{lowLevelKey}
+	k := &ECDSAPrivateKey{lowLevelKey}
 
 	assert.False(t, k.Symmetric())
 	assert.True(t, k.Private())
@@ -136,7 +136,7 @@ func TestEcdsaPrivateKey(t *testing.T) {
 	pk, err := k.PublicKey()
 	assert.NoError(t, err)
 	assert.NotNil(t, pk)
-	ecdsaPK, ok := pk.(*ecdsaPublicKey)
+	ecdsaPK, ok := pk.(*ECDSAPublicKey)
 	assert.True(t, ok)
 	assert.Equal(t, &lowLevelKey.PublicKey, ecdsaPK.pubKey)
 }
@@ -146,7 +146,7 @@ func TestEcdsaPublicKey(t *testing.T) {
 
 	lowLevelKey, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
 	assert.NoError(t, err)
-	k := &ecdsaPublicKey{&lowLevelKey.PublicKey}
+	k := &ECDSAPublicKey{&lowLevelKey.PublicKey}
 
 	assert.False(t, k.Symmetric())
 	assert.False(t, k.Private())

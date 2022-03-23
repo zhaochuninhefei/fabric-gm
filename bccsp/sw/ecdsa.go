@@ -63,18 +63,18 @@ func verifyECDSA(k *ecdsa.PublicKey, signature, digest []byte, opts bccsp.Signer
 type ecdsaSigner struct{}
 
 func (s *ecdsaSigner) Sign(k bccsp.Key, digest []byte, opts bccsp.SignerOpts) ([]byte, error) {
-	return signECDSA(k.(*ecdsaPrivateKey).privKey, digest, opts)
+	return signECDSA(k.(*ECDSAPrivateKey).privKey, digest, opts)
 }
 
 // ecdsa验签已恢复，没用sm2的验签冒充 --> bccsp/sw/sm2.go
 type ecdsaPrivateKeyVerifier struct{}
 
 func (v *ecdsaPrivateKeyVerifier) Verify(k bccsp.Key, signature, digest []byte, opts bccsp.SignerOpts) (bool, error) {
-	return verifyECDSA(&(k.(*ecdsaPrivateKey).privKey.PublicKey), signature, digest, opts)
+	return verifyECDSA(&(k.(*ECDSAPrivateKey).privKey.PublicKey), signature, digest, opts)
 }
 
 type ecdsaPublicKeyKeyVerifier struct{}
 
 func (v *ecdsaPublicKeyKeyVerifier) Verify(k bccsp.Key, signature, digest []byte, opts bccsp.SignerOpts) (bool, error) {
-	return verifyECDSA(k.(*ecdsaPublicKey).pubKey, signature, digest, opts)
+	return verifyECDSA(k.(*ECDSAPublicKey).pubKey, signature, digest, opts)
 }

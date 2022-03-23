@@ -55,7 +55,7 @@ func TestECDSAKeyGenerator(t *testing.T) {
 	k, err := kg.KeyGen(nil)
 	assert.NoError(t, err)
 
-	ecdsaK, ok := k.(*ecdsaPrivateKey)
+	ecdsaK, ok := k.(*ECDSAPrivateKey)
 	assert.True(t, ok)
 	assert.NotNil(t, ecdsaK.privKey)
 	assert.Equal(t, ecdsaK.privKey.Curve, elliptic.P256())
@@ -69,7 +69,7 @@ func TestAESKeyGenerator(t *testing.T) {
 	k, err := kg.KeyGen(nil)
 	assert.NoError(t, err)
 
-	aesK, ok := k.(*aesPrivateKey)
+	aesK, ok := k.(*AESPrivateKey)
 	assert.True(t, ok)
 	assert.NotNil(t, aesK.privKey)
 	assert.Equal(t, len(aesK.privKey), 32)

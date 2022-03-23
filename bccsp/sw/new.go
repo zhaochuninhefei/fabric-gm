@@ -79,11 +79,11 @@ func NewWithParams(usingGM bool, securityLevel int, hashFamily string, keyStore 
 		swbccsp.AddWrapper(reflect.TypeOf(&bccsp.SM2PublicKeyImportOpts{}), &sm2PublicKeyOptsKeyImporter{})
 		swbccsp.AddWrapper(reflect.TypeOf(&bccsp.SM2GoPublicKeyImportOpts{}), &sm2GoPublicKeyOptsKeyImporter{})
 		// sm2私钥签名
-		swbccsp.AddWrapper(reflect.TypeOf(&sm2PrivateKey{}), &sm2Signer{})
+		swbccsp.AddWrapper(reflect.TypeOf(&SM2PrivateKey{}), &sm2Signer{})
 		// sm2公钥验签
-		swbccsp.AddWrapper(reflect.TypeOf(&sm2PublicKey{}), &sm2PublicKeyKeyVerifier{})
+		swbccsp.AddWrapper(reflect.TypeOf(&SM2PublicKey{}), &sm2PublicKeyKeyVerifier{})
 		// sm2私钥验签，实际还是公钥验签
-		swbccsp.AddWrapper(reflect.TypeOf(&sm2PrivateKey{}), &sm2PrivateKeyVerifier{})
+		swbccsp.AddWrapper(reflect.TypeOf(&SM2PrivateKey{}), &sm2PrivateKeyVerifier{})
 
 		// sm3散列
 		swbccsp.AddWrapper(reflect.TypeOf(&bccsp.SM3Opts{}), &hasher{hash: sm3.New})
@@ -93,9 +93,12 @@ func NewWithParams(usingGM bool, securityLevel int, hashFamily string, keyStore 
 		// sm4密钥导入器
 		swbccsp.AddWrapper(reflect.TypeOf(&bccsp.SM4ImportKeyOpts{}), &sm4ImportKeyOptsKeyImporter{})
 		// sm4加密，未分组 --> 该问题已对应，修改了`bccsp/sw/sm4.go`的sm4Encryptor与sm4Decryptor的接口实现方法
-		swbccsp.AddWrapper(reflect.TypeOf(&sm4Key{}), &sm4Encryptor{})
+		swbccsp.AddWrapper(reflect.TypeOf(&SM4Key{}), &sm4Encryptor{})
 		// sm4解密，未分组 --> 该问题已对应，修改了`bccsp/sw/sm4.go`的sm4Encryptor与sm4Decryptor的接口实现方法
-		swbccsp.AddWrapper(reflect.TypeOf(&sm4Key{}), &sm4Decryptor{})
+		swbccsp.AddWrapper(reflect.TypeOf(&SM4Key{}), &sm4Decryptor{})
+
+		// // 国密HMac认证码导入器
+		// swbccsp.AddWrapper(reflect.TypeOf(&bccsp.GMHMACImportKeyOpts{}), &gmHmacImportKeyOptsKeyImporter{})
 
 		// gmx509公钥导入，x509的签名内容的核心是证书拥有者的公钥，与签名算法无关，因此可能是sm2,ecdsa或rsa
 		swbccsp.AddWrapper(reflect.TypeOf(&bccsp.GMX509PublicKeyImportOpts{}), &gmx509PublicKeyImportOptsKeyImporter{bccsp: swbccsp})
@@ -104,17 +107,17 @@ func NewWithParams(usingGM bool, securityLevel int, hashFamily string, keyStore 
 	}
 
 	// Set the Encryptors
-	swbccsp.AddWrapper(reflect.TypeOf(&aesPrivateKey{}), &aescbcpkcs7Encryptor{})
+	swbccsp.AddWrapper(reflect.TypeOf(&AESPrivateKey{}), &aescbcpkcs7Encryptor{})
 	// Set the Decryptors
-	swbccsp.AddWrapper(reflect.TypeOf(&aesPrivateKey{}), &aescbcpkcs7Decryptor{})
+	swbccsp.AddWrapper(reflect.TypeOf(&AESPrivateKey{}), &aescbcpkcs7Decryptor{})
 	// Set the Signers
 	// ecdsa签名
-	swbccsp.AddWrapper(reflect.TypeOf(&ecdsaPrivateKey{}), &ecdsaSigner{})
+	swbccsp.AddWrapper(reflect.TypeOf(&ECDSAPrivateKey{}), &ecdsaSigner{})
 	// Set the Verifiers
 	// ecdsa私钥验签，实际还是公钥验签 已改回真实的ecdsa实现
-	swbccsp.AddWrapper(reflect.TypeOf(&ecdsaPrivateKey{}), &ecdsaPrivateKeyVerifier{})
+	swbccsp.AddWrapper(reflect.TypeOf(&ECDSAPrivateKey{}), &ecdsaPrivateKeyVerifier{})
 	// ecdsa公钥验签 已改回真实的ecdsa实现
-	swbccsp.AddWrapper(reflect.TypeOf(&ecdsaPublicKey{}), &ecdsaPublicKeyKeyVerifier{})
+	swbccsp.AddWrapper(reflect.TypeOf(&ECDSAPublicKey{}), &ecdsaPublicKeyKeyVerifier{})
 	// Set the Hashers
 	swbccsp.AddWrapper(reflect.TypeOf(&bccsp.SHAOpts{}), &hasher{hash: conf.shaFunction})
 	swbccsp.AddWrapper(reflect.TypeOf(&bccsp.SHA256Opts{}), &hasher{hash: sha256.New})
@@ -131,9 +134,9 @@ func NewWithParams(usingGM bool, securityLevel int, hashFamily string, keyStore 
 	swbccsp.AddWrapper(reflect.TypeOf(&bccsp.AES192KeyGenOpts{}), &aesKeyGenerator{length: 24})
 	swbccsp.AddWrapper(reflect.TypeOf(&bccsp.AES128KeyGenOpts{}), &aesKeyGenerator{length: 16})
 	// Set the key deriver
-	swbccsp.AddWrapper(reflect.TypeOf(&ecdsaPrivateKey{}), &ecdsaPrivateKeyKeyDeriver{})
-	swbccsp.AddWrapper(reflect.TypeOf(&ecdsaPublicKey{}), &ecdsaPublicKeyKeyDeriver{})
-	swbccsp.AddWrapper(reflect.TypeOf(&aesPrivateKey{}), &aesPrivateKeyKeyDeriver{conf: conf})
+	swbccsp.AddWrapper(reflect.TypeOf(&ECDSAPrivateKey{}), &ecdsaPrivateKeyKeyDeriver{})
+	swbccsp.AddWrapper(reflect.TypeOf(&ECDSAPublicKey{}), &ecdsaPublicKeyKeyDeriver{})
+	swbccsp.AddWrapper(reflect.TypeOf(&AESPrivateKey{}), &aesPrivateKeyKeyDeriver{conf: conf})
 	// Set the key importers
 	swbccsp.AddWrapper(reflect.TypeOf(&bccsp.AES256ImportKeyOpts{}), &aes256ImportKeyOptsKeyImporter{})
 	swbccsp.AddWrapper(reflect.TypeOf(&bccsp.HMACImportKeyOpts{}), &hmacImportKeyOptsKeyImporter{})

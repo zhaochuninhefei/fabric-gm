@@ -29,20 +29,20 @@ import (
 bccsp/sw/sm2key.go 用来定义国密sm2公私钥结构体，并分别实现`bccsp.Key`(bccsp/bccsp.go)接口
 */
 
-type sm2PrivateKey struct {
+type SM2PrivateKey struct {
 	privKey *sm2.PrivateKey
 }
 
 // Bytes converts this key to its byte representation,
 // if this operation is allowed.
 // 获取sm2私钥的asn1编码结果，未对私钥加密
-func (k *sm2PrivateKey) Bytes() (raw []byte, err error) {
+func (k *SM2PrivateKey) Bytes() (raw []byte, err error) {
 	// return nil, errors.New("not supported")
 	return x509.MarshalSm2UnecryptedPrivateKey(k.privKey)
 }
 
 // SKI returns the subject key identifier of this key.
-func (k *sm2PrivateKey) SKI() (ski []byte) {
+func (k *SM2PrivateKey) SKI() (ski []byte) {
 	if k.privKey == nil {
 		return nil
 	}
@@ -58,34 +58,34 @@ func (k *sm2PrivateKey) SKI() (ski []byte) {
 
 // Symmetric returns true if this key is a symmetric key,
 // false if this key is asymmetric
-func (k *sm2PrivateKey) Symmetric() bool {
+func (k *SM2PrivateKey) Symmetric() bool {
 	return false
 }
 
 // Private returns true if this key is a private key,
 // false otherwise.
-func (k *sm2PrivateKey) Private() bool {
+func (k *SM2PrivateKey) Private() bool {
 	return true
 }
 
 // PublicKey returns the corresponding public key part of an asymmetric public/private key pair.
 // This method returns an error in symmetric key schemes.
-func (k *sm2PrivateKey) PublicKey() (bccsp.Key, error) {
-	return &sm2PublicKey{&k.privKey.PublicKey}, nil
+func (k *SM2PrivateKey) PublicKey() (bccsp.Key, error) {
+	return &SM2PublicKey{&k.privKey.PublicKey}, nil
 }
 
-func (k *sm2PrivateKey) InsideKey() interface{} {
+func (k *SM2PrivateKey) InsideKey() interface{} {
 	return k.privKey
 }
 
-type sm2PublicKey struct {
+type SM2PublicKey struct {
 	pubKey *sm2.PublicKey
 }
 
 // Bytes converts this key to its byte representation,
 // if this operation is allowed.
 // 返回sm2公钥的asn1编码结果
-func (k *sm2PublicKey) Bytes() (raw []byte, err error) {
+func (k *SM2PublicKey) Bytes() (raw []byte, err error) {
 	raw, err = x509.MarshalSm2PublicKey(k.pubKey)
 	if err != nil {
 		return nil, fmt.Errorf("failed marshalling key [%s]", err)
@@ -94,7 +94,7 @@ func (k *sm2PublicKey) Bytes() (raw []byte, err error) {
 }
 
 // SKI returns the subject key identifier of this key.
-func (k *sm2PublicKey) SKI() (ski []byte) {
+func (k *SM2PublicKey) SKI() (ski []byte) {
 	if k.pubKey == nil {
 		return nil
 	}
@@ -110,22 +110,22 @@ func (k *sm2PublicKey) SKI() (ski []byte) {
 
 // Symmetric returns true if this key is a symmetric key,
 // false if this key is asymmetric
-func (k *sm2PublicKey) Symmetric() bool {
+func (k *SM2PublicKey) Symmetric() bool {
 	return false
 }
 
 // Private returns true if this key is a private key,
 // false otherwise.
-func (k *sm2PublicKey) Private() bool {
+func (k *SM2PublicKey) Private() bool {
 	return false
 }
 
 // PublicKey returns the corresponding public key part of an asymmetric public/private key pair.
 // This method returns an error in symmetric key schemes.
-func (k *sm2PublicKey) PublicKey() (bccsp.Key, error) {
+func (k *SM2PublicKey) PublicKey() (bccsp.Key, error) {
 	return k, nil
 }
 
-func (k *sm2PublicKey) InsideKey() interface{} {
+func (k *SM2PublicKey) InsideKey() interface{} {
 	return k.pubKey
 }

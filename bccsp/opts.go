@@ -266,6 +266,22 @@ func (opts *HMACImportKeyOpts) Ephemeral() bool {
 	return opts.Temporary
 }
 
+// // GMHMACImportKeyOpts contains options for importing HMAC keys.
+// type GMHMACImportKeyOpts struct {
+// 	Temporary bool
+// }
+
+// // Algorithm returns the key importation algorithm identifier (to be used).
+// func (opts *GMHMACImportKeyOpts) Algorithm() string {
+// 	return HMAC
+// }
+
+// // Ephemeral returns true if the key generated has to be ephemeral,
+// // false otherwise.
+// func (opts *GMHMACImportKeyOpts) Ephemeral() bool {
+// 	return opts.Temporary
+// }
+
 // SHAOpts contains options for computing SHA.
 type SHAOpts struct{}
 

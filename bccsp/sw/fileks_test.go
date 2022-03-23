@@ -36,22 +36,22 @@ func TestInvalidStoreKey(t *testing.T) {
 		t.Fatal("Error should be different from nil in this case")
 	}
 
-	err = ks.StoreKey(&ecdsaPrivateKey{nil})
+	err = ks.StoreKey(&ECDSAPrivateKey{nil})
 	if err == nil {
 		t.Fatal("Error should be different from nil in this case")
 	}
 
-	err = ks.StoreKey(&ecdsaPublicKey{nil})
+	err = ks.StoreKey(&ECDSAPublicKey{nil})
 	if err == nil {
 		t.Fatal("Error should be different from nil in this case")
 	}
 
-	err = ks.StoreKey(&aesPrivateKey{nil, false})
+	err = ks.StoreKey(&AESPrivateKey{nil, false})
 	if err == nil {
 		t.Fatal("Error should be different from nil in this case")
 	}
 
-	err = ks.StoreKey(&aesPrivateKey{nil, true})
+	err = ks.StoreKey(&AESPrivateKey{nil, true})
 	if err == nil {
 		t.Fatal("Error should be different from nil in this case")
 	}
@@ -69,7 +69,7 @@ func TestBigKeyFile(t *testing.T) {
 	privKey, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
 	assert.NoError(t, err)
 
-	cspKey := &ecdsaPrivateKey{privKey}
+	cspKey := &ECDSAPrivateKey{privKey}
 	ski := cspKey.SKI()
 	rawKey, err := privateKeyToPEM(privKey, nil)
 	assert.NoError(t, err)

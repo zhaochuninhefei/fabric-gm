@@ -78,7 +78,7 @@ type sm4Encryptor struct{}
 // 实现 Encryptor 接口
 // 不能直接调用 SM4Encrypt 因为没有分组
 func (e *sm4Encryptor) Encrypt(k bccsp.Key, plaintext []byte, opts bccsp.EncrypterOpts) (ciphertext []byte, err error) {
-	key := k.(*sm4Key).privKey
+	key := k.(*SM4Key).privKey
 	switch o := opts.(type) {
 	case *bccsp.SM4EncrypterDecrypterOpts:
 		iv := o.IV
@@ -112,7 +112,7 @@ type sm4Decryptor struct{}
 // 实现 Decryptor 接口
 // 不能直接调用 SM4Decrypt 因为没有分组
 func (e *sm4Decryptor) Decrypt(k bccsp.Key, ciphertext []byte, opts bccsp.DecrypterOpts) (plaintext []byte, err error) {
-	key := k.(*sm4Key).privKey
+	key := k.(*SM4Key).privKey
 	switch o := opts.(type) {
 	case *bccsp.SM4EncrypterDecrypterOpts:
 		iv := o.IV

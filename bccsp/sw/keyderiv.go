@@ -44,7 +44,7 @@ func (kd *ecdsaPublicKeyKeyDeriver) KeyDeriv(key bccsp.Key, opts bccsp.KeyDerivO
 		return nil, errors.New("invalid opts parameter. It must not be nil")
 	}
 
-	ecdsaK := key.(*ecdsaPublicKey)
+	ecdsaK := key.(*ECDSAPublicKey)
 
 	// Re-randomized an ECDSA private key
 	reRandOpts, ok := opts.(*bccsp.ECDSAReRandKeyOpts)
@@ -77,7 +77,7 @@ func (kd *ecdsaPublicKeyKeyDeriver) KeyDeriv(key bccsp.Key, opts bccsp.KeyDerivO
 		return nil, errors.New("failed temporary public key IsOnCurve check")
 	}
 
-	return &ecdsaPublicKey{tempSK}, nil
+	return &ECDSAPublicKey{tempSK}, nil
 }
 
 type ecdsaPrivateKeyKeyDeriver struct{}
@@ -88,7 +88,7 @@ func (kd *ecdsaPrivateKeyKeyDeriver) KeyDeriv(key bccsp.Key, opts bccsp.KeyDeriv
 		return nil, errors.New("invalid opts parameter. It must not be nil")
 	}
 
-	ecdsaK := key.(*ecdsaPrivateKey)
+	ecdsaK := key.(*ECDSAPrivateKey)
 
 	// Re-randomized an ECDSA private key
 	reRandOpts, ok := opts.(*bccsp.ECDSAReRandKeyOpts)
@@ -128,7 +128,7 @@ func (kd *ecdsaPrivateKeyKeyDeriver) KeyDeriv(key bccsp.Key, opts bccsp.KeyDeriv
 		return nil, errors.New("failed temporary public key IsOnCurve check")
 	}
 
-	return &ecdsaPrivateKey{tempSK}, nil
+	return &ECDSAPrivateKey{tempSK}, nil
 }
 
 type aesPrivateKeyKeyDeriver struct {
@@ -141,18 +141,18 @@ func (kd *aesPrivateKeyKeyDeriver) KeyDeriv(k bccsp.Key, opts bccsp.KeyDerivOpts
 		return nil, errors.New("invalid opts parameter. It must not be nil")
 	}
 
-	aesK := k.(*aesPrivateKey)
+	aesK := k.(*AESPrivateKey)
 
 	switch hmacOpts := opts.(type) {
 	case *bccsp.HMACTruncated256AESDeriveKeyOpts:
 		mac := hmac.New(kd.conf.shaFunction, aesK.privKey)
 		mac.Write(hmacOpts.Argument())
-		return &aesPrivateKey{mac.Sum(nil)[:kd.conf.aesByteLength], false}, nil
+		return &AESPrivateKey{mac.Sum(nil)[:kd.conf.aesByteLength], false}, nil
 
 	case *bccsp.HMACDeriveKeyOpts:
 		mac := hmac.New(kd.conf.shaFunction, aesK.privKey)
 		mac.Write(hmacOpts.Argument())
-		return &aesPrivateKey{mac.Sum(nil), true}, nil
+		return &AESPrivateKey{mac.Sum(nil), true}, nil
 
 	default:
 		return nil, fmt.Errorf("unsupported 'KeyDerivOpts' provided [%v]", opts)
