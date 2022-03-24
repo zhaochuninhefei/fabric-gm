@@ -80,6 +80,7 @@ func (msp *bccspmsp) getCertifiersIdentifier(certRaw []byte) ([]byte, error) {
 }
 
 func (msp *bccspmsp) setupCrypto(conf *m.FabricMSPConfig) error {
+	// TODO: 调查 IdentityIdentifierHashFunction 的作用，确定是否可以修改为 SM3
 	msp.cryptoConfig = conf.CryptoConfig
 	if msp.cryptoConfig == nil {
 		// Move to defaults

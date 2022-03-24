@@ -14,13 +14,14 @@ import (
 	"path/filepath"
 	"testing"
 
-	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/utils"
+	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/sw"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/util"
 	"gitee.com/zhaochuninhefei/gmgo/sm2"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestSigner(t *testing.T) {
+	// TODO: 需要将testdata/signer下的相关文件替换为sm2相关文件
 	conf := Config{
 		MSPID:        "SampleOrg",
 		IdentityPath: filepath.Join("testdata", "signer", "cert.pem"),
@@ -34,7 +35,8 @@ func TestSigner(t *testing.T) {
 	sig, err := signer.Sign(msg)
 	assert.NoError(t, err)
 
-	r, s, err := utils.UnmarshalECDSASignature(sig)
+	// r, s, err := utils.UnmarshalECDSASignature(sig)
+	r, s, err := sw.UnmarshalSM2Signature(sig)
 	assert.NoError(t, err)
 	// TODO Verify -> Sm2Verify
 	sm2.Sm2Verify(&signer.key.PublicKey, util.ComputeSHA256(msg), nil, r, s)

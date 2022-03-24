@@ -7,14 +7,11 @@ SPDX-License-Identifier: Apache-2.0
 package signer
 
 import (
-	"crypto/ecdsa"
 	"crypto/rand"
-	"encoding/asn1"
 	"encoding/pem"
 	"io/ioutil"
-	"math/big"
 
-	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/utils"
+	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/sw"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/util"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
 	"gitee.com/zhaochuninhefei/gmgo/sm2"
@@ -23,12 +20,18 @@ import (
 	"github.com/pkg/errors"
 )
 
+/*
+cmd/common/signer/signer.go 貌似是MSP的签名器
+*/
+
 // Config holds the configuration for
 // creation of a Signer
 type Config struct {
-	MSPID        string
+	MSPID string
+	// 证书, 当前msp的证书?
 	IdentityPath string
-	KeyPath      string
+	// 私钥 当前msp的私钥?
+	KeyPath string
 }
 
 // Signer signs messages.
@@ -46,20 +49,24 @@ func (si *Signer) Serialize() ([]byte, error) {
 
 // NewSigner creates a new Signer out of the given configuration
 func NewSigner(conf Config) (*Signer, error) {
+	// 序列化客户端mspid
 	sId, err := serializeIdentity(conf.IdentityPath, conf.MSPID)
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}
+	// 读取私钥
 	key, err := loadPrivateKey(conf.KeyPath)
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}
+	// 创建 Signer TODO: 在 Signerｌｉ埋入 序列化客户端mspid 的目的是啥？
 	return &Signer{
 		Creator: sId,
 		key:     key,
 	}, nil
 }
 
+// 将客户端证书及MSPID组装为 protof格式的字节流
 func serializeIdentity(clientCert string, mspID string) ([]byte, error) {
 	b, err := ioutil.ReadFile(clientCert)
 	if err != nil {
@@ -73,10 +80,13 @@ func serializeIdentity(clientCert string, mspID string) ([]byte, error) {
 }
 
 func (si *Signer) Sign(msg []byte) ([]byte, error) {
+	// TODO: 这里是否不需要对msg先做一次摘要？
+	// 因为sm2签名内部会对msg做摘要。
 	digest := util.ComputeSM3(msg)
 	return signSM2(si.key, digest)
 }
 
+// 将未加密的pem文件转为sm2私钥
 func loadPrivateKey(file string) (*sm2.PrivateKey, error) {
 	b, err := ioutil.ReadFile(file)
 	if err != nil {
@@ -125,31 +135,31 @@ func signSM2(k *sm2.PrivateKey, digest []byte) (signature []byte, err error) {
 		return nil, err
 	}
 
-	return marshalSM2Signature(r, s)
+	return sw.MarshalSM2Signature(r, s)
 }
 
-func signECDSA(k *ecdsa.PrivateKey, digest []byte) (signature []byte, err error) {
-	r, s, err := ecdsa.Sign(rand.Reader, k, digest)
-	if err != nil {
-		return nil, err
-	}
+// func signECDSA(k *ecdsa.PrivateKey, digest []byte) (signature []byte, err error) {
+// 	r, s, err := ecdsa.Sign(rand.Reader, k, digest)
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	s, err = utils.ToLowS(&k.PublicKey, s)
-	if err != nil {
-		return nil, err
-	}
+// 	s, err = utils.ToLowS(&k.PublicKey, s)
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	return marshalECDSASignature(r, s)
-}
+// 	return marshalECDSASignature(r, s)
+// }
 
-func marshalECDSASignature(r, s *big.Int) ([]byte, error) {
-	return asn1.Marshal(ECDSASignature{r, s})
-}
+// func marshalECDSASignature(r, s *big.Int) ([]byte, error) {
+// 	return asn1.Marshal(ECDSASignature{r, s})
+// }
 
-func marshalSM2Signature(r, s *big.Int) ([]byte, error) {
-	return asn1.Marshal(ECDSASignature{r, s})
-}
+// func marshalSM2Signature(r, s *big.Int) ([]byte, error) {
+// 	return asn1.Marshal(sw.SM2Signature{R: r, S: s})
+// }
 
-type ECDSASignature struct {
-	R, S *big.Int
-}
+// type ECDSASignature struct {
+// 	R, S *big.Int
+// }

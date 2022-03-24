@@ -203,7 +203,7 @@ func computeSKI(privKey *sm2.PrivateKey) []byte {
 	// Hash it
 	// hash := sha256.Sum256(raw)
 	// return hash[:]
-	// TODO 可能需要修改为sm3
+	// TODO 计算SKI不用使用SM3
 	hash := sha256.New()
 	hash.Write(raw)
 	return hash.Sum(nil)

@@ -131,6 +131,7 @@ func (ccpack *CDSPackage) getCDSData(cds *pb.ChaincodeDeploymentSpec) ([]byte, [
 		return nil, nil, nil, err
 	}
 
+	// TODO: 如果这里改为使用SM3，那么需要找到验证散列值的代码，也改为用SM3
 	//compute hashes now
 	// hash, err := factory.GetDefault().GetHash(&bccsp.SHAOpts{})
 	hash, err := ccpack.GetHasher.GetHash(&bccsp.SHAOpts{})
@@ -170,6 +171,7 @@ func (ccpack *CDSPackage) getCDSData(cds *pb.ChaincodeDeploymentSpec) ([]byte, [
 
 // ValidateCC returns error if the chaincode is not found or if its not a
 // ChaincodeDeploymentSpec
+// TODO: ValidateCC 没有检查ccdata中的各个散列值?
 func (ccpack *CDSPackage) ValidateCC(ccdata *ChaincodeData) error {
 	if ccpack.depSpec == nil {
 		return fmt.Errorf("uninitialized package")

@@ -174,7 +174,7 @@ func (id *identity) Verify(msg []byte, sig []byte) error {
 	if err != nil {
 		return errors.WithMessage(err, "failed getting hash function options")
 	}
-
+	// TODO: sm2时到底做不做摘要，要统一
 	digest, err := id.msp.bccsp.Hash(msg, hashOpt)
 	if err != nil {
 		return errors.WithMessage(err, "failed computing digest")
