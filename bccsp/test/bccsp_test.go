@@ -101,13 +101,13 @@ BCCSP:
 	fmt.Printf("sm2公钥: %s\n", hex.EncodeToString(sm2PubBytes))
 
 	// sm2私钥签名
-	sign, err := (*csp).Sign(sm2Priv, plaintext, nil)
+	sign, err := (*csp).Sign(sm2Priv, digest1, nil)
 	if err != nil {
 		t.Fatalf("sm2签名失败: %s", err)
 	}
 	fmt.Printf("sm2签名: %s\n", hex.EncodeToString(sign))
 	// sm2公钥验签
-	valid, err := (*csp).Verify(sm2Pub, sign, plaintext, nil)
+	valid, err := (*csp).Verify(sm2Pub, sign, digest1, nil)
 	if err != nil {
 		t.Fatalf("sm2公钥验签失败: %s", err)
 	}
@@ -116,7 +116,7 @@ BCCSP:
 	}
 	assert.Equal(t, true, valid)
 	// sm2私钥验签
-	valid2, err := (*csp).Verify(sm2Priv, sign, plaintext, nil)
+	valid2, err := (*csp).Verify(sm2Priv, sign, digest1, nil)
 	if err != nil {
 		t.Fatalf("sm2私钥验签失败: %s", err)
 	}
@@ -209,13 +209,13 @@ BCCSP:
 	fmt.Printf("ecdsa公钥: %s\n", hex.EncodeToString(ecdsaPubBytes))
 
 	// ecdsa私钥签名
-	sign, err := (*csp).Sign(ecdsaPriv, plaintext, nil)
+	sign, err := (*csp).Sign(ecdsaPriv, digest1, nil)
 	if err != nil {
 		t.Fatalf("ecdsa签名失败: %s", err)
 	}
 	fmt.Printf("ecdsa签名: %s\n", hex.EncodeToString(sign))
 	// ecdsa公钥验签
-	valid, err := (*csp).Verify(ecdsaPub, sign, plaintext, nil)
+	valid, err := (*csp).Verify(ecdsaPub, sign, digest1, nil)
 	if err != nil {
 		t.Fatalf("ecdsa公钥验签失败: %s", err)
 	}
@@ -224,7 +224,7 @@ BCCSP:
 	}
 	assert.Equal(t, true, valid)
 	// ecdsa私钥验签
-	valid2, err := (*csp).Verify(ecdsaPriv, sign, plaintext, nil)
+	valid2, err := (*csp).Verify(ecdsaPriv, sign, digest1, nil)
 	if err != nil {
 		t.Fatalf("ecdsa私钥验签失败: %s", err)
 	}
