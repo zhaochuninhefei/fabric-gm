@@ -81,13 +81,13 @@ func UnmarshalSM2Signature(raw []byte) (*big.Int, *big.Int, error) {
 	return sig.R, sig.S, nil
 }
 
-// 国密sm2签名，digest是明文不是摘要，opts实际没有使用
+// 国密sm2签名，digest是内容摘要，opts实际没有使用
 func signSM2(k *sm2.PrivateKey, digest []byte, opts bccsp.SignerOpts) (signature []byte, err error) {
 	signature, err = k.Sign(rand.Reader, digest, opts)
 	return
 }
 
-// 国密sm2验签，digest是签名内容明文，signature是被验签的签名，opts实际没有使用
+// 国密sm2验签，digest是内容摘要，signature是被验签的签名，opts实际没有使用
 func verifySM2(k *sm2.PublicKey, signature, digest []byte, opts bccsp.SignerOpts) (valid bool, err error) {
 	valid = k.Verify(digest, signature)
 	/*fmt.Printf("valid+++,%v", valid)*/

@@ -71,37 +71,49 @@ func NewWithParams(usingGM bool, securityLevel int, hashFamily string, keyStore 
 
 	// 添加国密相关组件
 	if usingGM {
+		// Set the key generators
 		// sm2密钥对构造器
 		swbccsp.AddWrapper(reflect.TypeOf(&bccsp.SM2KeyGenOpts{}), &sm2KeyGenerator{})
+		// sm4密钥构造器
+		swbccsp.AddWrapper(reflect.TypeOf(&bccsp.SM4KeyGenOpts{}), &sm4KeyGenerator{length: conf.gmByteLength})
+
+		// Set the key deriver
+		// 国密没有密钥派生相关实现
+
+		// Set the key importers
 		// sm2私钥导入器
 		swbccsp.AddWrapper(reflect.TypeOf(&bccsp.SM2PrivateKeyImportOpts{}), &sm2PrivateKeyOptsKeyImporter{})
 		// sm2公钥导入器
 		swbccsp.AddWrapper(reflect.TypeOf(&bccsp.SM2PublicKeyImportOpts{}), &sm2PublicKeyOptsKeyImporter{})
 		swbccsp.AddWrapper(reflect.TypeOf(&bccsp.SM2GoPublicKeyImportOpts{}), &sm2GoPublicKeyOptsKeyImporter{})
+		// sm4密钥导入器
+		swbccsp.AddWrapper(reflect.TypeOf(&bccsp.SM4ImportKeyOpts{}), &sm4ImportKeyOptsKeyImporter{})
+		// gmx509公钥导入，x509的签名内容的核心是证书拥有者的公钥，与签名算法无关，因此可能是sm2,ecdsa或rsa
+		swbccsp.AddWrapper(reflect.TypeOf(&bccsp.GMX509PublicKeyImportOpts{}), &gmx509PublicKeyImportOptsKeyImporter{bccsp: swbccsp})
+		// // 国密HMac认证码导入器
+		// swbccsp.AddWrapper(reflect.TypeOf(&bccsp.GMHMACImportKeyOpts{}), &gmHmacImportKeyOptsKeyImporter{})
+
+		// Set the Hashers
+		// sm3散列
+		swbccsp.AddWrapper(reflect.TypeOf(&bccsp.SM3Opts{}), &hasher{hash: sm3.New})
+
+		// Set the Signers
 		// sm2私钥签名
 		swbccsp.AddWrapper(reflect.TypeOf(&SM2PrivateKey{}), &sm2Signer{})
+
+		// Set the Verifiers
 		// sm2公钥验签
 		swbccsp.AddWrapper(reflect.TypeOf(&SM2PublicKey{}), &sm2PublicKeyKeyVerifier{})
 		// sm2私钥验签，实际还是公钥验签
 		swbccsp.AddWrapper(reflect.TypeOf(&SM2PrivateKey{}), &sm2PrivateKeyVerifier{})
 
-		// sm3散列
-		swbccsp.AddWrapper(reflect.TypeOf(&bccsp.SM3Opts{}), &hasher{hash: sm3.New})
-
-		// sm4密钥构造器
-		swbccsp.AddWrapper(reflect.TypeOf(&bccsp.SM4KeyGenOpts{}), &sm4KeyGenerator{length: conf.gmByteLength})
-		// sm4密钥导入器
-		swbccsp.AddWrapper(reflect.TypeOf(&bccsp.SM4ImportKeyOpts{}), &sm4ImportKeyOptsKeyImporter{})
+		// Set the Encryptors
 		// sm4加密，未分组 --> 该问题已对应，修改了`bccsp/sw/sm4.go`的sm4Encryptor与sm4Decryptor的接口实现方法
 		swbccsp.AddWrapper(reflect.TypeOf(&SM4Key{}), &sm4Encryptor{})
+
+		// Set the Decryptors
 		// sm4解密，未分组 --> 该问题已对应，修改了`bccsp/sw/sm4.go`的sm4Encryptor与sm4Decryptor的接口实现方法
 		swbccsp.AddWrapper(reflect.TypeOf(&SM4Key{}), &sm4Decryptor{})
-
-		// // 国密HMac认证码导入器
-		// swbccsp.AddWrapper(reflect.TypeOf(&bccsp.GMHMACImportKeyOpts{}), &gmHmacImportKeyOptsKeyImporter{})
-
-		// gmx509公钥导入，x509的签名内容的核心是证书拥有者的公钥，与签名算法无关，因此可能是sm2,ecdsa或rsa
-		swbccsp.AddWrapper(reflect.TypeOf(&bccsp.GMX509PublicKeyImportOpts{}), &gmx509PublicKeyImportOptsKeyImporter{bccsp: swbccsp})
 
 		swbccsp.Algorithms = "sm2-sm3-sm4,"
 	}

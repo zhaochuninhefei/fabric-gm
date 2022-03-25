@@ -59,7 +59,7 @@ func NewSigner(conf Config) (*Signer, error) {
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}
-	// 创建 Signer TODO: 在 Signerｌｉ埋入 序列化客户端mspid 的目的是啥？
+	// 创建 Signer TODO: 在 Signer埋入 序列化客户端mspid 的目的是啥？
 	return &Signer{
 		Creator: sId,
 		key:     key,
@@ -80,8 +80,6 @@ func serializeIdentity(clientCert string, mspID string) ([]byte, error) {
 }
 
 func (si *Signer) Sign(msg []byte) ([]byte, error) {
-	// TODO: 这里是否不需要对msg先做一次摘要？
-	// 因为sm2签名内部会对msg做摘要。
 	digest := util.ComputeSM3(msg)
 	return signSM2(si.key, digest)
 }
