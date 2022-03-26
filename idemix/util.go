@@ -35,6 +35,7 @@ var GroupOrder = FP256BN.NewBIGints(FP256BN.CURVE_Order)
 var FieldBytes = int(FP256BN.MODBYTES)
 
 // RandModOrder returns a random element in 0, ..., GroupOrder-1
+// 疑似 基于FP256BN椭圆曲线的私钥生成函数
 func RandModOrder(rng *amcl.RAND) *FP256BN.BIG {
 	// curve order q
 	q := FP256BN.NewBIGints(FP256BN.CURVE_Order)

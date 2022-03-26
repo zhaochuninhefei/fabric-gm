@@ -17,6 +17,10 @@ import (
 	"github.com/pkg/errors"
 )
 
+/*
+bccsp/idemix/bccsp.go 提供零知识证明所需的csp及其密码组件
+*/
+
 type csp struct {
 	*sw.CSP
 }
@@ -30,24 +34,31 @@ func New(keyStore bccsp.KeyStore) (*csp, error) {
 	csp := &csp{CSP: base}
 
 	// key generators
+	// issuer使用FP256BN(基于 Weierstrass方程 的一种椭圆曲线)生成Issuer密钥(内部也有公私钥)
 	base.AddWrapper(reflect.TypeOf(&bccsp.IdemixIssuerKeyGenOpts{}), &handlers.IssuerKeyGen{Issuer: &bridge.Issuer{NewRand: bridge.NewRandOrPanic}})
+	// user使用FP256BN的随机数生成函数生成一个用户密钥
 	base.AddWrapper(reflect.TypeOf(&bccsp.IdemixUserSecretKeyGenOpts{}), &handlers.UserKeyGen{User: &bridge.User{NewRand: bridge.NewRandOrPanic}})
+	// 撤销公私钥直接使用了ecdsa，现在改为了sm2
 	base.AddWrapper(reflect.TypeOf(&bccsp.IdemixRevocationKeyGenOpts{}), &handlers.RevocationKeyGen{Revocation: &bridge.Revocation{}})
 
 	// key derivers
+	// nymKey 由User密钥和Issuer公钥派生
 	base.AddWrapper(reflect.TypeOf(handlers.NewUserSecretKey(nil, false)), &handlers.NymKeyDerivation{
 		User: &bridge.User{NewRand: bridge.NewRandOrPanic},
 	})
 
 	// signers
+	// user签名，使用的都是FP256BN
 	base.AddWrapper(reflect.TypeOf(handlers.NewUserSecretKey(nil, false)), &userSecreKeySignerMultiplexer{
 		signer:                  &handlers.Signer{SignatureScheme: &bridge.SignatureScheme{NewRand: bridge.NewRandOrPanic}},
 		nymSigner:               &handlers.NymSigner{NymSignatureScheme: &bridge.NymSignatureScheme{NewRand: bridge.NewRandOrPanic}},
 		credentialRequestSigner: &handlers.CredentialRequestSigner{CredRequest: &bridge.CredRequest{NewRand: bridge.NewRandOrPanic}},
 	})
+	// issuer签名，也用的FP256BN
 	base.AddWrapper(reflect.TypeOf(handlers.NewIssuerSecretKey(nil, false)), &handlers.CredentialSigner{
 		Credential: &bridge.Credential{NewRand: bridge.NewRandOrPanic},
 	})
+	// 撤销签名，本来是ecdsa，现在改为sm2
 	base.AddWrapper(reflect.TypeOf(handlers.NewRevocationSecretKey(nil, false)), &handlers.CriSigner{
 		Revocation: &bridge.Revocation{},
 	})

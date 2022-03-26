@@ -51,9 +51,11 @@ var _ = Describe("Revocation", func() {
 				pkBytes             []byte
 			)
 			BeforeEach(func() {
+				// TODO: 使用sm2的话，椭圆曲线也应该换成 P256Sm2
 				idemixRevocationKey = &sm2.PrivateKey{
 					PublicKey: sm2.PublicKey{
-						Curve: elliptic.P256(),
+						// Curve: elliptic.P256(),
+						Curve: sm2.P256Sm2(),
 						X:     big.NewInt(1), Y: big.NewInt(1)},
 					D: big.NewInt(1)}
 

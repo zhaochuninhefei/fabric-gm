@@ -33,8 +33,9 @@ var ProofBytes = map[RevocationAlgorithm]int{
 
 // GenerateLongTermRevocationKey generates a long term signing key that will be used for revocation
 func GenerateLongTermRevocationKey() (*sm2.PrivateKey, error) {
+	// TODO: 为什么用于撤销的长期签名私钥使用ecdsa？而User和IssUer都是fabric自己的一种密钥?
 	//	return ecdsa.GenerateKey(elliptic.P384(), rand.Reader)
-	return sm2.GenerateKey(rand.Reader) //TODO
+	return sm2.GenerateKey(rand.Reader)
 }
 
 // CreateCRI creates the Credential Revocation Information for a certain time period (epoch).
@@ -63,7 +64,7 @@ func CreateCRI(key *sm2.PrivateKey, unrevokedHandles []*FP256BN.BIG, epoch int, 
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to marshal CRI")
 	}
-
+	// TODO: 是否改为sm3
 	digest := sha256.Sum256(bytesToSign)
 
 	cri.EpochPkSig, err = key.Sign(rand.Reader, digest[:], nil)
@@ -95,6 +96,7 @@ func VerifyEpochPK(pk *sm2.PublicKey, epochPK *ECP2, epochPkSig []byte, epoch in
 	if err != nil {
 		return err
 	}
+	// TODO: 是否改为sm3
 	digest := sha256.Sum256(bytesToSign)
 
 	var sig struct{ R, S *big.Int }

@@ -50,6 +50,10 @@ func (conf *config) setSecurityLevel(usingGM bool, securityLevel int, hashFamily
 	}
 	// 非国密的安全级别配置
 	switch hashFamily {
+	case "SM3":
+		// 散列函数选择SM3的话，则认为要支持国密，且非国密部分默认为SH2
+		_ = conf.setSecurityLevelWithSM2SM3()
+		err = conf.setSecurityLevelSHA2(securityLevel)
 	case "SHA2":
 		err = conf.setSecurityLevelSHA2(securityLevel)
 	case "SHA3":

@@ -14,7 +14,7 @@ import (
 
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
 	"gitee.com/zhaochuninhefei/gmgo/sm2"
-	"gitee.com/zhaochuninhefei/gmgo/x509"
+	gmx509 "gitee.com/zhaochuninhefei/gmgo/x509"
 	"github.com/pkg/errors"
 )
 
@@ -85,7 +85,7 @@ func NewRevocationPublicKey(pubKey *sm2.PublicKey) *revocationPublicKey {
 // Bytes converts this key to its byte representation,
 // if this operation is allowed.
 func (k *revocationPublicKey) Bytes() (raw []byte, err error) {
-	raw, err = x509.MarshalPKIXPublicKey(k.pubKey)
+	raw, err = gmx509.MarshalPKIXPublicKey(k.pubKey)
 	if err != nil {
 		return nil, fmt.Errorf("failed marshalling key [%s]", err)
 	}
@@ -162,13 +162,15 @@ func (i *RevocationPublicKeyImporter) KeyImport(raw interface{}, opts bccsp.KeyI
 	if blockPub == nil {
 		return nil, errors.New("Failed to decode revocation sm2 public key")
 	}
-	revocationPk, err := x509.ParsePKIXPublicKey(blockPub.Bytes)
+	// TODO: 撤销用公私钥之前用的是ecdsa，目前改为sm2。
+	// 这里使用gmx509的ParsePKIXPublicKey函数，支持sm2与ecdsa的公钥读取。
+	revocationPk, err := gmx509.ParsePKIXPublicKey(blockPub.Bytes)
 	if err != nil {
 		return nil, errors.Wrap(err, "Failed to parse revocation sm2 public key bytes")
 	}
-	sm2PublicKey, isECDSA := revocationPk.(*sm2.PublicKey)
-	if !isECDSA {
-		return nil, errors.Errorf("key is of type %v, not of type ECDSA", reflect.TypeOf(revocationPk))
+	sm2PublicKey, isSM2 := revocationPk.(*sm2.PublicKey)
+	if !isSM2 {
+		return nil, errors.Errorf("key is of type %v, not of type SM2", reflect.TypeOf(revocationPk))
 	}
 
 	return &revocationPublicKey{sm2PublicKey}, nil
