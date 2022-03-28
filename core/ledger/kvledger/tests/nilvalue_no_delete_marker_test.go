@@ -40,8 +40,8 @@ func TestNilValNoDeleteMarker(t *testing.T) {
 	testLedger.cutBlockAndCommitLegacy()
 
 	testLedger.verifyPubState("cc1", "pubKey1", "pubValue1")
-	testLedger.verifyPvtdataHashState("cc1", "coll1", "pvtKey1", util.ComputeSHA256([]byte("pvtValue1")))
-	testLedger.verifyPvtdataHashState("cc1", "coll1", "pvtKey2", util.ComputeSHA256([]byte("pvtValue2")))
+	testLedger.verifyPvtdataHashState("cc1", "coll1", "pvtKey1", util.ComputeSHA256ButSm3([]byte("pvtValue1")))
+	testLedger.verifyPvtdataHashState("cc1", "coll1", "pvtKey2", util.ComputeSHA256ButSm3([]byte("pvtValue2")))
 	testLedger.verifyPvtState("cc1", "coll1", "pvtKey1", "pvtValue1")
 	testLedger.verifyPvtState("cc1", "coll1", "pvtKey2", "pvtValue2")
 
@@ -61,14 +61,14 @@ func TestNilValNoDeleteMarker(t *testing.T) {
 	hashedWrites := &kvrwset.HashedRWSet{
 		HashedWrites: []*kvrwset.KVWriteHash{
 			{
-				KeyHash:   util.ComputeSHA256([]byte("pvtKey1")),
+				KeyHash:   util.ComputeSHA256ButSm3([]byte("pvtKey1")),
 				IsDelete:  false,
 				ValueHash: nil,
 			},
 			{
-				KeyHash:   util.ComputeSHA256([]byte("pvtKey2")),
+				KeyHash:   util.ComputeSHA256ButSm3([]byte("pvtKey2")),
 				IsDelete:  false,
-				ValueHash: util.ComputeSHA256([]byte{}),
+				ValueHash: util.ComputeSHA256ButSm3([]byte{}),
 			},
 		},
 	}
@@ -105,7 +105,7 @@ func TestNilValNoDeleteMarker(t *testing.T) {
 					{
 						CollectionName: "coll1",
 						HashedRwset:    hashedWritesBytes,
-						PvtRwsetHash:   util.ComputeSHA256(pvtWritesBytes),
+						PvtRwsetHash:   util.ComputeSHA256ButSm3(pvtWritesBytes),
 					},
 				},
 			},

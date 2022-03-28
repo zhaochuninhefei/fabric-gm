@@ -12,7 +12,6 @@ import (
 	"strings"
 	"testing"
 
-	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/pkcs11"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/require"
 )
@@ -24,29 +23,29 @@ func TestMain(m *testing.M) {
 BCCSP:
     default: SW
     SW:
-        Hash: SHA2
+        Hash: SM3
         Security: 256
     UsingGM: y
 `
 
-	if pkcs11Enabled {
-		lib, pin, label := pkcs11.FindPKCS11Lib()
-		yamlCFG = fmt.Sprintf(`
-BCCSP:
-    default: PKCS11
-    SW:
-        Hash: SHA2
-        Security: 256
-    UsingGM: y
-    PKCS11:
-        Hash: SHA3
-        Security: 256
+	// 	if pkcs11Enabled {
+	// 		lib, pin, label := pkcs11.FindPKCS11Lib()
+	// 		yamlCFG = fmt.Sprintf(`
+	// BCCSP:
+	//     default: PKCS11
+	//     SW:
+	//         Hash: SHA2
+	//         Security: 256
+	//     UsingGM: y
+	//     PKCS11:
+	//         Hash: SHA3
+	//         Security: 256
 
-        Library: %s
-        Pin:     '%s'
-        Label:   %s
-        `, lib, pin, label)
-	}
+	//         Library: %s
+	//         Pin:     '%s'
+	//         Label:   %s
+	//         `, lib, pin, label)
+	// 	}
 
 	viper.SetConfigType("yaml")
 	err := viper.ReadConfig(strings.NewReader(yamlCFG))

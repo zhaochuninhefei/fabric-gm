@@ -852,7 +852,7 @@ func createDeliverEnvelope(
 	var tlsCertHash []byte
 	// check for client certificate and create hash if present
 	if len(certificate.Certificate) > 0 {
-		tlsCertHash = util.ComputeSHA256(certificate.Certificate[0])
+		tlsCertHash = util.ComputeSHA256ButSm3(certificate.Certificate[0])
 	}
 
 	start := &ab.SeekPosition{

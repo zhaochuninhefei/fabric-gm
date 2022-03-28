@@ -1,7 +1,6 @@
 package test
 
 import (
-	"crypto/aes"
 	"crypto/x509/pkix"
 	"encoding/asn1"
 	"encoding/hex"
@@ -25,8 +24,8 @@ func TestUsingGM(t *testing.T) {
 BCCSP:
     default: SW
     SW:
-        Hash: SHA3
-        Security: 384
+        Hash: SM3
+        Security: 256
     UsingGM: "y"
 `
 	csp, err := readYaml2Bccsp(yamlCFG)
@@ -126,113 +125,113 @@ BCCSP:
 	assert.Equal(t, true, valid2)
 }
 
-func TestNotUsingGM(t *testing.T) {
-	// bccsp工厂配置(yaml)
-	yamlCFG := `
-BCCSP:
-    default: SW
-    SW:
-        Hash: SHA3
-        Security: 384
-    UsingGM: "n"
-`
-	csp, err := readYaml2Bccsp(yamlCFG)
-	if err != nil {
-		t.Fatalf("读取YAML到BCCSP失败: %s", err)
-	}
-	fmt.Printf("csp 支持的算法: %s\n", (*csp).ShowAlgorithms())
+// func TestNotUsingGM(t *testing.T) {
+// 	// bccsp工厂配置(yaml)
+// 	yamlCFG := `
+// BCCSP:
+//     default: SW
+//     SW:
+//         Hash: SHA3
+//         Security: 384
+//     UsingGM: "n"
+// `
+// 	csp, err := readYaml2Bccsp(yamlCFG)
+// 	if err != nil {
+// 		t.Fatalf("读取YAML到BCCSP失败: %s", err)
+// 	}
+// 	fmt.Printf("csp 支持的算法: %s\n", (*csp).ShowAlgorithms())
 
-	// 定义明文
-	plaintext := []byte("月黑见渔灯，孤光一点萤。微微风簇浪，散作满河星。")
-	fmt.Printf("明文: %s\n", plaintext)
+// 	// 定义明文
+// 	plaintext := []byte("月黑见渔灯，孤光一点萤。微微风簇浪，散作满河星。")
+// 	fmt.Printf("明文: %s\n", plaintext)
 
-	// 对称加密
+// 	// 对称加密
 
-	// 获取aes密钥
-	aesKey, err := (*csp).KeyGen(&bccsp.AESKeyGenOpts{Temporary: true})
-	if err != nil {
-		t.Fatalf("生成aesKey失败: %s", err)
-	}
-	aesKeyBytes, err := aesKey.Bytes()
-	if err != nil {
-		t.Fatalf("获取aesKeyBytes失败: %s", err)
-	}
-	fmt.Printf("aes密钥: %s\n", hex.EncodeToString(aesKeyBytes))
-	fmt.Printf("aes密钥长度: %d\n", len(aesKeyBytes))
-	// 获取IV
-	aesIV, err := sw.GetRandomBytes(aes.BlockSize)
-	if err != nil {
-		t.Fatalf("获取aesIV失败: %s", err)
-	}
-	fmt.Printf("aesIV: %s\n", hex.EncodeToString(aesIV))
+// 	// 获取aes密钥
+// 	aesKey, err := (*csp).KeyGen(&bccsp.AESKeyGenOpts{Temporary: true})
+// 	if err != nil {
+// 		t.Fatalf("生成aesKey失败: %s", err)
+// 	}
+// 	aesKeyBytes, err := aesKey.Bytes()
+// 	if err != nil {
+// 		t.Fatalf("获取aesKeyBytes失败: %s", err)
+// 	}
+// 	fmt.Printf("aes密钥: %s\n", hex.EncodeToString(aesKeyBytes))
+// 	fmt.Printf("aes密钥长度: %d\n", len(aesKeyBytes))
+// 	// 获取IV
+// 	aesIV, err := sw.GetRandomBytes(aes.BlockSize)
+// 	if err != nil {
+// 		t.Fatalf("获取aesIV失败: %s", err)
+// 	}
+// 	fmt.Printf("aesIV: %s\n", hex.EncodeToString(aesIV))
 
-	// aes加密
-	aesOpts := &bccsp.AESCBCPKCS7ModeOpts{
-		IV: aesIV,
-		// PRNG: rand.Reader,
-	}
-	ciphertext, err := (*csp).Encrypt(aesKey, plaintext, aesOpts)
-	if err != nil {
-		t.Fatalf("aes加密失败: %s", err)
-	}
-	fmt.Printf("密文: %s\n", hex.EncodeToString(ciphertext))
-	// aes解密
-	textAfterDecrypt, err := (*csp).Decrypt(aesKey, ciphertext, aesOpts)
-	if err != nil {
-		t.Fatalf("aes解密失败: %s", err)
-	}
-	fmt.Printf("解密后的明文: %s\n", textAfterDecrypt)
-	assert.Equal(t, plaintext, textAfterDecrypt)
+// 	// aes加密
+// 	aesOpts := &bccsp.AESCBCPKCS7ModeOpts{
+// 		IV: aesIV,
+// 		// PRNG: rand.Reader,
+// 	}
+// 	ciphertext, err := (*csp).Encrypt(aesKey, plaintext, aesOpts)
+// 	if err != nil {
+// 		t.Fatalf("aes加密失败: %s", err)
+// 	}
+// 	fmt.Printf("密文: %s\n", hex.EncodeToString(ciphertext))
+// 	// aes解密
+// 	textAfterDecrypt, err := (*csp).Decrypt(aesKey, ciphertext, aesOpts)
+// 	if err != nil {
+// 		t.Fatalf("aes解密失败: %s", err)
+// 	}
+// 	fmt.Printf("解密后的明文: %s\n", textAfterDecrypt)
+// 	assert.Equal(t, plaintext, textAfterDecrypt)
 
-	// 散列
-	digest1, err := (*csp).Hash(plaintext, &bccsp.SHAOpts{})
-	if err != nil {
-		t.Fatalf("sha散列失败: %s", err)
-	}
-	fmt.Printf("sha散列: %s\n", hex.EncodeToString(digest1))
-	digest2, err := (*csp).Hash(textAfterDecrypt, &bccsp.SHAOpts{})
-	if err != nil {
-		t.Fatalf("sha散列失败: %s", err)
-	}
-	fmt.Printf("sha散列: %s\n", hex.EncodeToString(digest2))
-	assert.Equal(t, digest1, digest2)
+// 	// 散列
+// 	digest1, err := (*csp).Hash(plaintext, &bccsp.SHAOpts{})
+// 	if err != nil {
+// 		t.Fatalf("sha散列失败: %s", err)
+// 	}
+// 	fmt.Printf("sha散列: %s\n", hex.EncodeToString(digest1))
+// 	digest2, err := (*csp).Hash(textAfterDecrypt, &bccsp.SHAOpts{})
+// 	if err != nil {
+// 		t.Fatalf("sha散列失败: %s", err)
+// 	}
+// 	fmt.Printf("sha散列: %s\n", hex.EncodeToString(digest2))
+// 	assert.Equal(t, digest1, digest2)
 
-	// 生成ecdsa密钥对
-	ecdsaPriv, err := (*csp).KeyGen(&bccsp.ECDSAKeyGenOpts{Temporary: true})
-	if err != nil {
-		t.Fatalf("生成sm2密钥对失败: %s", err)
-	}
-	ecdsaPub, _ := ecdsaPriv.PublicKey()
-	ecdsaPrivBytes, _ := ecdsaPriv.Bytes()
-	ecdsaPubBytes, _ := ecdsaPub.Bytes()
-	fmt.Printf("ecdsa私钥: %s\n", hex.EncodeToString(ecdsaPrivBytes))
-	fmt.Printf("ecdsa公钥: %s\n", hex.EncodeToString(ecdsaPubBytes))
+// 	// 生成ecdsa密钥对
+// 	ecdsaPriv, err := (*csp).KeyGen(&bccsp.ECDSAKeyGenOpts{Temporary: true})
+// 	if err != nil {
+// 		t.Fatalf("生成sm2密钥对失败: %s", err)
+// 	}
+// 	ecdsaPub, _ := ecdsaPriv.PublicKey()
+// 	ecdsaPrivBytes, _ := ecdsaPriv.Bytes()
+// 	ecdsaPubBytes, _ := ecdsaPub.Bytes()
+// 	fmt.Printf("ecdsa私钥: %s\n", hex.EncodeToString(ecdsaPrivBytes))
+// 	fmt.Printf("ecdsa公钥: %s\n", hex.EncodeToString(ecdsaPubBytes))
 
-	// ecdsa私钥签名
-	sign, err := (*csp).Sign(ecdsaPriv, digest1, nil)
-	if err != nil {
-		t.Fatalf("ecdsa签名失败: %s", err)
-	}
-	fmt.Printf("ecdsa签名: %s\n", hex.EncodeToString(sign))
-	// ecdsa公钥验签
-	valid, err := (*csp).Verify(ecdsaPub, sign, digest1, nil)
-	if err != nil {
-		t.Fatalf("ecdsa公钥验签失败: %s", err)
-	}
-	if valid {
-		fmt.Println("ecdsa公钥验签成功")
-	}
-	assert.Equal(t, true, valid)
-	// ecdsa私钥验签
-	valid2, err := (*csp).Verify(ecdsaPriv, sign, digest1, nil)
-	if err != nil {
-		t.Fatalf("ecdsa私钥验签失败: %s", err)
-	}
-	if valid2 {
-		fmt.Println("ecdsa私钥验签成功")
-	}
-	assert.Equal(t, true, valid2)
-}
+// 	// ecdsa私钥签名
+// 	sign, err := (*csp).Sign(ecdsaPriv, digest1, nil)
+// 	if err != nil {
+// 		t.Fatalf("ecdsa签名失败: %s", err)
+// 	}
+// 	fmt.Printf("ecdsa签名: %s\n", hex.EncodeToString(sign))
+// 	// ecdsa公钥验签
+// 	valid, err := (*csp).Verify(ecdsaPub, sign, digest1, nil)
+// 	if err != nil {
+// 		t.Fatalf("ecdsa公钥验签失败: %s", err)
+// 	}
+// 	if valid {
+// 		fmt.Println("ecdsa公钥验签成功")
+// 	}
+// 	assert.Equal(t, true, valid)
+// 	// ecdsa私钥验签
+// 	valid2, err := (*csp).Verify(ecdsaPriv, sign, digest1, nil)
+// 	if err != nil {
+// 		t.Fatalf("ecdsa私钥验签失败: %s", err)
+// 	}
+// 	if valid2 {
+// 		fmt.Println("ecdsa私钥验签成功")
+// 	}
+// 	assert.Equal(t, true, valid2)
+// }
 
 func TestCreateCertFromCA(t *testing.T) {
 	// bccsp工厂配置(yaml)
@@ -240,7 +239,7 @@ func TestCreateCertFromCA(t *testing.T) {
 BCCSP:
     default: SW
     SW:
-        Hash: SHA2
+        Hash: SM3
         Security: 256
     UsingGM: "y"
 `

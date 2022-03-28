@@ -18,7 +18,6 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/factory"
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/signer"
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/sw"
-	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/utils"
 	gmx509 "gitee.com/zhaochuninhefei/gmgo/x509"
 	"github.com/golang/protobuf/proto"
 	m "github.com/hyperledger/fabric-protos-go/msp"
@@ -903,29 +902,30 @@ func (msp *bccspmsp) getCertificationChainIdentifierFromChain(chain []*gmx509.Ce
 // do have signatures in Low-S. If this is not the case, the certificate
 // is regenerated to have a Low-S signature.
 func (msp *bccspmsp) sanitizeCert(cert *gmx509.Certificate) (*gmx509.Certificate, error) {
-	if isECDSASignedCert(cert) {
-		// Lookup for a parent certificate to perform the sanitization
-		var parentCert *gmx509.Certificate
-		chain, err := msp.getUniqueValidationChain(cert, msp.getValidityOptsForCert(cert))
-		if err != nil {
-			return nil, err
-		}
+	// 国密x509证书在fabric中只使用sm2，不需要ecdsa的Low-S检查与对应。
+	// if isECDSASignedCert(cert) {
+	// 	// Lookup for a parent certificate to perform the sanitization
+	// 	var parentCert *gmx509.Certificate
+	// 	chain, err := msp.getUniqueValidationChain(cert, msp.getValidityOptsForCert(cert))
+	// 	if err != nil {
+	// 		return nil, err
+	// 	}
 
-		// at this point, cert might be a root CA certificate
-		// or an intermediate CA certificate
-		if cert.IsCA && len(chain) == 1 {
-			// cert is a root CA certificate
-			parentCert = cert
-		} else {
-			parentCert = chain[1]
-		}
+	// 	// at this point, cert might be a root CA certificate
+	// 	// or an intermediate CA certificate
+	// 	if cert.IsCA && len(chain) == 1 {
+	// 		// cert is a root CA certificate
+	// 		parentCert = cert
+	// 	} else {
+	// 		parentCert = chain[1]
+	// 	}
 
-		// Sanitize
-		cert, err = sanitizeECDSASignedCert(cert, parentCert)
-		if err != nil {
-			return nil, err
-		}
-	}
+	// 	// Sanitize
+	// 	cert, err = sanitizeECDSASignedCert(cert, parentCert)
+	// 	if err != nil {
+	// 		return nil, err
+	// 	}
+	// }
 	return cert, nil
 }
 
@@ -954,7 +954,7 @@ func (msp *bccspmsp) IsWellFormed(identity *m.SerializedIdentity) error {
 		return err
 	}
 
-	if !isECDSASignedCert(cert) {
+	if !isSM2SignedCert(cert) {
 		return nil
 	}
 
@@ -963,12 +963,14 @@ func (msp *bccspmsp) IsWellFormed(identity *m.SerializedIdentity) error {
 }
 
 func isIdentitySignedInCanonicalForm(sig []byte, mspID string, pemEncodedIdentity []byte) error {
-	r, s, err := utils.UnmarshalECDSASignature(sig)
+	// r, s, err := utils.UnmarshalECDSASignature(sig)
+	r, s, err := sw.UnmarshalSM2Signature(sig)
 	if err != nil {
 		return err
 	}
 
-	expectedSig, err := utils.MarshalECDSASignature(r, s)
+	// expectedSig, err := utils.MarshalECDSASignature(r, s)
+	expectedSig, err := sw.MarshalSM2Signature(r, s)
 	if err != nil {
 		return err
 	}

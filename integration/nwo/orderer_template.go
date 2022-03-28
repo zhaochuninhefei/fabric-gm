@@ -43,8 +43,8 @@ General:
     Enabled: false
     Address: 127.0.0.1:{{ .OrdererPort Orderer "Profile" }}
   BCCSP:
-    Default: GM
-    GM:
+    Default: SW
+    SW:
       Hash: SM3
       Security: 256
       FileKeyStore:

@@ -128,7 +128,7 @@ func TestConstructMetadataDBName(t *testing.T) {
 
 	// <first 50 chars (i.e., chainNameAllowedLength) of chainName> + 1 char for '(' + <64 chars for SHA256 hash
 	// (hex encoding) of untruncated chainName> + 1 char for ')' + 1 char for '_' = 117 chars
-	hash := hex.EncodeToString(util.ComputeSHA256([]byte(chainName)))
+	hash := hex.EncodeToString(util.ComputeSHA256ButSm3([]byte(chainName)))
 	expectedDBName := truncatedChainName + "(" + hash + ")" + "_"
 	expectedDBNameLength := 117
 
@@ -157,7 +157,7 @@ func TestConstructedNamespaceDBName(t *testing.T) {
 	require.Equal(t, collectionNameAllowedLength, len(truncatedEscapedColl))
 
 	untruncatedDBName := chainName + "_" + ns + "$$" + coll
-	hash := hex.EncodeToString(util.ComputeSHA256([]byte(untruncatedDBName)))
+	hash := hex.EncodeToString(util.ComputeSHA256ButSm3([]byte(untruncatedDBName)))
 	expectedDBName := truncatedChainName + "_" + truncatedEscapedNs + "$$" + truncatedEscapedColl + "(" + hash + ")"
 	// <first 50 chars (i.e., chainNameAllowedLength) of chainName> + 1 char for '_' + <first 50 chars
 	// (i.e., namespaceNameAllowedLength) of escaped namespace> + 2 chars for '$$' + <first 50 chars
@@ -173,7 +173,7 @@ func TestConstructedNamespaceDBName(t *testing.T) {
 	// === SCENARIO 2: chainName_ns ===
 
 	untruncatedDBName = chainName + "_" + ns
-	hash = hex.EncodeToString(util.ComputeSHA256([]byte(untruncatedDBName)))
+	hash = hex.EncodeToString(util.ComputeSHA256ButSm3([]byte(untruncatedDBName)))
 	expectedDBName = truncatedChainName + "_" + truncatedEscapedNs + "(" + hash + ")"
 	// <first 50 chars (i.e., chainNameAllowedLength) of chainName> + 1 char for '_' + <first 50 chars
 	// (i.e., namespaceNameAllowedLength) of escaped namespace> + 1 char for '(' + <64 chars for SHA256 hash

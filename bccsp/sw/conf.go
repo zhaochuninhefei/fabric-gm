@@ -8,14 +8,11 @@ package sw
 
 import (
 	"crypto/elliptic"
-	"crypto/sha256"
-	"crypto/sha512"
 	"fmt"
 	"hash"
 
 	"gitee.com/zhaochuninhefei/gmgo/sm2"
 	"gitee.com/zhaochuninhefei/gmgo/sm3"
-	"golang.org/x/crypto/sha3"
 )
 
 /*
@@ -23,12 +20,12 @@ bccsp/sw/conf.go 提供bccsp配置
 */
 
 type config struct {
-	// ECDSA的椭圆曲线
-	ecdsaCurve elliptic.Curve
-	// SHA的散列函数
-	shaFunction func() hash.Hash
-	// AES密钥位数
-	aesByteLength int
+	// // ECDSA的椭圆曲线
+	// ecdsaCurve elliptic.Curve
+	// // SHA的散列函数
+	// shaFunction func() hash.Hash
+	// // AES密钥位数
+	// aesByteLength int
 	// // RSA私钥位数
 	// rsaBitLength int
 
@@ -44,64 +41,64 @@ type config struct {
 
 // 设置安全级别配置
 func (conf *config) setSecurityLevel(usingGM bool, securityLevel int, hashFamily string) (err error) {
-	conf.usingGM = usingGM
-	if usingGM {
+	// 国密对应，无视 usingGM ，固定使用国密
+	conf.usingGM = true
+	if securityLevel == 256 && hashFamily == "SM3" {
 		_ = conf.setSecurityLevelWithSM2SM3()
+	} else {
+		err = fmt.Errorf("bccsp国密改造版目前只支持国密SM3 256位，不支持 [%s] [%d]位", hashFamily, securityLevel)
 	}
-	// 非国密的安全级别配置
-	switch hashFamily {
-	case "SM3":
-		// 散列函数选择SM3的话，则认为要支持国密，且非国密部分默认为SH2
-		_ = conf.setSecurityLevelWithSM2SM3()
-		err = conf.setSecurityLevelSHA2(securityLevel)
-	case "SHA2":
-		err = conf.setSecurityLevelSHA2(securityLevel)
-	case "SHA3":
-		err = conf.setSecurityLevelSHA3(securityLevel)
-	default:
-		err = fmt.Errorf("非国密的安全级别配置不支持 [%s]", hashFamily)
-	}
-
+	// if usingGM {
+	// 	_ = conf.setSecurityLevelWithSM2SM3()
+	// }
+	// switch hashFamily {
+	// case "SHA2":
+	// 	err = conf.setSecurityLevelSHA2(securityLevel)
+	// case "SHA3":
+	// 	err = conf.setSecurityLevelSHA3(securityLevel)
+	// default:
+	// 	err = fmt.Errorf("国密的安全级别配置不支持 [%s]", hashFamily)
+	// }
 	return
 }
 
-// 设置使用ecdsa与SHA2时的安全级别配置
-func (conf *config) setSecurityLevelSHA2(level int) (err error) {
-	switch level {
-	case 256:
-		conf.ecdsaCurve = elliptic.P256()
-		conf.shaFunction = sha256.New
-		// conf.rsaBitLength = 2048
-		conf.aesByteLength = 32
-	case 384:
-		conf.ecdsaCurve = elliptic.P384()
-		conf.shaFunction = sha512.New384
-		// conf.rsaBitLength = 3072
-		conf.aesByteLength = 32
-	default:
-		err = fmt.Errorf("security level not supported [%d]", level)
-	}
-	return
-}
+// // 设置使用ecdsa与SHA2时的安全级别配置
+// func (conf *config) setSecurityLevelSHA2(level int) (err error) {
+// 	switch level {
+// 	case 256:
+// 		conf.ecdsaCurve = elliptic.P256()
+// 		conf.shaFunction = sha256.New
+// 		// conf.rsaBitLength = 2048
+// 		conf.aesByteLength = 32
+// 	case 384:
+// 		conf.ecdsaCurve = elliptic.P384()
+// 		conf.shaFunction = sha512.New384
+// 		// conf.rsaBitLength = 3072
+// 		conf.aesByteLength = 32
+// 	default:
+// 		err = fmt.Errorf("security level not supported [%d]", level)
+// 	}
+// 	return
+// }
 
-// 设置使用ecdsa与SHA3时的安全级别配置
-func (conf *config) setSecurityLevelSHA3(level int) (err error) {
-	switch level {
-	case 256:
-		conf.ecdsaCurve = elliptic.P256()
-		conf.shaFunction = sha3.New256
-		// conf.rsaBitLength = 2048
-		conf.aesByteLength = 32
-	case 384:
-		conf.ecdsaCurve = elliptic.P384()
-		conf.shaFunction = sha3.New384
-		// conf.rsaBitLength = 3072
-		conf.aesByteLength = 32
-	default:
-		err = fmt.Errorf("security level not supported [%d]", level)
-	}
-	return
-}
+// // 设置使用ecdsa与SHA3时的安全级别配置
+// func (conf *config) setSecurityLevelSHA3(level int) (err error) {
+// 	switch level {
+// 	case 256:
+// 		conf.ecdsaCurve = elliptic.P256()
+// 		conf.shaFunction = sha3.New256
+// 		// conf.rsaBitLength = 2048
+// 		conf.aesByteLength = 32
+// 	case 384:
+// 		conf.ecdsaCurve = elliptic.P384()
+// 		conf.shaFunction = sha3.New384
+// 		// conf.rsaBitLength = 3072
+// 		conf.aesByteLength = 32
+// 	default:
+// 		err = fmt.Errorf("security level not supported [%d]", level)
+// 	}
+// 	return
+// }
 
 // 设置使用国密时的安全级别配置
 func (conf *config) setSecurityLevelWithSM2SM3() (err error) {

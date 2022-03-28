@@ -6,22 +6,24 @@ While in a production environment you could override the environment variables i
 
 This checklist covers key configuration parameters for setting up a production network. Of course, you can always refer to the core.yaml file for additional parameters or more information. It also provides guidance on which parameters should be overridden. The list of parameters that you need to understand and that are described in this topic include:
 
-- [peer.id](#peer-id)
-- [peer.networkId](#peer-networkid)
-- [peer.listenAddress](#peer-listenaddress)
-- [peer.chaincodeListenAddress](#peer-chaincodelistenaddress)
-- [peer.chaincodeAddress](#peer-chaincodeaddress)
-- [peer.address](#peer-address)
-- [peer.mspConfigPath](#peer-mspconfigpath)
-- [peer.localMspId](#peer-localmspid)
-- [peer.fileSystemPath](#peer-filesystempath)
-- [peer.gossip.*](#peer-gossip)
-- [peer.tls.*](#peer-tls)
-- [peer.bccsp.*](#peer-bccsp)
-- [chaincode.externalBuilders.*](#chaincode-externalbuilders)
-- [ledger.*](#ledger)
-- [operations.*](#operations)
-- [metrics.*](#metrics)
+- [Checklist for a production peer](#checklist-for-a-production-peer)
+  - [peer.id](#peerid)
+  - [peer.networkId](#peernetworkid)
+  - [peer.listenAddress](#peerlistenaddress)
+  - [peer.chaincodeListenAddress](#peerchaincodelistenaddress)
+  - [peer.chaincodeAddress](#peerchaincodeaddress)
+  - [peer.address](#peeraddress)
+  - [peer.mspConfigPath](#peermspconfigpath)
+  - [peer.localMspId](#peerlocalmspid)
+  - [peer.fileSystemPath](#peerfilesystempath)
+  - [peer.gossip.*](#peergossip)
+  - [peer.tls.*](#peertls)
+  - [peer.bccsp.*](#peerbccsp)
+  - [chaincode.externalBuilders.*](#chaincodeexternalbuilders)
+  - [ledger.*](#ledger)
+  - [operations.*](#operations)
+  - [metrics.*](#metrics)
+  - [Next steps](#next-steps)
 
 ## peer.id
 
@@ -248,7 +250,7 @@ BCCSP:
             # TODO: The default Hash and Security level needs refactoring to be
             # fully configurable. Changing these defaults requires coordination
             # SHA2 is hardcoded in several places, not only BCCSP
-            Hash: SHA2
+            Hash: SM3
             Security: 256
             # Location of Key Store
             FileKeyStore:

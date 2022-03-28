@@ -15,66 +15,58 @@ limitations under the License.
 */
 package sw
 
-import (
-	"crypto/ecdsa"
-	"crypto/rand"
-	"fmt"
-
-	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
-	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/utils"
-)
-
 /*
 bccsp/sw/ecdsa.go 实现ecdsa的签名与验签器
+国密对应后废弃
 */
 
-func signECDSA(k *ecdsa.PrivateKey, digest []byte, opts bccsp.SignerOpts) ([]byte, error) {
-	r, s, err := ecdsa.Sign(rand.Reader, k, digest)
-	if err != nil {
-		return nil, err
-	}
+// func signECDSA(k *ecdsa.PrivateKey, digest []byte, opts bccsp.SignerOpts) ([]byte, error) {
+// 	r, s, err := ecdsa.Sign(rand.Reader, k, digest)
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	s, err = utils.ToLowS(&k.PublicKey, s)
-	if err != nil {
-		return nil, err
-	}
+// 	s, err = utils.ToLowS(&k.PublicKey, s)
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	return utils.MarshalECDSASignature(r, s)
-}
+// 	return utils.MarshalECDSASignature(r, s)
+// }
 
-func verifyECDSA(k *ecdsa.PublicKey, signature, digest []byte, opts bccsp.SignerOpts) (bool, error) {
-	r, s, err := utils.UnmarshalECDSASignature(signature)
-	if err != nil {
-		return false, fmt.Errorf("failed unmashalling signature [%s]", err)
-	}
+// func verifyECDSA(k *ecdsa.PublicKey, signature, digest []byte, opts bccsp.SignerOpts) (bool, error) {
+// 	r, s, err := utils.UnmarshalECDSASignature(signature)
+// 	if err != nil {
+// 		return false, fmt.Errorf("failed unmashalling signature [%s]", err)
+// 	}
 
-	lowS, err := utils.IsLowS(k, s)
-	if err != nil {
-		return false, err
-	}
+// 	lowS, err := utils.IsLowS(k, s)
+// 	if err != nil {
+// 		return false, err
+// 	}
 
-	if !lowS {
-		return false, fmt.Errorf("invalid S. Must be smaller than half the order [%s][%s]", s, utils.GetCurveHalfOrdersAt(k.Curve))
-	}
+// 	if !lowS {
+// 		return false, fmt.Errorf("invalid S. Must be smaller than half the order [%s][%s]", s, utils.GetCurveHalfOrdersAt(k.Curve))
+// 	}
 
-	return ecdsa.Verify(k, digest, r, s), nil
-}
+// 	return ecdsa.Verify(k, digest, r, s), nil
+// }
 
-type ecdsaSigner struct{}
+// type ecdsaSigner struct{}
 
-func (s *ecdsaSigner) Sign(k bccsp.Key, digest []byte, opts bccsp.SignerOpts) ([]byte, error) {
-	return signECDSA(k.(*ECDSAPrivateKey).privKey, digest, opts)
-}
+// func (s *ecdsaSigner) Sign(k bccsp.Key, digest []byte, opts bccsp.SignerOpts) ([]byte, error) {
+// 	return signECDSA(k.(*ECDSAPrivateKey).privKey, digest, opts)
+// }
 
-// ecdsa验签已恢复，没用sm2的验签冒充 --> bccsp/sw/sm2.go
-type ecdsaPrivateKeyVerifier struct{}
+// // ecdsa验签已恢复，没用sm2的验签冒充 --> bccsp/sw/sm2.go
+// type ecdsaPrivateKeyVerifier struct{}
 
-func (v *ecdsaPrivateKeyVerifier) Verify(k bccsp.Key, signature, digest []byte, opts bccsp.SignerOpts) (bool, error) {
-	return verifyECDSA(&(k.(*ECDSAPrivateKey).privKey.PublicKey), signature, digest, opts)
-}
+// func (v *ecdsaPrivateKeyVerifier) Verify(k bccsp.Key, signature, digest []byte, opts bccsp.SignerOpts) (bool, error) {
+// 	return verifyECDSA(&(k.(*ECDSAPrivateKey).privKey.PublicKey), signature, digest, opts)
+// }
 
-type ecdsaPublicKeyKeyVerifier struct{}
+// type ecdsaPublicKeyKeyVerifier struct{}
 
-func (v *ecdsaPublicKeyKeyVerifier) Verify(k bccsp.Key, signature, digest []byte, opts bccsp.SignerOpts) (bool, error) {
-	return verifyECDSA(k.(*ECDSAPublicKey).pubKey, signature, digest, opts)
-}
+// func (v *ecdsaPublicKeyKeyVerifier) Verify(k bccsp.Key, signature, digest []byte, opts bccsp.SignerOpts) (bool, error) {
+// 	return verifyECDSA(k.(*ECDSAPublicKey).pubKey, signature, digest, opts)
+// }

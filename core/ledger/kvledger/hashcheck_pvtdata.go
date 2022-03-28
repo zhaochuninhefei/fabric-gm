@@ -161,7 +161,7 @@ func findInvalidNsPvtData(nsRwset *rwset.NsPvtReadWriteSet, txRWSet *rwsetutil.T
 			continue
 		}
 
-		if !bytes.Equal(util.ComputeSHA256(collPvtRwset.Rwset), rwsetHash) {
+		if !bytes.Equal(util.ComputeSHA256ButSm3(collPvtRwset.Rwset), rwsetHash) {
 			invalidPvtData = append(invalidPvtData, &ledger.PvtdataHashMismatch{
 				BlockNum:     blkNum,
 				TxNum:        txNum,

@@ -613,7 +613,7 @@ func (l *kvLedger) addBlockCommitHash(block *common.Block, updateBatchBytes []by
 	valueBytes = append(valueBytes, updateBatchBytes...)
 	valueBytes = append(valueBytes, l.commitHash...)
 
-	l.commitHash = util.ComputeSHA256(valueBytes)
+	l.commitHash = util.ComputeSHA256ButSm3(valueBytes)
 	block.Metadata.Metadata[common.BlockMetadataIndex_COMMIT_HASH] = protoutil.MarshalOrPanic(&common.Metadata{Value: l.commitHash})
 }
 

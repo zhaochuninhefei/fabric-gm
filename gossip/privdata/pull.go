@@ -205,7 +205,7 @@ func hashDigest(dig *protosgossip.PvtDataDigest) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return hex.EncodeToString(commonutil.ComputeSHA256(b)), nil
+	return hex.EncodeToString(commonutil.ComputeSHA256ButSm3(b)), nil
 }
 
 func (p *puller) waitForMembership() []discovery.NetworkMember {

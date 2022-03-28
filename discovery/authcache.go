@@ -192,5 +192,5 @@ func signedDataToKey(data protoutil.SignedData) (string, error) {
 	if err != nil {
 		return "", errors.Wrap(err, "failed marshaling signed data")
 	}
-	return hex.EncodeToString(util.ComputeSHA256(b)), nil
+	return hex.EncodeToString(util.ComputeSHA256ButSm3(b)), nil
 }

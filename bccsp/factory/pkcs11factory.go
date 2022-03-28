@@ -9,61 +9,65 @@ SPDX-License-Identifier: Apache-2.0
 
 package factory
 
-import (
-	"encoding/hex"
-
-	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
-	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/pkcs11"
-	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/sw"
-	"github.com/pkg/errors"
-)
-
 /*
-bccsp/factory/pkcs11factory.go 定义 PKCS11Factory 结构体并为其实现`factory.BCCSPFactory`接口(bccsp/factory/factory.go)
-需要添加编译条件: `pkcs11`
+bccsp/factory/pkcs11factory.go 国密对应后废弃
 */
 
-const (
-	// PKCS11BasedFactoryName is the name of the factory of the hsm-based BCCSP implementation
-	PKCS11BasedFactoryName = "PKCS11"
-)
+// import (
+// 	"encoding/hex"
 
-// PKCS11Factory is the factory of the HSM-based BCCSP.
-type PKCS11Factory struct{}
+// 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
+// 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/pkcs11"
+// 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/sw"
+// 	"github.com/pkg/errors"
+// )
 
-// Name returns the name of this factory
-func (f *PKCS11Factory) Name() string {
-	return PKCS11BasedFactoryName
-}
+// /*
+// bccsp/factory/pkcs11factory.go 定义 PKCS11Factory 结构体并为其实现`factory.BCCSPFactory`接口(bccsp/factory/factory.go)
+// 需要添加编译条件: `pkcs11`
+// */
 
-// Get returns an instance of BCCSP using Opts.
-func (f *PKCS11Factory) Get(config *FactoryOpts) (bccsp.BCCSP, error) {
-	// Validate arguments
-	if config == nil || config.Pkcs11Opts == nil {
-		return nil, errors.New("Invalid config. It must not be nil.")
-	}
+// const (
+// 	// PKCS11BasedFactoryName is the name of the factory of the hsm-based BCCSP implementation
+// 	PKCS11BasedFactoryName = "PKCS11"
+// )
 
-	p11Opts := *config.Pkcs11Opts
-	ks := sw.NewDummyKeyStore()
-	mapper := skiMapper(p11Opts)
+// // PKCS11Factory is the factory of the HSM-based BCCSP.
+// type PKCS11Factory struct{}
 
-	return pkcs11.New(p11Opts, ks, pkcs11.WithKeyMapper(mapper))
-}
+// // Name returns the name of this factory
+// func (f *PKCS11Factory) Name() string {
+// 	return PKCS11BasedFactoryName
+// }
 
-func skiMapper(p11Opts pkcs11.PKCS11Opts) func([]byte) []byte {
-	keyMap := map[string]string{}
-	for _, k := range p11Opts.KeyIDs {
-		keyMap[k.SKI] = k.ID
-	}
+// // Get returns an instance of BCCSP using Opts.
+// func (f *PKCS11Factory) Get(config *FactoryOpts) (bccsp.BCCSP, error) {
+// 	// Validate arguments
+// 	if config == nil || config.Pkcs11Opts == nil {
+// 		return nil, errors.New("Invalid config. It must not be nil.")
+// 	}
 
-	return func(ski []byte) []byte {
-		keyID := hex.EncodeToString(ski)
-		if id, ok := keyMap[keyID]; ok {
-			return []byte(id)
-		}
-		if p11Opts.AltID != "" {
-			return []byte(p11Opts.AltID)
-		}
-		return ski
-	}
-}
+// 	p11Opts := *config.Pkcs11Opts
+// 	ks := sw.NewDummyKeyStore()
+// 	mapper := skiMapper(p11Opts)
+
+// 	return pkcs11.New(p11Opts, ks, pkcs11.WithKeyMapper(mapper))
+// }
+
+// func skiMapper(p11Opts pkcs11.PKCS11Opts) func([]byte) []byte {
+// 	keyMap := map[string]string{}
+// 	for _, k := range p11Opts.KeyIDs {
+// 		keyMap[k.SKI] = k.ID
+// 	}
+
+// 	return func(ski []byte) []byte {
+// 		keyID := hex.EncodeToString(ski)
+// 		if id, ok := keyMap[keyID]; ok {
+// 			return []byte(id)
+// 		}
+// 		if p11Opts.AltID != "" {
+// 			return []byte(p11Opts.AltID)
+// 		}
+// 		return ski
+// 	}
+// }

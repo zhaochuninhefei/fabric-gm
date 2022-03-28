@@ -8,12 +8,9 @@ package channelconfig
 
 import (
 	"math"
-	"reflect"
 	"testing"
 
-	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/sw"
-	"gitee.com/zhaochuninhefei/fabric-gm/common/util"
 	cb "github.com/hyperledger/fabric-protos-go/common"
 	"github.com/stretchr/testify/assert"
 )
@@ -41,17 +38,17 @@ func TestHashingAlgorithm(t *testing.T) {
 	cc = &ChannelConfig{protos: &ChannelProtos{HashingAlgorithm: &cb.HashingAlgorithm{Name: "MD5"}}}
 	assert.Error(t, cc.validateHashingAlgorithm(), "Bad hashing algorithm supplied")
 
-	cc = &ChannelConfig{protos: &ChannelProtos{HashingAlgorithm: &cb.HashingAlgorithm{Name: bccsp.SHA256}}}
-	assert.NoError(t, cc.validateHashingAlgorithm(), "Allowed hashing algorith SHA256 supplied")
+	// cc = &ChannelConfig{protos: &ChannelProtos{HashingAlgorithm: &cb.HashingAlgorithm{Name: bccsp.SHA256}}}
+	// assert.NoError(t, cc.validateHashingAlgorithm(), "Allowed hashing algorith SHA256 supplied")
 
-	assert.Equal(t, reflect.ValueOf(util.ComputeSHA256).Pointer(), reflect.ValueOf(cc.HashingAlgorithm()).Pointer(),
-		"Unexpected hashing algorithm returned")
+	// assert.Equal(t, reflect.ValueOf(util.ComputeSHA256).Pointer(), reflect.ValueOf(cc.HashingAlgorithm()).Pointer(),
+	// 	"Unexpected hashing algorithm returned")
 
-	cc = &ChannelConfig{protos: &ChannelProtos{HashingAlgorithm: &cb.HashingAlgorithm{Name: bccsp.SHA3_256}}}
-	assert.NoError(t, cc.validateHashingAlgorithm(), "Allowed hashing algorith SHA3_256 supplied")
+	// cc = &ChannelConfig{protos: &ChannelProtos{HashingAlgorithm: &cb.HashingAlgorithm{Name: bccsp.SHA3_256}}}
+	// assert.NoError(t, cc.validateHashingAlgorithm(), "Allowed hashing algorith SHA3_256 supplied")
 
-	assert.Equal(t, reflect.ValueOf(util.ComputeSHA3256).Pointer(), reflect.ValueOf(cc.HashingAlgorithm()).Pointer(),
-		"Unexpected hashing algorithm returned")
+	// assert.Equal(t, reflect.ValueOf(util.ComputeSHA3256).Pointer(), reflect.ValueOf(cc.HashingAlgorithm()).Pointer(),
+	// 	"Unexpected hashing algorithm returned")
 }
 
 func TestBlockDataHashingStructure(t *testing.T) {

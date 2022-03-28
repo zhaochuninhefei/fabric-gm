@@ -216,7 +216,7 @@ func (s *Serializer) IsMetadataSerialized(namespace, name string, structure inte
 		return false, errors.WithMessagef(err, "could not get state hash for metadata key %s", mdKey)
 	}
 
-	return bytes.Equal(util.ComputeSHA256(metadataBin), existingMDHash), nil
+	return bytes.Equal(util.ComputeSHA256ButSm3(metadataBin), existingMDHash), nil
 }
 
 // IsSerialized essentially checks if the hashes of a serialized version of a structure matches the hashes
@@ -252,7 +252,7 @@ func (s *Serializer) IsSerialized(namespace, name string, structure interface{},
 	}
 
 	metadataKeyName := MetadataKey(namespace, name)
-	if !bytes.Equal(util.ComputeSHA256(metadataBin), existingKeys[metadataKeyName]) {
+	if !bytes.Equal(util.ComputeSHA256ButSm3(metadataBin), existingKeys[metadataKeyName]) {
 		return false, nil
 	}
 
@@ -287,7 +287,7 @@ func (s *Serializer) IsSerialized(namespace, name string, structure interface{},
 			return false, errors.WithMessagef(err, "could not marshal value for key %s", keyName)
 		}
 
-		if existingValue, ok := existingKeys[keyName]; !ok || !bytes.Equal(existingValue, util.ComputeSHA256(marshaledFieldValue)) {
+		if existingValue, ok := existingKeys[keyName]; !ok || !bytes.Equal(existingValue, util.ComputeSHA256ButSm3(marshaledFieldValue)) {
 			return false, nil
 		}
 	}

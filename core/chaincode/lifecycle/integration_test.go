@@ -131,7 +131,7 @@ var _ = Describe("Integration", func() {
 		}
 
 		fakeStub.GetPrivateDataHashStub = func(collection, key string) ([]byte, error) {
-			return util.ComputeSHA256(fakeOrgKVStore[key]), nil
+			return util.ComputeSHA256ButSm3(fakeOrgKVStore[key]), nil
 		}
 	})
 

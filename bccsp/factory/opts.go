@@ -27,7 +27,7 @@ func GetDefaultOpts() *FactoryOpts {
 		// 恢复为 SW
 		ProviderName: "SW",
 		SwOpts: &SwOpts{
-			HashFamily: "SHA2",
+			HashFamily: "SM3",
 			SecLevel:   256,
 			Ephemeral:  true,
 		},

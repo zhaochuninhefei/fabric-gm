@@ -60,47 +60,47 @@ func TestKeyDeriv(t *testing.T) {
 	assert.Nil(t, err)
 }
 
-func TestECDSAPublicKeyKeyDeriver(t *testing.T) {
-	t.Parallel()
+// func TestECDSAPublicKeyKeyDeriver(t *testing.T) {
+// 	t.Parallel()
 
-	kd := ecdsaPublicKeyKeyDeriver{}
+// 	kd := ecdsaPublicKeyKeyDeriver{}
 
-	_, err := kd.KeyDeriv(&mocks2.MockKey{}, nil)
-	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "invalid opts parameter. It must not be nil")
+// 	_, err := kd.KeyDeriv(&mocks2.MockKey{}, nil)
+// 	assert.Error(t, err)
+// 	assert.Contains(t, err.Error(), "invalid opts parameter. It must not be nil")
 
-	_, err = kd.KeyDeriv(&ECDSAPublicKey{}, &mocks2.KeyDerivOpts{})
-	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "unsupported 'KeyDerivOpts' provided [")
-}
+// 	_, err = kd.KeyDeriv(&ECDSAPublicKey{}, &mocks2.KeyDerivOpts{})
+// 	assert.Error(t, err)
+// 	assert.Contains(t, err.Error(), "unsupported 'KeyDerivOpts' provided [")
+// }
 
-func TestECDSAPrivateKeyKeyDeriver(t *testing.T) {
-	t.Parallel()
+// func TestECDSAPrivateKeyKeyDeriver(t *testing.T) {
+// 	t.Parallel()
 
-	kd := ecdsaPrivateKeyKeyDeriver{}
+// 	kd := ecdsaPrivateKeyKeyDeriver{}
 
-	_, err := kd.KeyDeriv(&mocks2.MockKey{}, nil)
-	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "invalid opts parameter. It must not be nil")
+// 	_, err := kd.KeyDeriv(&mocks2.MockKey{}, nil)
+// 	assert.Error(t, err)
+// 	assert.Contains(t, err.Error(), "invalid opts parameter. It must not be nil")
 
-	_, err = kd.KeyDeriv(&ECDSAPrivateKey{}, &mocks2.KeyDerivOpts{})
-	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "unsupported 'KeyDerivOpts' provided [")
-}
+// 	_, err = kd.KeyDeriv(&ECDSAPrivateKey{}, &mocks2.KeyDerivOpts{})
+// 	assert.Error(t, err)
+// 	assert.Contains(t, err.Error(), "unsupported 'KeyDerivOpts' provided [")
+// }
 
-func TestAESPrivateKeyKeyDeriver(t *testing.T) {
-	t.Parallel()
+// func TestAESPrivateKeyKeyDeriver(t *testing.T) {
+// 	t.Parallel()
 
-	kd := aesPrivateKeyKeyDeriver{}
+// 	kd := aesPrivateKeyKeyDeriver{}
 
-	_, err := kd.KeyDeriv(&mocks2.MockKey{}, nil)
-	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "invalid opts parameter. It must not be nil")
+// 	_, err := kd.KeyDeriv(&mocks2.MockKey{}, nil)
+// 	assert.Error(t, err)
+// 	assert.Contains(t, err.Error(), "invalid opts parameter. It must not be nil")
 
-	_, err = kd.KeyDeriv(&AESPrivateKey{}, &mocks2.KeyDerivOpts{})
-	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "unsupported 'KeyDerivOpts' provided [")
-}
+// 	_, err = kd.KeyDeriv(&AESPrivateKey{}, &mocks2.KeyDerivOpts{})
+// 	assert.Error(t, err)
+// 	assert.Contains(t, err.Error(), "unsupported 'KeyDerivOpts' provided [")
+// }
 
 func Test_smPublicKeyKeyDeriver_KeyDeriv(t *testing.T) {
 	type args struct {

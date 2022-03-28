@@ -30,7 +30,7 @@ func TestPurge(t *testing.T) {
 	cryptoProvider, err := sw.NewDefaultSecurityLevelWithKeystore(sw.NewDummyKeyStore())
 	assert.NoError(t, err)
 
-	hash, err := cryptoProvider.Hash(k.TLSCert.Raw, &bccsp.SHA256Opts{})
+	hash, err := cryptoProvider.Hash(k.TLSCert.Raw, &bccsp.SM3Opts{})
 	assert.NoError(t, err)
 	assert.Equal(t, "A", m.lookup(certHash(hash)))
 	time.Sleep(time.Second * 3)

@@ -51,7 +51,7 @@ type Chaincode struct {
 func (c *Chaincode) SetPackageIDFromPackageFile() {
 	fileBytes, err := ioutil.ReadFile(c.PackageFile)
 	Expect(err).NotTo(HaveOccurred())
-	hashStr := fmt.Sprintf("%x", util.ComputeSHA256(fileBytes))
+	hashStr := fmt.Sprintf("%x", util.ComputeSHA256ButSm3(fileBytes))
 	c.PackageID = c.Label + ":" + hashStr
 }
 

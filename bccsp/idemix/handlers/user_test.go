@@ -262,7 +262,8 @@ var _ = Describe("User", func() {
 				})
 
 				It("returns error", func() {
-					nym, err := NymKeyDerivation.KeyDeriv(fakeUserSecretKey, &bccsp.AESKeyGenOpts{})
+					// nym, err := NymKeyDerivation.KeyDeriv(fakeUserSecretKey, &bccsp.AESKeyGenOpts{})
+					nym, err := NymKeyDerivation.KeyDeriv(fakeUserSecretKey, &bccsp.SM4KeyGenOpts{})
 					Expect(err).To(MatchError("invalid options, expected *IdemixNymKeyDerivationOpts"))
 					Expect(nym).To(BeNil())
 				})

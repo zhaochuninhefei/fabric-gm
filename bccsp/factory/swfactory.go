@@ -81,9 +81,9 @@ func (f *SWFactory) Get(config *FactoryOpts) (bccsp.BCCSP, error) {
 // 用于 SWFactory 的相关配置
 type SwOpts struct {
 	// Default algorithms when not specified (Deprecated?)
-	// 算法强度，如 256
+	// 算法强度，国密对应后只支持256
 	SecLevel int `mapstructure:"security" json:"security" yaml:"Security"`
-	// 散列算法，如 SM3
+	// 散列算法，国密对应后只支持SM3
 	HashFamily string `mapstructure:"hash" json:"hash" yaml:"Hash"`
 
 	// Keystore Options

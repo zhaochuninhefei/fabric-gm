@@ -141,7 +141,8 @@ var _ = Describe("Issuer", func() {
 
 			Context("and the option is not of type *bccsp.IdemixIssuerKeyGenOpts", func() {
 				It("returns error", func() {
-					sk, err := IssuerKeyGen.KeyGen(&bccsp.AESKeyGenOpts{})
+					// sk, err := IssuerKeyGen.KeyGen(&bccsp.AESKeyGenOpts{})
+					sk, err := IssuerKeyGen.KeyGen(&bccsp.SM4KeyGenOpts{})
 					Expect(err).To(MatchError("invalid options, expected *bccsp.IdemixIssuerKeyGenOpts"))
 					Expect(sk).To(BeNil())
 				})

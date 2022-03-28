@@ -7,7 +7,6 @@ SPDX-License-Identifier: Apache-2.0
 package sw
 
 import (
-	"crypto/elliptic"
 	"errors"
 	"reflect"
 	"testing"
@@ -47,40 +46,40 @@ func TestKeyGen(t *testing.T) {
 	assert.Nil(t, err)
 }
 
-func TestECDSAKeyGenerator(t *testing.T) {
-	t.Parallel()
+// func TestECDSAKeyGenerator(t *testing.T) {
+// 	t.Parallel()
 
-	kg := &ecdsaKeyGenerator{curve: elliptic.P256()}
+// 	kg := &ecdsaKeyGenerator{curve: elliptic.P256()}
 
-	k, err := kg.KeyGen(nil)
-	assert.NoError(t, err)
+// 	k, err := kg.KeyGen(nil)
+// 	assert.NoError(t, err)
 
-	ecdsaK, ok := k.(*ECDSAPrivateKey)
-	assert.True(t, ok)
-	assert.NotNil(t, ecdsaK.privKey)
-	assert.Equal(t, ecdsaK.privKey.Curve, elliptic.P256())
-}
+// 	ecdsaK, ok := k.(*ECDSAPrivateKey)
+// 	assert.True(t, ok)
+// 	assert.NotNil(t, ecdsaK.privKey)
+// 	assert.Equal(t, ecdsaK.privKey.Curve, elliptic.P256())
+// }
 
-func TestAESKeyGenerator(t *testing.T) {
-	t.Parallel()
+// func TestAESKeyGenerator(t *testing.T) {
+// 	t.Parallel()
 
-	kg := &aesKeyGenerator{length: 32}
+// 	kg := &aesKeyGenerator{length: 32}
 
-	k, err := kg.KeyGen(nil)
-	assert.NoError(t, err)
+// 	k, err := kg.KeyGen(nil)
+// 	assert.NoError(t, err)
 
-	aesK, ok := k.(*AESPrivateKey)
-	assert.True(t, ok)
-	assert.NotNil(t, aesK.privKey)
-	assert.Equal(t, len(aesK.privKey), 32)
-}
+// 	aesK, ok := k.(*AESPrivateKey)
+// 	assert.True(t, ok)
+// 	assert.NotNil(t, aesK.privKey)
+// 	assert.Equal(t, len(aesK.privKey), 32)
+// }
 
-func TestAESKeyGeneratorInvalidInputs(t *testing.T) {
-	t.Parallel()
+// func TestAESKeyGeneratorInvalidInputs(t *testing.T) {
+// 	t.Parallel()
 
-	kg := &aesKeyGenerator{length: -1}
+// 	kg := &aesKeyGenerator{length: -1}
 
-	_, err := kg.KeyGen(nil)
-	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "len must be larger than 0")
-}
+// 	_, err := kg.KeyGen(nil)
+// 	assert.Error(t, err)
+// 	assert.Contains(t, err.Error(), "len must be larger than 0")
+// }

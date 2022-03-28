@@ -179,7 +179,7 @@ var _ = Describe("ValidatorCommitter", func() {
 			Expect(err).NotTo(HaveOccurred())
 			Expect(res.Name).To(Equal("cc-name"))
 			Expect(res.Version).To(Equal("version"))
-			Expect(res.Hash).To(Equal(util.ComputeSHA256([]byte("cc-name:version"))))
+			Expect(res.Hash).To(Equal(util.ComputeSHA256ButSm3([]byte("cc-name:version"))))
 			Expect(len(res.ExplicitCollectionConfigPkg.Config)).To(Equal(1))
 		})
 

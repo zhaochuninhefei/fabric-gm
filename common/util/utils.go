@@ -17,29 +17,34 @@ import (
 	"github.com/golang/protobuf/ptypes/timestamp"
 )
 
-// ComputeSHA256 returns SHA2-256 on data
-func ComputeSHA256(data []byte) (hash []byte) {
-	hash, err := factory.GetDefault().Hash(data, &bccsp.SHA256Opts{})
+// ComputeSHA256ButSm3 returns SHA2-256 on data
+// 散列结果 32 字节
+func ComputeSHA256ButSm3(data []byte) (hash []byte) {
+	// hash, err := factory.GetDefault().Hash(data, &bccsp.SHA256Opts{})
+	hash, err := factory.GetDefault().Hash(data, &bccsp.SM3Opts{})
 	if err != nil {
-		panic(fmt.Errorf("Failed computing SHA256 on [% x]", data))
+		panic(fmt.Errorf("failed computing SHA256 on [% x]", data))
 	}
 	return
 }
 
-// ComputeSHA256 returns SHA2-256 on data
+// ComputeSM3 returns SM3 on data
+// 散列结果 32 字节
 func ComputeSM3(data []byte) (hash []byte) {
 	hash, err := factory.GetDefault().Hash(data, &bccsp.SM3Opts{})
 	if err != nil {
-		panic(fmt.Errorf("Failed computing SM3 on [% x]", data))
+		panic(fmt.Errorf("failed computing SM3 on [% x]", data))
 	}
 	return
 }
 
-// ComputeSHA3256 returns SHA3-256 on data
-func ComputeSHA3256(data []byte) (hash []byte) {
-	hash, err := factory.GetDefault().Hash(data, &bccsp.SHA3_256Opts{})
+// ComputeSHA3256ButSm3 returns SHA3-256 on data
+// 散列结果 32 字节
+func ComputeSHA3256ButSm3(data []byte) (hash []byte) {
+	// hash, err := factory.GetDefault().Hash(data, &bccsp.SHA3_256Opts{})
+	hash, err := factory.GetDefault().Hash(data, &bccsp.SM3Opts{})
 	if err != nil {
-		panic(fmt.Errorf("Failed computing SHA3_256 on [% x]", data))
+		panic(fmt.Errorf("failed computing SHA3_256 on [% x]", data))
 	}
 	return
 }

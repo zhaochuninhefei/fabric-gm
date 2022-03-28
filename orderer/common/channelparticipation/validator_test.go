@@ -117,7 +117,7 @@ func blockWithGroups(groups map[string]*cb.ConfigGroup, channelID string) *cb.Bl
 									Values: map[string]*cb.ConfigValue{
 										"HashingAlgorithm": {
 											Value: protoutil.MarshalOrPanic(&cb.HashingAlgorithm{
-												Name: bccsp.SHA256,
+												Name: bccsp.SM3,
 											}),
 										},
 										"BlockDataHashingStructure": {

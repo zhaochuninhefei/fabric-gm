@@ -38,8 +38,8 @@ func TestSigner(t *testing.T) {
 	// r, s, err := utils.UnmarshalECDSASignature(sig)
 	r, s, err := sw.UnmarshalSM2Signature(sig)
 	assert.NoError(t, err)
-	// TODO Verify -> Sm2Verify
-	sm2.Sm2Verify(&signer.key.PublicKey, util.ComputeSHA256(msg), nil, r, s)
+	// Verify -> Sm2Verify ComputeSHA256 -> ComputeSM3
+	sm2.Sm2Verify(&signer.key.PublicKey, util.ComputeSM3(msg), nil, r, s)
 }
 
 func TestSignerDifferentFormats(t *testing.T) {

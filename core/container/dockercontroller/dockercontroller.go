@@ -491,7 +491,7 @@ func (vm *DockerVM) GetVMNameForDocker(ccid string) (string, error) {
 	// pre-2.0 used "-" as the separator in the ccid, so replace ":" with
 	// "-" here to ensure 2.0 peers can find pre-2.0 cc images
 	name = strings.ReplaceAll(name, ":", "-")
-	hash := hex.EncodeToString(util.ComputeSHA256([]byte(name)))
+	hash := hex.EncodeToString(util.ComputeSHA256ButSm3([]byte(name)))
 	saniName := vmRegExp.ReplaceAllString(name, "-")
 	imageName := strings.ToLower(fmt.Sprintf("%s-%s", saniName, hash))
 

@@ -170,7 +170,7 @@ func (m MapLedgerShim) GetState(key string) (value []byte, err error) {
 
 func (m MapLedgerShim) GetStateHash(key string) (value []byte, err error) {
 	if val, ok := m[key]; ok {
-		return util.ComputeSHA256(val), nil
+		return util.ComputeSHA256ButSm3(val), nil
 	}
 	return nil, nil
 }

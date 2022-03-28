@@ -23,19 +23,19 @@ import (
 )
 
 func TestComputeSHA256(t *testing.T) {
-	if !bytes.Equal(ComputeSHA256([]byte("foobar")), ComputeSHA256([]byte("foobar"))) {
+	if !bytes.Equal(ComputeSHA256ButSm3([]byte("foobar")), ComputeSHA256ButSm3([]byte("foobar"))) {
 		t.Fatalf("Expected hashes to match, but they did not match")
 	}
-	if bytes.Equal(ComputeSHA256([]byte("foobar1")), ComputeSHA256([]byte("foobar2"))) {
+	if bytes.Equal(ComputeSHA256ButSm3([]byte("foobar1")), ComputeSHA256ButSm3([]byte("foobar2"))) {
 		t.Fatalf("Expected hashes to be different, but they match")
 	}
 }
 
 func TestComputeSHA3256(t *testing.T) {
-	if !bytes.Equal(ComputeSHA3256([]byte("foobar")), ComputeSHA3256([]byte("foobar"))) {
+	if !bytes.Equal(ComputeSHA3256ButSm3([]byte("foobar")), ComputeSHA3256ButSm3([]byte("foobar"))) {
 		t.Fatalf("Expected hashes to match, but they did not match")
 	}
-	if bytes.Equal(ComputeSHA3256([]byte("foobar1")), ComputeSHA3256([]byte("foobar2"))) {
+	if bytes.Equal(ComputeSHA3256ButSm3([]byte("foobar1")), ComputeSHA3256ButSm3([]byte("foobar2"))) {
 		t.Fatalf("Expected hashed to be different, but they match")
 	}
 }

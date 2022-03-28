@@ -85,7 +85,7 @@ type PrivateRWSet []byte
 
 // Digest returns a deterministic and collision-free representation of the PrivateRWSet
 func (rws PrivateRWSet) Digest() string {
-	return hex.EncodeToString(util.ComputeSHA256(rws))
+	return hex.EncodeToString(util.ComputeSHA256ButSm3(rws))
 }
 
 // PrivateRWSetWithConfig encapsulates private read-write set

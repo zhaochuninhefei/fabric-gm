@@ -16,10 +16,7 @@ limitations under the License.
 package signer
 
 import (
-	"crypto/ecdsa"
-	"crypto/elliptic"
 	"crypto/rand"
-	"crypto/x509"
 	"encoding/hex"
 	"errors"
 	"fmt"
@@ -28,7 +25,6 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/mocks"
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/sw"
-	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/utils"
 	"gitee.com/zhaochuninhefei/gmgo/sm2"
 	gmx509 "gitee.com/zhaochuninhefei/gmgo/x509"
 	"github.com/stretchr/testify/assert"
@@ -56,25 +52,25 @@ func TestInitFailures(t *testing.T) {
 	assert.Error(t, err)
 }
 
-func TestInit(t *testing.T) {
-	k, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
-	assert.NoError(t, err)
-	pkRaw, err := x509.MarshalPKIXPublicKey(&k.PublicKey)
-	assert.NoError(t, err)
+// func TestInit(t *testing.T) {
+// 	k, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
+// 	assert.NoError(t, err)
+// 	pkRaw, err := x509.MarshalPKIXPublicKey(&k.PublicKey)
+// 	assert.NoError(t, err)
 
-	signer, err := New(&mocks.MockBCCSP{}, &mocks.MockKey{PK: &mocks.MockKey{BytesValue: pkRaw}})
-	assert.NoError(t, err)
-	assert.NotNil(t, signer)
+// 	signer, err := New(&mocks.MockBCCSP{}, &mocks.MockKey{PK: &mocks.MockKey{BytesValue: pkRaw}})
+// 	assert.NoError(t, err)
+// 	assert.NotNil(t, signer)
 
-	// Test public key
-	R, S, err := ecdsa.Sign(rand.Reader, k, []byte{0, 1, 2, 3})
-	assert.NoError(t, err)
-	fmt.Printf("签名: %d, %d\n", R, S)
-	sign, _ := utils.MarshalECDSASignature(R, S)
-	fmt.Printf("签名: %s", hex.EncodeToString(sign))
+// 	// Test public key
+// 	R, S, err := ecdsa.Sign(rand.Reader, k, []byte{0, 1, 2, 3})
+// 	assert.NoError(t, err)
+// 	fmt.Printf("签名: %d, %d\n", R, S)
+// 	sign, _ := utils.MarshalECDSASignature(R, S)
+// 	fmt.Printf("签名: %s", hex.EncodeToString(sign))
 
-	assert.True(t, ecdsa.Verify(signer.Public().(*ecdsa.PublicKey), []byte{0, 1, 2, 3}, R, S))
-}
+// 	assert.True(t, ecdsa.Verify(signer.Public().(*ecdsa.PublicKey), []byte{0, 1, 2, 3}, R, S))
+// }
 
 func TestInitSm2(t *testing.T) {
 	k, err := sm2.GenerateKey(rand.Reader)

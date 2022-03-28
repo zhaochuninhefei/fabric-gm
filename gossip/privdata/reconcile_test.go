@@ -145,7 +145,7 @@ func TestReconciliationHappyPathWithoutScheduler(t *testing.T) {
 				// block's private data could not be fetched
 				continue
 			}
-			hash := util2.ComputeSHA256([]byte("rws-pre-image"))
+			hash := util2.ComputeSHA256ButSm3([]byte("rws-pre-image"))
 			element := &gossip2.PvtDataElement{
 				Digest: &gossip2.PvtDataDigest{
 					TxId:       digest.TxId,
@@ -246,7 +246,7 @@ func TestReconciliationHappyPathWithScheduler(t *testing.T) {
 		var dig2CollectionConfig = args.Get(0).(privdatacommon.Dig2CollectionConfig)
 		assert.Equal(t, 1, len(dig2CollectionConfig))
 		for digest := range dig2CollectionConfig {
-			hash := util2.ComputeSHA256([]byte("rws-pre-image"))
+			hash := util2.ComputeSHA256ButSm3([]byte("rws-pre-image"))
 			element := &gossip2.PvtDataElement{
 				Digest: &gossip2.PvtDataDigest{
 					TxId:       digest.TxId,
@@ -371,7 +371,7 @@ func TestReconciliationPullingMissingPrivateDataAtOnePass(t *testing.T) {
 		var dig2CollectionConfig = args.Get(0).(privdatacommon.Dig2CollectionConfig)
 		assert.Equal(t, 1, len(dig2CollectionConfig))
 		for digest := range dig2CollectionConfig {
-			hash := util2.ComputeSHA256([]byte("rws-pre-image"))
+			hash := util2.ComputeSHA256ButSm3([]byte("rws-pre-image"))
 			element := &gossip2.PvtDataElement{
 				Digest: &gossip2.PvtDataDigest{
 					TxId:       digest.TxId,
@@ -471,7 +471,7 @@ func TestReconciliationFailedToCommit(t *testing.T) {
 		var dig2CollectionConfig = args.Get(0).(privdatacommon.Dig2CollectionConfig)
 		assert.Equal(t, 1, len(dig2CollectionConfig))
 		for digest := range dig2CollectionConfig {
-			hash := util2.ComputeSHA256([]byte("rws-pre-image"))
+			hash := util2.ComputeSHA256ButSm3([]byte("rws-pre-image"))
 			element := &gossip2.PvtDataElement{
 				Digest: &gossip2.PvtDataDigest{
 					TxId:       digest.TxId,

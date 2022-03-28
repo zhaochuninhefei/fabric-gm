@@ -16,210 +16,214 @@ limitations under the License.
 
 package sw
 
-import (
-	"bytes"
-	"crypto/aes"
-	"crypto/cipher"
-	"crypto/rand"
-	"errors"
-	"fmt"
-	"io"
-
-	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
-)
-
 /*
-bccsp/sw/aes.go 实现`sw.Encryptor`接口和`sw.Decryptor`接口(bccsp/sw/internals.go)
+bccsp/sw/aes.go 国密对应后废弃
 */
 
-// GetRandomBytes returns len random looking bytes
-func GetRandomBytes(len int) ([]byte, error) {
-	if len < 0 {
-		return nil, errors.New("len must be larger than 0")
-	}
+// import (
+// 	"bytes"
+// 	"crypto/aes"
+// 	"crypto/cipher"
+// 	"crypto/rand"
+// 	"errors"
+// 	"fmt"
+// 	"io"
 
-	buffer := make([]byte, len)
+// 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
+// )
 
-	n, err := rand.Read(buffer)
-	if err != nil {
-		return nil, err
-	}
-	if n != len {
-		return nil, fmt.Errorf("buffer not filled. Requested [%d], got [%d]", len, n)
-	}
+// /*
+// bccsp/sw/aes.go 实现`sw.Encryptor`接口和`sw.Decryptor`接口(bccsp/sw/internals.go)
+// */
 
-	return buffer, nil
-}
+// // GetRandomBytes returns len random looking bytes
+// func GetRandomBytes(len int) ([]byte, error) {
+// 	if len < 0 {
+// 		return nil, errors.New("len must be larger than 0")
+// 	}
 
-func pkcs7Padding(src []byte) []byte {
-	padding := aes.BlockSize - len(src)%aes.BlockSize
-	padtext := bytes.Repeat([]byte{byte(padding)}, padding)
-	return append(src, padtext...)
-}
+// 	buffer := make([]byte, len)
 
-func pkcs7UnPadding(src []byte) ([]byte, error) {
-	length := len(src)
-	unpadding := int(src[length-1])
+// 	n, err := rand.Read(buffer)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	if n != len {
+// 		return nil, fmt.Errorf("buffer not filled. Requested [%d], got [%d]", len, n)
+// 	}
 
-	if unpadding > aes.BlockSize || unpadding == 0 {
-		return nil, errors.New("invalid pkcs7 padding (unpadding > aes.BlockSize || unpadding == 0)")
-	}
+// 	return buffer, nil
+// }
 
-	pad := src[len(src)-unpadding:]
-	for i := 0; i < unpadding; i++ {
-		if pad[i] != byte(unpadding) {
-			return nil, errors.New("invalid pkcs7 padding (pad[i] != unpadding)")
-		}
-	}
+// func pkcs7Padding(src []byte) []byte {
+// 	padding := aes.BlockSize - len(src)%aes.BlockSize
+// 	padtext := bytes.Repeat([]byte{byte(padding)}, padding)
+// 	return append(src, padtext...)
+// }
 
-	return src[:(length - unpadding)], nil
-}
+// func pkcs7UnPadding(src []byte) ([]byte, error) {
+// 	length := len(src)
+// 	unpadding := int(src[length-1])
 
-func aesCBCEncrypt(key, s []byte) ([]byte, error) {
-	return aesCBCEncryptWithRand(rand.Reader, key, s)
-}
+// 	if unpadding > aes.BlockSize || unpadding == 0 {
+// 		return nil, errors.New("invalid pkcs7 padding (unpadding > aes.BlockSize || unpadding == 0)")
+// 	}
 
-func aesCBCEncryptWithRand(prng io.Reader, key, s []byte) ([]byte, error) {
-	if len(s)%aes.BlockSize != 0 {
-		return nil, errors.New("invalid plaintext. It must be a multiple of the block size")
-	}
+// 	pad := src[len(src)-unpadding:]
+// 	for i := 0; i < unpadding; i++ {
+// 		if pad[i] != byte(unpadding) {
+// 			return nil, errors.New("invalid pkcs7 padding (pad[i] != unpadding)")
+// 		}
+// 	}
 
-	block, err := aes.NewCipher(key)
-	if err != nil {
-		return nil, err
-	}
+// 	return src[:(length - unpadding)], nil
+// }
 
-	ciphertext := make([]byte, aes.BlockSize+len(s))
-	iv := ciphertext[:aes.BlockSize]
-	if _, err := io.ReadFull(prng, iv); err != nil {
-		return nil, err
-	}
+// func aesCBCEncrypt(key, s []byte) ([]byte, error) {
+// 	return aesCBCEncryptWithRand(rand.Reader, key, s)
+// }
 
-	mode := cipher.NewCBCEncrypter(block, iv)
-	mode.CryptBlocks(ciphertext[aes.BlockSize:], s)
+// func aesCBCEncryptWithRand(prng io.Reader, key, s []byte) ([]byte, error) {
+// 	if len(s)%aes.BlockSize != 0 {
+// 		return nil, errors.New("invalid plaintext. It must be a multiple of the block size")
+// 	}
 
-	return ciphertext, nil
-}
+// 	block, err := aes.NewCipher(key)
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-func aesCBCEncryptWithIV(IV []byte, key, s []byte) ([]byte, error) {
-	if len(s)%aes.BlockSize != 0 {
-		return nil, errors.New("invalid plaintext. It must be a multiple of the block size")
-	}
+// 	ciphertext := make([]byte, aes.BlockSize+len(s))
+// 	iv := ciphertext[:aes.BlockSize]
+// 	if _, err := io.ReadFull(prng, iv); err != nil {
+// 		return nil, err
+// 	}
 
-	if len(IV) != aes.BlockSize {
-		return nil, errors.New("invalid IV. It must have length the block size")
-	}
+// 	mode := cipher.NewCBCEncrypter(block, iv)
+// 	mode.CryptBlocks(ciphertext[aes.BlockSize:], s)
 
-	block, err := aes.NewCipher(key)
-	if err != nil {
-		return nil, err
-	}
+// 	return ciphertext, nil
+// }
 
-	ciphertext := make([]byte, aes.BlockSize+len(s))
-	copy(ciphertext[:aes.BlockSize], IV)
+// func aesCBCEncryptWithIV(IV []byte, key, s []byte) ([]byte, error) {
+// 	if len(s)%aes.BlockSize != 0 {
+// 		return nil, errors.New("invalid plaintext. It must be a multiple of the block size")
+// 	}
 
-	mode := cipher.NewCBCEncrypter(block, IV)
-	mode.CryptBlocks(ciphertext[aes.BlockSize:], s)
+// 	if len(IV) != aes.BlockSize {
+// 		return nil, errors.New("invalid IV. It must have length the block size")
+// 	}
 
-	return ciphertext, nil
-}
+// 	block, err := aes.NewCipher(key)
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-func aesCBCDecrypt(key, src []byte) ([]byte, error) {
-	block, err := aes.NewCipher(key)
-	if err != nil {
-		return nil, err
-	}
+// 	ciphertext := make([]byte, aes.BlockSize+len(s))
+// 	copy(ciphertext[:aes.BlockSize], IV)
 
-	if len(src) < aes.BlockSize {
-		return nil, errors.New("invalid ciphertext. It must be a multiple of the block size")
-	}
-	iv := src[:aes.BlockSize]
-	src = src[aes.BlockSize:]
+// 	mode := cipher.NewCBCEncrypter(block, IV)
+// 	mode.CryptBlocks(ciphertext[aes.BlockSize:], s)
 
-	if len(src)%aes.BlockSize != 0 {
-		return nil, errors.New("invalid ciphertext. It must be a multiple of the block size")
-	}
+// 	return ciphertext, nil
+// }
 
-	mode := cipher.NewCBCDecrypter(block, iv)
+// func aesCBCDecrypt(key, src []byte) ([]byte, error) {
+// 	block, err := aes.NewCipher(key)
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	mode.CryptBlocks(src, src)
+// 	if len(src) < aes.BlockSize {
+// 		return nil, errors.New("invalid ciphertext. It must be a multiple of the block size")
+// 	}
+// 	iv := src[:aes.BlockSize]
+// 	src = src[aes.BlockSize:]
 
-	return src, nil
-}
+// 	if len(src)%aes.BlockSize != 0 {
+// 		return nil, errors.New("invalid ciphertext. It must be a multiple of the block size")
+// 	}
 
-// AESCBCPKCS7Encrypt combines CBC encryption and PKCS7 padding
-func AESCBCPKCS7Encrypt(key, src []byte) ([]byte, error) {
-	// First pad
-	tmp := pkcs7Padding(src)
+// 	mode := cipher.NewCBCDecrypter(block, iv)
 
-	// Then encrypt
-	return aesCBCEncrypt(key, tmp)
-}
+// 	mode.CryptBlocks(src, src)
 
-// AESCBCPKCS7Encrypt combines CBC encryption and PKCS7 padding using as prng the passed to the function
-func AESCBCPKCS7EncryptWithRand(prng io.Reader, key, src []byte) ([]byte, error) {
-	// First pad
-	tmp := pkcs7Padding(src)
+// 	return src, nil
+// }
 
-	// Then encrypt
-	return aesCBCEncryptWithRand(prng, key, tmp)
-}
+// // AESCBCPKCS7Encrypt combines CBC encryption and PKCS7 padding
+// func AESCBCPKCS7Encrypt(key, src []byte) ([]byte, error) {
+// 	// First pad
+// 	tmp := pkcs7Padding(src)
 
-// AESCBCPKCS7Encrypt combines CBC encryption and PKCS7 padding, the IV used is the one passed to the function
-func AESCBCPKCS7EncryptWithIV(IV []byte, key, src []byte) ([]byte, error) {
-	// First pad
-	tmp := pkcs7Padding(src)
+// 	// Then encrypt
+// 	return aesCBCEncrypt(key, tmp)
+// }
 
-	// Then encrypt
-	return aesCBCEncryptWithIV(IV, key, tmp)
-}
+// // AESCBCPKCS7Encrypt combines CBC encryption and PKCS7 padding using as prng the passed to the function
+// func AESCBCPKCS7EncryptWithRand(prng io.Reader, key, src []byte) ([]byte, error) {
+// 	// First pad
+// 	tmp := pkcs7Padding(src)
 
-// AESCBCPKCS7Decrypt combines CBC decryption and PKCS7 unpadding
-func AESCBCPKCS7Decrypt(key, src []byte) ([]byte, error) {
-	// First decrypt
-	pt, err := aesCBCDecrypt(key, src)
-	if err == nil {
-		return pkcs7UnPadding(pt)
-	}
-	return nil, err
-}
+// 	// Then encrypt
+// 	return aesCBCEncryptWithRand(prng, key, tmp)
+// }
 
-type aescbcpkcs7Encryptor struct{}
+// // AESCBCPKCS7Encrypt combines CBC encryption and PKCS7 padding, the IV used is the one passed to the function
+// func AESCBCPKCS7EncryptWithIV(IV []byte, key, src []byte) ([]byte, error) {
+// 	// First pad
+// 	tmp := pkcs7Padding(src)
 
-func (e *aescbcpkcs7Encryptor) Encrypt(k bccsp.Key, plaintext []byte, opts bccsp.EncrypterOpts) ([]byte, error) {
-	switch o := opts.(type) {
-	case *bccsp.AESCBCPKCS7ModeOpts:
-		// AES in CBC mode with PKCS7 padding
+// 	// Then encrypt
+// 	return aesCBCEncryptWithIV(IV, key, tmp)
+// }
 
-		if len(o.IV) != 0 && o.PRNG != nil {
-			return nil, errors.New("invalid options. Either IV or PRNG should be different from nil, or both nil")
-		}
+// // AESCBCPKCS7Decrypt combines CBC decryption and PKCS7 unpadding
+// func AESCBCPKCS7Decrypt(key, src []byte) ([]byte, error) {
+// 	// First decrypt
+// 	pt, err := aesCBCDecrypt(key, src)
+// 	if err == nil {
+// 		return pkcs7UnPadding(pt)
+// 	}
+// 	return nil, err
+// }
 
-		if len(o.IV) != 0 {
-			// Encrypt with the passed IV
-			return AESCBCPKCS7EncryptWithIV(o.IV, k.(*AESPrivateKey).privKey, plaintext)
-		} else if o.PRNG != nil {
-			// Encrypt with PRNG
-			return AESCBCPKCS7EncryptWithRand(o.PRNG, k.(*AESPrivateKey).privKey, plaintext)
-		}
-		// AES in CBC mode with PKCS7 padding
-		return AESCBCPKCS7Encrypt(k.(*AESPrivateKey).privKey, plaintext)
-	case bccsp.AESCBCPKCS7ModeOpts:
-		return e.Encrypt(k, plaintext, &o)
-	default:
-		return nil, fmt.Errorf("mode not recognized [%s]", opts)
-	}
-}
+// type aescbcpkcs7Encryptor struct{}
 
-type aescbcpkcs7Decryptor struct{}
+// func (e *aescbcpkcs7Encryptor) Encrypt(k bccsp.Key, plaintext []byte, opts bccsp.EncrypterOpts) ([]byte, error) {
+// 	switch o := opts.(type) {
+// 	case *bccsp.AESCBCPKCS7ModeOpts:
+// 		// AES in CBC mode with PKCS7 padding
 
-func (*aescbcpkcs7Decryptor) Decrypt(k bccsp.Key, ciphertext []byte, opts bccsp.DecrypterOpts) ([]byte, error) {
-	// check for mode
-	switch opts.(type) {
-	case *bccsp.AESCBCPKCS7ModeOpts, bccsp.AESCBCPKCS7ModeOpts:
-		// AES in CBC mode with PKCS7 padding
-		return AESCBCPKCS7Decrypt(k.(*AESPrivateKey).privKey, ciphertext)
-	default:
-		return nil, fmt.Errorf("mode not recognized [%s]", opts)
-	}
-}
+// 		if len(o.IV) != 0 && o.PRNG != nil {
+// 			return nil, errors.New("invalid options. Either IV or PRNG should be different from nil, or both nil")
+// 		}
+
+// 		if len(o.IV) != 0 {
+// 			// Encrypt with the passed IV
+// 			return AESCBCPKCS7EncryptWithIV(o.IV, k.(*AESPrivateKey).privKey, plaintext)
+// 		} else if o.PRNG != nil {
+// 			// Encrypt with PRNG
+// 			return AESCBCPKCS7EncryptWithRand(o.PRNG, k.(*AESPrivateKey).privKey, plaintext)
+// 		}
+// 		// AES in CBC mode with PKCS7 padding
+// 		return AESCBCPKCS7Encrypt(k.(*AESPrivateKey).privKey, plaintext)
+// 	case bccsp.AESCBCPKCS7ModeOpts:
+// 		return e.Encrypt(k, plaintext, &o)
+// 	default:
+// 		return nil, fmt.Errorf("mode not recognized [%s]", opts)
+// 	}
+// }
+
+// type aescbcpkcs7Decryptor struct{}
+
+// func (*aescbcpkcs7Decryptor) Decrypt(k bccsp.Key, ciphertext []byte, opts bccsp.DecrypterOpts) ([]byte, error) {
+// 	// check for mode
+// 	switch opts.(type) {
+// 	case *bccsp.AESCBCPKCS7ModeOpts, bccsp.AESCBCPKCS7ModeOpts:
+// 		// AES in CBC mode with PKCS7 padding
+// 		return AESCBCPKCS7Decrypt(k.(*AESPrivateKey).privKey, ciphertext)
+// 	default:
+// 		return nil, fmt.Errorf("mode not recognized [%s]", opts)
+// 	}
+// }

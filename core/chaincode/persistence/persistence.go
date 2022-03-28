@@ -145,7 +145,7 @@ func (s *Store) Initialize() {
 // Save persists chaincode install package bytes. It returns
 // the hash of the chaincode install package
 func (s *Store) Save(label string, ccInstallPkg []byte) (string, error) {
-	hash := util.ComputeSHA256(ccInstallPkg)
+	hash := util.ComputeSHA256ButSm3(ccInstallPkg)
 	packageID := packageID(label, hash)
 
 	ccInstallPkgFileName := CCFileName(packageID)

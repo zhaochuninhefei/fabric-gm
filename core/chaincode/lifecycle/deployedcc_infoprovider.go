@@ -97,7 +97,7 @@ func (vc *ValidatorCommitter) ChaincodeInfo(channelName, chaincodeName string, q
 	return &ledger.DeployedChaincodeInfo{
 		Name:                        chaincodeName,
 		Version:                     definedChaincode.EndorsementInfo.Version,
-		Hash:                        util.ComputeSHA256([]byte(chaincodeName + ":" + definedChaincode.EndorsementInfo.Version)),
+		Hash:                        util.ComputeSHA256ButSm3([]byte(chaincodeName + ":" + definedChaincode.EndorsementInfo.Version)),
 		ExplicitCollectionConfigPkg: definedChaincode.Collections,
 		IsLegacy:                    false,
 	}, nil

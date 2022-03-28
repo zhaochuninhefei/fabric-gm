@@ -17,7 +17,6 @@ limitations under the License.
 package msp
 
 import (
-	"crypto/elliptic"
 	"crypto/rand"
 	"crypto/x509/pkix"
 	"encoding/asn1"
@@ -30,43 +29,42 @@ import (
 	"gitee.com/zhaochuninhefei/gmgo/x509"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/sw"
-	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/utils"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestSanitizeCertWithRSA(t *testing.T) {
 	cert := &x509.Certificate{}
 	cert.SignatureAlgorithm = x509.SM2WithSM3
-	result := isECDSASignedCert(cert)
+	result := isSM2SignedCert(cert)
 	assert.False(t, result)
 
 	cert.SignatureAlgorithm = x509.SM2WithSM3
-	result = isECDSASignedCert(cert)
+	result = isSM2SignedCert(cert)
 	assert.True(t, result)
 }
 
-func TestSanitizeCertInvalidInput(t *testing.T) {
-	_, err := sanitizeECDSASignedCert(nil, nil)
-	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "certificate must be different from nil")
+// func TestSanitizeCertInvalidInput(t *testing.T) {
+// 	_, err := sanitizeECDSASignedCert(nil, nil)
+// 	assert.Error(t, err)
+// 	assert.Contains(t, err.Error(), "certificate must be different from nil")
 
-	_, err = sanitizeECDSASignedCert(&x509.Certificate{}, nil)
-	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "parent certificate must be different from nil")
+// 	_, err = sanitizeECDSASignedCert(&x509.Certificate{}, nil)
+// 	assert.Error(t, err)
+// 	assert.Contains(t, err.Error(), "parent certificate must be different from nil")
 
-	k, err := sm2.GenerateKey(rand.Reader)
-	assert.NoError(t, err)
-	cert := &x509.Certificate{}
-	cert.PublicKey = &k.PublicKey
-	sigma, err := utils.MarshalECDSASignature(big.NewInt(1), elliptic.P256().Params().N)
-	assert.NoError(t, err)
-	cert.Signature = sigma
-	cert.PublicKeyAlgorithm = x509.ECDSA
-	cert.Raw = []byte{0, 1}
-	_, err = sanitizeECDSASignedCert(cert, cert)
-	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "asn1: structure error: tags don't match")
-}
+// 	k, err := sm2.GenerateKey(rand.Reader)
+// 	assert.NoError(t, err)
+// 	cert := &x509.Certificate{}
+// 	cert.PublicKey = &k.PublicKey
+// 	sigma, err := utils.MarshalECDSASignature(big.NewInt(1), elliptic.P256().Params().N)
+// 	assert.NoError(t, err)
+// 	cert.Signature = sigma
+// 	cert.PublicKeyAlgorithm = x509.ECDSA
+// 	cert.Raw = []byte{0, 1}
+// 	_, err = sanitizeECDSASignedCert(cert, cert)
+// 	assert.Error(t, err)
+// 	assert.Contains(t, err.Error(), "asn1: structure error: tags don't match")
+// }
 
 /*func TestSanitizeCert(t *testing.T) {
 	var k *ecdsa.PrivateKey

@@ -287,7 +287,7 @@ func (pdp *PvtdataProvider) populateFromCache(pvtdata rwsetByKeys, pvtdataRetrie
 					seqInBlock: txPvtdata.SeqInBlock,
 					collection: col.CollectionName,
 					namespace:  ns.Namespace,
-					hash:       hex.EncodeToString(commonutil.ComputeSHA256(col.Rwset)),
+					hash:       hex.EncodeToString(commonutil.ComputeSHA256ButSm3(col.Rwset)),
 				}
 				// skip if key not originally missing
 				if _, missing := pvtdataRetrievalInfo.remainingEligibleMissingKeys[key]; !missing {
@@ -345,7 +345,7 @@ func (pdp *PvtdataProvider) populateFromTransientStore(pvtdata rwsetByKeys, pvtd
 						seqInBlock: k.seqInBlock,
 						collection: col.CollectionName,
 						namespace:  ns.Namespace,
-						hash:       hex.EncodeToString(commonutil.ComputeSHA256(col.Rwset)),
+						hash:       hex.EncodeToString(commonutil.ComputeSHA256ButSm3(col.Rwset)),
 					}
 					// skip if not missing
 					if _, missing := pvtdataRetrievalInfo.remainingEligibleMissingKeys[key]; !missing {
@@ -405,7 +405,7 @@ func (pdp *PvtdataProvider) populateFromRemotePeers(pvtdata rwsetByKeys, pvtdata
 				namespace:  dig.Namespace,
 				collection: dig.Collection,
 				seqInBlock: dig.SeqInBlock,
-				hash:       hex.EncodeToString(commonutil.ComputeSHA256(rws)),
+				hash:       hex.EncodeToString(commonutil.ComputeSHA256ButSm3(rws)),
 			}
 			// skip if not missing
 			if _, missing := pvtdataRetrievalInfo.remainingEligibleMissingKeys[key]; !missing {

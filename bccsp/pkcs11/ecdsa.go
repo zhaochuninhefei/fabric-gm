@@ -6,46 +6,50 @@ SPDX-License-Identifier: Apache-2.0
 
 package pkcs11
 
-import (
-	"crypto/ecdsa"
-	"fmt"
+/*
+bccsp/pkcs11/ecdsa.go 国密对应后废弃
+*/
 
-	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
-	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/utils"
-)
+// import (
+// 	"crypto/ecdsa"
+// 	"fmt"
 
-func (csp *impl) signECDSA(k ecdsaPrivateKey, digest []byte, opts bccsp.SignerOpts) ([]byte, error) {
-	r, s, err := csp.signP11ECDSA(k.ski, digest)
-	if err != nil {
-		return nil, err
-	}
+// 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
+// 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/utils"
+// )
 
-	s, err = utils.ToLowS(k.pub.pub, s)
-	if err != nil {
-		return nil, err
-	}
+// func (csp *impl) signECDSA(k ecdsaPrivateKey, digest []byte, opts bccsp.SignerOpts) ([]byte, error) {
+// 	r, s, err := csp.signP11ECDSA(k.ski, digest)
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	return utils.MarshalECDSASignature(r, s)
-}
+// 	s, err = utils.ToLowS(k.pub.pub, s)
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-func (csp *impl) verifyECDSA(k ecdsaPublicKey, signature, digest []byte, opts bccsp.SignerOpts) (bool, error) {
-	r, s, err := utils.UnmarshalECDSASignature(signature)
-	if err != nil {
-		return false, fmt.Errorf("failed unmashalling signature [%s]", err)
-	}
+// 	return utils.MarshalECDSASignature(r, s)
+// }
 
-	lowS, err := utils.IsLowS(k.pub, s)
-	if err != nil {
-		return false, err
-	}
+// func (csp *impl) verifyECDSA(k ecdsaPublicKey, signature, digest []byte, opts bccsp.SignerOpts) (bool, error) {
+// 	r, s, err := utils.UnmarshalECDSASignature(signature)
+// 	if err != nil {
+// 		return false, fmt.Errorf("failed unmashalling signature [%s]", err)
+// 	}
 
-	if !lowS {
-		return false, fmt.Errorf("invalid S. Must be smaller than half the order [%s][%s]", s, utils.GetCurveHalfOrdersAt(k.pub.Curve))
-	}
+// 	lowS, err := utils.IsLowS(k.pub, s)
+// 	if err != nil {
+// 		return false, err
+// 	}
 
-	if csp.softVerify {
-		return ecdsa.Verify(k.pub, digest, r, s), nil
-	}
+// 	if !lowS {
+// 		return false, fmt.Errorf("invalid S. Must be smaller than half the order [%s][%s]", s, utils.GetCurveHalfOrdersAt(k.pub.Curve))
+// 	}
 
-	return csp.verifyP11ECDSA(k.ski, digest, r, s, k.pub.Curve.Params().BitSize/8)
-}
+// 	if csp.softVerify {
+// 		return ecdsa.Verify(k.pub, digest, r, s), nil
+// 	}
+
+// 	return csp.verifyP11ECDSA(k.ski, digest, r, s, k.pub.Curve.Params().BitSize/8)
+// }

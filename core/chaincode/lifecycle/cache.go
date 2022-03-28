@@ -23,12 +23,14 @@ import (
 	"github.com/pkg/errors"
 )
 
+// Peer节点本地安装的合约信息(发起审议以后才会有?)
 type LocalChaincodeInfo struct {
 	Definition  *ChaincodeDefinition
 	Approved    bool
 	InstallInfo *ChaincodeInstallInfo
 }
 
+// 合约的安装信息
 type ChaincodeInstallInfo struct {
 	PackageID string
 	Type      string
@@ -36,20 +38,28 @@ type ChaincodeInstallInfo struct {
 	Label     string
 }
 
+// 提交到通道的合约定义缓存
 type CachedChaincodeDefinition struct {
-	Definition  *ChaincodeDefinition
+	Definition *ChaincodeDefinition
+	// 提交成功后 Approved 为true?
 	Approved    bool
 	InstallInfo *ChaincodeInstallInfo
 
+	// 该合约的hashKey集合(一个合约有多个hashKey指向它)
 	// Hashes is the list of hashed keys in the implicit collection referring to this definition.
 	// These hashes are determined by the current sequence number of chaincode definition.  When dirty,
 	// these hashes will be empty, and when not, they will be populated.
 	Hashes []string
 }
 
+// 通道合约缓存
+// 名为 ChannelCache 实际是通道里部署的合约的缓存
 type ChannelCache struct {
+	// 通道里部署的合约定义缓存集合
 	Chaincodes map[string]*CachedChaincodeDefinition
 
+	// InterestingHashes 用于存储干净(即已提交成功没有审议的合约?)的合约名(hashKey:合约名称)
+	// 这里的hashKey就来自每个合约的CachedChaincodeDefinition里定义的Hashes。
 	// InterestingHashes is a map of hashed key names to the chaincode name which they affect.
 	// These are to be used for the state listener, to mark chaincode definitions dirty when
 	// a write is made into the implicit collection for this org.  Interesting hashes are
@@ -64,7 +74,9 @@ type MetadataHandler interface {
 	UpdateMetadata(channel string, chaincodes chaincode.MetadataSet)
 }
 
+// 通道缓存?
 type Cache struct {
+	// 通道上部署的合约缓存
 	definedChaincodes map[string]*ChannelCache
 	Resources         *Resources
 	MyOrgMSPID        string
@@ -77,6 +89,13 @@ type Cache struct {
 	// chaincodes are installed and which channels that installed chaincode is currently in use on.
 	mutex sync.RWMutex
 
+	// localChaincodes是一个三层的map。
+	// 第一层是 合约proto编码散列的散列 : LocalChaincode
+	// 第二层是 LocalChaincode其内部的References 通道map集合
+	// 第三层是 每个通道对应的CachedChaincodeDefinition的map集合
+	// 大约是:peer节点安装智能合约，每个智能合约可以部署在不同的通道里，每个通道里部署的合约有多个历史版本(序列号)。
+	// TODO: 是否通道里不管在哪个peer安装了合约，都会向localChaincodes添加一条LocalChaincode？
+	// 如果一个合约被安装到多个peer上，这里仍然只有一条LocalChaincode？
 	// localChaincodes is a map from the hash of the locally installed chaincode's proto
 	// encoded hash (yes, the hash of the hash), to a set of channels, to a set of chaincode
 	// definitions which reference this local installed chaincode hash.
@@ -229,7 +248,7 @@ func (c *Cache) handleChaincodeInstalledWhileLocked(initializing bool, md *persi
 	encodedCCHash := protoutil.MarshalOrPanic(&lb.StateData{
 		Type: &lb.StateData_String_{String_: packageID},
 	})
-	hashOfCCHash := string(util.ComputeSHA256(encodedCCHash))
+	hashOfCCHash := string(util.ComputeSHA256ButSm3(encodedCCHash))
 	localChaincode, ok := c.localChaincodes[hashOfCCHash]
 	if !ok {
 		localChaincode = &LocalChaincode{
@@ -470,6 +489,7 @@ func (c *Cache) update(initializing bool, channelID string, dirtyChaincodes map[
 
 		privateName := fmt.Sprintf("%s#%d", name, chaincodeDefinition.Sequence)
 		hashKey := FieldKey(ChaincodeSourcesName, privateName, "PackageID")
+		// TODO: 需要确认GetStateHash有没有散列计算，如果有，采用的什么散列算法。
 		hashOfCCHash, err := orgState.GetStateHash(hashKey)
 		if err != nil {
 			return errors.WithMessagef(err, "could not check opaque org state for chaincode source hash for '%s' on channel '%s'", name, channelID)
@@ -526,11 +546,11 @@ func (c *Cache) update(initializing bool, channelID string, dirtyChaincodes map[
 		cachedChaincode.Approved = false
 
 		cachedChaincode.Hashes = []string{
-			string(util.ComputeSHA256([]byte(MetadataKey(NamespacesName, privateName)))),
-			string(util.ComputeSHA256([]byte(FieldKey(NamespacesName, privateName, "EndorsementInfo")))),
-			string(util.ComputeSHA256([]byte(FieldKey(NamespacesName, privateName, "ValidationInfo")))),
-			string(util.ComputeSHA256([]byte(FieldKey(NamespacesName, privateName, "Collections")))),
-			string(util.ComputeSHA256([]byte(FieldKey(ChaincodeSourcesName, privateName, "PackageID")))),
+			string(util.ComputeSHA256ButSm3([]byte(MetadataKey(NamespacesName, privateName)))),
+			string(util.ComputeSHA256ButSm3([]byte(FieldKey(NamespacesName, privateName, "EndorsementInfo")))),
+			string(util.ComputeSHA256ButSm3([]byte(FieldKey(NamespacesName, privateName, "ValidationInfo")))),
+			string(util.ComputeSHA256ButSm3([]byte(FieldKey(NamespacesName, privateName, "Collections")))),
+			string(util.ComputeSHA256ButSm3([]byte(FieldKey(ChaincodeSourcesName, privateName, "PackageID")))),
 		}
 
 		for _, hash := range cachedChaincode.Hashes {

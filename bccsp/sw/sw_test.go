@@ -18,12 +18,9 @@ package sw
 
 import (
 	"errors"
-	"reflect"
 	"testing"
 
-	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/mocks"
-	mocks2 "gitee.com/zhaochuninhefei/fabric-gm/bccsp/sw/mocks"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -40,56 +37,56 @@ func TestKeyGenInvalidInputs(t *testing.T) {
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "Unsupported 'KeyGenOpts' provided [")
 
-	_, err = csp.KeyGen(&bccsp.ECDSAP256KeyGenOpts{})
-	assert.Error(t, err, "Generation of a non-ephemeral key must fail. KeyStore is programmed to fail.")
-	assert.Contains(t, err.Error(), "cannot store key")
+	// _, err = csp.KeyGen(&bccsp.ECDSAP256KeyGenOpts{})
+	// assert.Error(t, err, "Generation of a non-ephemeral key must fail. KeyStore is programmed to fail.")
+	// assert.Contains(t, err.Error(), "cannot store key")
 }
 
-func TestKeyDerivInvalidInputs(t *testing.T) {
-	csp, err := NewWithParams(false, 256, "SHA2", &mocks.KeyStore{StoreKeyErr: errors.New("cannot store key")})
-	assert.NoError(t, err)
+// func TestKeyDerivInvalidInputs(t *testing.T) {
+// 	csp, err := NewWithParams(false, 256, "SHA2", &mocks.KeyStore{StoreKeyErr: errors.New("cannot store key")})
+// 	assert.NoError(t, err)
 
-	_, err = csp.KeyDeriv(nil, &bccsp.ECDSAReRandKeyOpts{})
-	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "Invalid Key. It must not be nil.")
+// 	_, err = csp.KeyDeriv(nil, &bccsp.ECDSAReRandKeyOpts{})
+// 	assert.Error(t, err)
+// 	assert.Contains(t, err.Error(), "Invalid Key. It must not be nil.")
 
-	_, err = csp.KeyDeriv(&mocks.MockKey{}, nil)
-	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "Invalid opts. It must not be nil.")
+// 	_, err = csp.KeyDeriv(&mocks.MockKey{}, nil)
+// 	assert.Error(t, err)
+// 	assert.Contains(t, err.Error(), "Invalid opts. It must not be nil.")
 
-	_, err = csp.KeyDeriv(&mocks.MockKey{}, &bccsp.ECDSAReRandKeyOpts{})
-	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "Unsupported 'Key' provided [")
+// 	_, err = csp.KeyDeriv(&mocks.MockKey{}, &bccsp.ECDSAReRandKeyOpts{})
+// 	assert.Error(t, err)
+// 	assert.Contains(t, err.Error(), "Unsupported 'Key' provided [")
 
-	keyDerivers := make(map[reflect.Type]KeyDeriver)
-	keyDerivers[reflect.TypeOf(&mocks.MockKey{})] = &mocks2.KeyDeriver{
-		KeyArg:  &mocks.MockKey{},
-		OptsArg: &mocks.KeyDerivOpts{EphemeralValue: false},
-		Value:   nil,
-		Err:     nil,
-	}
-	csp.(*CSP).KeyDerivers = keyDerivers
-	_, err = csp.KeyDeriv(&mocks.MockKey{}, &mocks.KeyDerivOpts{EphemeralValue: false})
-	assert.Error(t, err, "KeyDerivation of a non-ephemeral key must fail. KeyStore is programmed to fail.")
-	assert.Contains(t, err.Error(), "cannot store key")
-}
+// 	keyDerivers := make(map[reflect.Type]KeyDeriver)
+// 	keyDerivers[reflect.TypeOf(&mocks.MockKey{})] = &mocks2.KeyDeriver{
+// 		KeyArg:  &mocks.MockKey{},
+// 		OptsArg: &mocks.KeyDerivOpts{EphemeralValue: false},
+// 		Value:   nil,
+// 		Err:     nil,
+// 	}
+// 	csp.(*CSP).KeyDerivers = keyDerivers
+// 	_, err = csp.KeyDeriv(&mocks.MockKey{}, &mocks.KeyDerivOpts{EphemeralValue: false})
+// 	assert.Error(t, err, "KeyDerivation of a non-ephemeral key must fail. KeyStore is programmed to fail.")
+// 	assert.Contains(t, err.Error(), "cannot store key")
+// }
 
-func TestKeyImportInvalidInputs(t *testing.T) {
-	csp, err := NewWithParams(false, 256, "SHA2", &mocks.KeyStore{})
-	assert.NoError(t, err)
+// func TestKeyImportInvalidInputs(t *testing.T) {
+// 	csp, err := NewWithParams(false, 256, "SHA2", &mocks.KeyStore{})
+// 	assert.NoError(t, err)
 
-	_, err = csp.KeyImport(nil, &bccsp.AES256ImportKeyOpts{})
-	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "Invalid raw. It must not be nil.")
+// 	_, err = csp.KeyImport(nil, &bccsp.AES256ImportKeyOpts{})
+// 	assert.Error(t, err)
+// 	assert.Contains(t, err.Error(), "Invalid raw. It must not be nil.")
 
-	_, err = csp.KeyImport([]byte{0, 1, 2, 3, 4}, nil)
-	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "Invalid opts. It must not be nil.")
+// 	_, err = csp.KeyImport([]byte{0, 1, 2, 3, 4}, nil)
+// 	assert.Error(t, err)
+// 	assert.Contains(t, err.Error(), "Invalid opts. It must not be nil.")
 
-	_, err = csp.KeyImport([]byte{0, 1, 2, 3, 4}, &mocks.KeyImportOpts{})
-	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "Unsupported 'KeyImportOpts' provided [")
-}
+// 	_, err = csp.KeyImport([]byte{0, 1, 2, 3, 4}, &mocks.KeyImportOpts{})
+// 	assert.Error(t, err)
+// 	assert.Contains(t, err.Error(), "Unsupported 'KeyImportOpts' provided [")
+// }
 
 func TestGetKeyInvalidInputs(t *testing.T) {
 	// Init a BCCSP instance with a key store that returns an error on get
@@ -148,31 +145,31 @@ func TestVerifyInvalidInputs(t *testing.T) {
 	assert.Contains(t, err.Error(), "Unsupported 'VerifyKey' provided [")
 }
 
-func TestEncryptInvalidInputs(t *testing.T) {
-	csp, err := NewWithParams(false, 256, "SHA2", &mocks.KeyStore{})
-	assert.NoError(t, err)
+// func TestEncryptInvalidInputs(t *testing.T) {
+// 	csp, err := NewWithParams(false, 256, "SHA2", &mocks.KeyStore{})
+// 	assert.NoError(t, err)
 
-	_, err = csp.Encrypt(nil, []byte{1, 2, 3, 4}, &bccsp.AESCBCPKCS7ModeOpts{})
-	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "Invalid Key. It must not be nil.")
+// 	_, err = csp.Encrypt(nil, []byte{1, 2, 3, 4}, &bccsp.AESCBCPKCS7ModeOpts{})
+// 	assert.Error(t, err)
+// 	assert.Contains(t, err.Error(), "Invalid Key. It must not be nil.")
 
-	_, err = csp.Encrypt(&mocks.MockKey{}, []byte{1, 2, 3, 4}, &bccsp.AESCBCPKCS7ModeOpts{})
-	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "Unsupported 'EncryptKey' provided [")
-}
+// 	_, err = csp.Encrypt(&mocks.MockKey{}, []byte{1, 2, 3, 4}, &bccsp.AESCBCPKCS7ModeOpts{})
+// 	assert.Error(t, err)
+// 	assert.Contains(t, err.Error(), "Unsupported 'EncryptKey' provided [")
+// }
 
-func TestDecryptInvalidInputs(t *testing.T) {
-	csp, err := NewWithParams(false, 256, "SHA2", &mocks.KeyStore{})
-	assert.NoError(t, err)
+// func TestDecryptInvalidInputs(t *testing.T) {
+// 	csp, err := NewWithParams(false, 256, "SHA2", &mocks.KeyStore{})
+// 	assert.NoError(t, err)
 
-	_, err = csp.Decrypt(nil, []byte{1, 2, 3, 4}, &bccsp.AESCBCPKCS7ModeOpts{})
-	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "Invalid Key. It must not be nil.")
+// 	_, err = csp.Decrypt(nil, []byte{1, 2, 3, 4}, &bccsp.AESCBCPKCS7ModeOpts{})
+// 	assert.Error(t, err)
+// 	assert.Contains(t, err.Error(), "Invalid Key. It must not be nil.")
 
-	_, err = csp.Decrypt(&mocks.MockKey{}, []byte{1, 2, 3, 4}, &bccsp.AESCBCPKCS7ModeOpts{})
-	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "Unsupported 'DecryptKey' provided [")
-}
+// 	_, err = csp.Decrypt(&mocks.MockKey{}, []byte{1, 2, 3, 4}, &bccsp.AESCBCPKCS7ModeOpts{})
+// 	assert.Error(t, err)
+// 	assert.Contains(t, err.Error(), "Unsupported 'DecryptKey' provided [")
+// }
 
 func TestHashInvalidInputs(t *testing.T) {
 	csp, err := NewWithParams(false, 256, "SHA2", &mocks.KeyStore{})

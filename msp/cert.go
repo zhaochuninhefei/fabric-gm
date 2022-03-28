@@ -17,8 +17,6 @@ limitations under the License.
 package msp
 
 import (
-	"bytes"
-	"crypto/ecdsa"
 	"crypto/x509/pkix"
 	"encoding/asn1"
 	"encoding/pem"
@@ -29,7 +27,6 @@ import (
 	// _ "gitee.com/zhaochuninhefei/fabric-gm/bccsp/utils"
 	"gitee.com/zhaochuninhefei/gmgo/x509"
 
-	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/utils"
 	"github.com/pkg/errors"
 )
 
@@ -64,7 +61,7 @@ type tbsCertificate struct {
 	Extensions         []pkix.Extension `asn1:"optional,explicit,tag:3"`
 }
 
-/*func isECDSASignedCert(cert *x509.Certificate) bool {
+/*func isSM2SignedCert(cert *x509.Certificate) bool {
 	return cert.SignatureAlgorithm == x509.ECDSAWithSHA1 ||
 		cert.SignatureAlgorithm == x509.ECDSAWithSHA256 ||
 		cert.SignatureAlgorithm == x509.ECDSAWithSHA384 ||
@@ -72,12 +69,8 @@ type tbsCertificate struct {
 }
 */
 //TODO
-func isECDSASignedCert(cert *x509.Certificate) bool {
-	return cert.SignatureAlgorithm == x509.ECDSAWithSHA1 ||
-		cert.SignatureAlgorithm == x509.ECDSAWithSHA256 ||
-		cert.SignatureAlgorithm == x509.ECDSAWithSHA384 ||
-		cert.SignatureAlgorithm == x509.ECDSAWithSHA512 ||
-		cert.SignatureAlgorithm == x509.SM2WithSM3
+func isSM2SignedCert(cert *x509.Certificate) bool {
+	return cert.SignatureAlgorithm == x509.SM2WithSM3
 }
 
 // sanitizeECDSASignedCert checks that the signatures signing a cert
@@ -85,49 +78,48 @@ func isECDSASignedCert(cert *x509.Certificate) bool {
 // If the signature is not in low-S, then a new certificate is generated
 // that is equals to cert but the signature that is in low-S.
 //func sanitizeECDSASignedCert(cert *x509.Certificate, parentCert *x509.Certificate) (*x509.Certificate, error) {
-// TODO 需要确认是否写个新的函数代替该函数
-func sanitizeECDSASignedCert(cert *x509.Certificate, parentCert *x509.Certificate) (*x509.Certificate, error) {
-	if cert == nil {
-		return nil, errors.New("certificate must be different from nil")
-	}
-	if parentCert == nil {
-		return nil, errors.New("parent certificate must be different from nil")
-	}
+// func sanitizeECDSASignedCert(cert *x509.Certificate, parentCert *x509.Certificate) (*x509.Certificate, error) {
+// 	if cert == nil {
+// 		return nil, errors.New("certificate must be different from nil")
+// 	}
+// 	if parentCert == nil {
+// 		return nil, errors.New("parent certificate must be different from nil")
+// 	}
 
-	// TODO sm2 是否需要 SignatureToLowS
-	expectedSig, err := utils.SignatureToLowS(parentCert.PublicKey.(*ecdsa.PublicKey), cert.Signature)
-	if err != nil {
-		return nil, err
-	}
+// 	// TODO sm2 是否需要 SignatureToLowS
+// 	expectedSig, err := utils.SignatureToLowS(parentCert.PublicKey.(*ecdsa.PublicKey), cert.Signature)
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	// if sig == cert.Signature, nothing needs to be done
-	if bytes.Equal(cert.Signature, expectedSig) {
-		return cert, nil
-	}
-	// otherwise create a new certificate with the new signature
+// 	// if sig == cert.Signature, nothing needs to be done
+// 	if bytes.Equal(cert.Signature, expectedSig) {
+// 		return cert, nil
+// 	}
+// 	// otherwise create a new certificate with the new signature
 
-	// 1. Unmarshal cert.Raw to get an instance of certificate,
-	//    the lower level interface that represent an x509 certificate
-	//    encoding
-	var newCert certificate
-	newCert, err = certFromSM2Cert(cert)
-	if err != nil {
-		return nil, err
-	}
+// 	// 1. Unmarshal cert.Raw to get an instance of certificate,
+// 	//    the lower level interface that represent an x509 certificate
+// 	//    encoding
+// 	var newCert certificate
+// 	newCert, err = certFromSM2Cert(cert)
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	// 2. Change the signature
-	newCert.SignatureValue = asn1.BitString{Bytes: expectedSig, BitLength: len(expectedSig) * 8}
+// 	// 2. Change the signature
+// 	newCert.SignatureValue = asn1.BitString{Bytes: expectedSig, BitLength: len(expectedSig) * 8}
 
-	// 3. marshal again newCert. Raw must be nil
-	newCert.Raw = nil
-	newRaw, err := asn1.Marshal(newCert)
-	if err != nil {
-		return nil, errors.Wrap(err, "marshalling of the certificate failed")
-	}
+// 	// 3. marshal again newCert. Raw must be nil
+// 	newCert.Raw = nil
+// 	newRaw, err := asn1.Marshal(newCert)
+// 	if err != nil {
+// 		return nil, errors.Wrap(err, "marshalling of the certificate failed")
+// 	}
 
-	// 4. parse newRaw to get an x509 certificate
-	return x509.ParseCertificate(newRaw)
-}
+// 	// 4. parse newRaw to get an x509 certificate
+// 	return x509.ParseCertificate(newRaw)
+// }
 
 //func certFromX509Cert(cert *x509.Certificate) (certificate, error) {
 func certFromSM2Cert(cert *x509.Certificate) (certificate, error) {

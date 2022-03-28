@@ -1074,7 +1074,7 @@ func GenerateMAC(pkiID common.PKIidType, channelID common.ChannelID) []byte {
 	var preImage []byte
 	preImage = append(preImage, []byte(pkiID)...)
 	preImage = append(preImage, []byte(channelID)...)
-	return common_utils.ComputeSHA256(preImage)
+	return common_utils.ComputeSHA256ButSm3(preImage)
 }
 
 //membershipTracker is a struct for tracking changes in peers of the channel

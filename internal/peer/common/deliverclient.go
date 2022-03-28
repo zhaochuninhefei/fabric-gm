@@ -175,7 +175,7 @@ func NewDeliverClientForOrderer(channelID string, signer identity.SignerSerializ
 	// check for client certificate and create hash if present
 	var tlsCertHash []byte
 	if len(oc.Certificate().Certificate) > 0 {
-		tlsCertHash = util.ComputeSHA256(oc.Certificate().Certificate[0])
+		tlsCertHash = util.ComputeSHA256ButSm3(oc.Certificate().Certificate[0])
 	}
 	ds := &ordererDeliverService{dc}
 	o := &DeliverClient{
@@ -207,7 +207,7 @@ func NewDeliverClientForPeer(channelID string, signer identity.SignerSerializer,
 
 	// check for client certificate and create hash if present
 	if len(pc.Certificate().Certificate) > 0 {
-		tlsCertHash = util.ComputeSHA256(pc.Certificate().Certificate[0])
+		tlsCertHash = util.ComputeSHA256ButSm3(pc.Certificate().Certificate[0])
 	}
 	ds := &peerDeliverService{d}
 	p := &DeliverClient{

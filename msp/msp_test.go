@@ -30,7 +30,6 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/factory"
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/sw"
-	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/utils"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/config/configtest"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
 	"gitee.com/zhaochuninhefei/gmgo/pkcs12"
@@ -521,7 +520,8 @@ func TestIsWellFormed(t *testing.T) {
 	cert, err := x509.ParseCertificate(bl.Bytes)
 	assert.NoError(t, err)
 	// Obtain the ECDSA signature
-	r, s, err := utils.UnmarshalECDSASignature(cert.Signature)
+	// r, s, err := utils.UnmarshalECDSASignature(cert.Signature)
+	r, s, err := sw.UnmarshalSM2Signature(cert.Signature)
 	assert.NoError(t, err)
 
 	// Modify it by appending some bytes to its end.
@@ -740,7 +740,7 @@ func TestSignAndVerifyOtherHash(t *testing.T) {
 	}
 
 	hash := id.(*signingidentity).msp.cryptoConfig.SignatureHashFamily
-	id.(*signingidentity).msp.cryptoConfig.SignatureHashFamily = bccsp.SHA3
+	id.(*signingidentity).msp.cryptoConfig.SignatureHashFamily = bccsp.SM3
 
 	msg := []byte("foo")
 	sig, err := id.Sign(msg)
@@ -1497,7 +1497,7 @@ func TestMSPIdentityIdentifier(t *testing.T) {
 	assert.NoError(t, err)
 	bl, _ := pem.Decode(pems[0])
 	assert.NotNil(t, bl)
-	caCertFromFile, err := x509.ParseCertificate(bl.Bytes)
+	// caCertFromFile, err := x509.ParseCertificate(bl.Bytes)
 	assert.NoError(t, err)
 
 	pems, err = getPemMaterialFromDir("testdata/mspid/signcerts")
@@ -1510,18 +1510,20 @@ func TestMSPIdentityIdentifier(t *testing.T) {
 	assert.NotEqual(t, certFromFile.Raw, id.(*signingidentity).cert)
 
 	// Check that certFromFile is in HighS
-	_, S, err := utils.UnmarshalECDSASignature(certFromFile.Signature)
+	// _, S, err := utils.UnmarshalECDSASignature(certFromFile.Signature)
+	_, _, err = sw.UnmarshalSM2Signature(certFromFile.Signature)
 	assert.NoError(t, err)
-	lowS, err := utils.IsLowS(caCertFromFile.PublicKey.(*ecdsa.PublicKey), S)
-	assert.NoError(t, err)
-	assert.False(t, lowS)
+	// lowS, err := utils.IsLowS(caCertFromFile.PublicKey.(*ecdsa.PublicKey), S)
+	// assert.NoError(t, err)
+	// assert.False(t, lowS)
 
 	// Check that id.(*signingidentity).cert is in LoswS
-	_, S, err = utils.UnmarshalECDSASignature(id.(*signingidentity).cert.Signature)
+	// _, S, err = utils.UnmarshalECDSASignature(id.(*signingidentity).cert.Signature)
+	_, _, err = sw.UnmarshalSM2Signature(id.(*signingidentity).cert.Signature)
 	assert.NoError(t, err)
-	lowS, err = utils.IsLowS(caCertFromFile.PublicKey.(*ecdsa.PublicKey), S)
-	assert.NoError(t, err)
-	assert.True(t, lowS)
+	// lowS, err = utils.IsLowS(caCertFromFile.PublicKey.(*ecdsa.PublicKey), S)
+	// assert.NoError(t, err)
+	// assert.True(t, lowS)
 
 	// Compute the digest for certFromFile
 	thisBCCSPMsp := thisMSP.(*bccspmsp)
