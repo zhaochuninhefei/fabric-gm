@@ -10,7 +10,6 @@ import (
 	"crypto"
 	"crypto/elliptic"
 	"crypto/rand"
-	"crypto/sha256"
 	"crypto/x509/pkix"
 	"encoding/pem"
 	"math/big"
@@ -18,6 +17,7 @@ import (
 	"time"
 
 	"gitee.com/zhaochuninhefei/gmgo/sm2"
+	"gitee.com/zhaochuninhefei/gmgo/sm3"
 	"gitee.com/zhaochuninhefei/gmgo/x509"
 	"github.com/pkg/errors"
 )
@@ -116,11 +116,12 @@ func newCertKeyPair(isCA bool, isServer bool, certSigner crypto.Signer, parent *
 }
 
 // compute Subject Key Identifier //TODO Important
+// 国密改造后散列算法改为SM3
 func computeSKI(privKey *sm2.PrivateKey) []byte {
 	// Marshall the public key
 	raw := elliptic.Marshal(privKey.Curve, privKey.PublicKey.X, privKey.PublicKey.Y)
 	// Hash it
-	hash := sha256.New()
+	hash := sm3.New()
 	hash.Write(raw)
 	return hash.Sum(nil)
 	//return hash[:]

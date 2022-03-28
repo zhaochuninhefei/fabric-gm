@@ -8,7 +8,6 @@ package deliver_test
 
 import (
 	"context"
-	"crypto/x509"
 	"encoding/pem"
 	"io"
 	"time"
@@ -21,6 +20,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/common/metrics/metricsfakes"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/util"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
+	"gitee.com/zhaochuninhefei/gmgo/x509"
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes/timestamp"
 	cb "github.com/hyperledger/fabric-protos-go/common"

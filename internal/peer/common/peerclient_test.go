@@ -6,7 +6,6 @@ SPDX-License-Identifier: Apache-2.0
 package common_test
 
 import (
-	"crypto/tls"
 	"net"
 	"os"
 	"path/filepath"
@@ -15,6 +14,7 @@ import (
 
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/peer/common"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/pkg/comm"
+	tls "gitee.com/zhaochuninhefei/gmgo/gmtls"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
 )

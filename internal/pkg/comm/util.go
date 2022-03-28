@@ -9,13 +9,11 @@ package comm
 import (
 	"bytes"
 	"context"
-	"crypto/sha256"
-
-	// "crypto/x509"
 	"encoding/pem"
 	"net"
 
 	credentials "gitee.com/zhaochuninhefei/gmgo/gmtls/gmcredentials"
+	"gitee.com/zhaochuninhefei/gmgo/sm3"
 	"gitee.com/zhaochuninhefei/gmgo/x509"
 	"github.com/golang/protobuf/proto"
 	"github.com/pkg/errors"
@@ -144,7 +142,7 @@ func ExtractCertificateHashFromContext(ctx context.Context) []byte {
 	if len(rawCert) == 0 {
 		return nil
 	}
-	h := sha256.New()
+	h := sm3.New()
 	h.Write(rawCert)
 	return h.Sum(nil)
 }

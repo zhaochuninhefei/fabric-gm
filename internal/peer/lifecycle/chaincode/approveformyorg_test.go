@@ -8,7 +8,6 @@ package chaincode_test
 
 import (
 	"context"
-	// "crypto/tls"
 	"time"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/sw"

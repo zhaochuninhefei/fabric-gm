@@ -6,9 +6,10 @@ SPDX-License-Identifier: Apache-2.0
 
 package comm_test
 
+// TODO gmtls的gmcredentials没有 `TransportCredentials`，
+// 因此目前无法替换 gmx509和gmtls
 import (
 	"context"
-	"crypto/sha256"
 	"crypto/tls"
 	"crypto/x509"
 	"net"
@@ -19,6 +20,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/pkg/comm"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/pkg/comm/testpb"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
+	"gitee.com/zhaochuninhefei/gmgo/sm3"
 	"github.com/golang/protobuf/proto"
 	"github.com/hyperledger/fabric-protos-go/common"
 	"github.com/stretchr/testify/assert"
@@ -51,7 +53,7 @@ func TestExtractCertificateHashFromContext(t *testing.T) {
 		},
 	}
 	ctx = peer.NewContext(context.Background(), p)
-	h := sha256.New()
+	h := sm3.New()
 	h.Write([]byte{1, 2, 3})
 	assert.Equal(t, h.Sum(nil), comm.ExtractCertificateHashFromContext(ctx))
 }
@@ -126,7 +128,7 @@ func TestBindingInspector(t *testing.T) {
 
 	// Scenario IV: Client sends its TLS cert hash as needed, but doesn't use mutual TLS
 	cert, _ := tls.X509KeyPair([]byte(selfSignedCertPEM), []byte(selfSignedKeyPEM))
-	h := sha256.New()
+	h := sm3.New()
 	h.Write([]byte(cert.Certificate[0]))
 	chanHdr.TlsCertHash = h.Sum(nil)
 	ch, _ = proto.Marshal(chanHdr)
@@ -188,6 +190,7 @@ func newInspectingServer(listener net.Listener, inspector comm.BindingInspector)
 	return is
 }
 
+// TODO gmtls的gmcredentials没有 `TransportCredentials`
 type inspection struct {
 	tlsConfig *tls.Config
 	server    *inspectingServer

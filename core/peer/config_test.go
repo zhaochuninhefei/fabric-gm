@@ -6,7 +6,6 @@ SPDX-License-Identifier: Apache-2.0
 package peer
 
 import (
-	"crypto/tls"
 	"io/ioutil"
 	"net"
 	"os"
@@ -17,6 +16,7 @@ import (
 
 	"gitee.com/zhaochuninhefei/fabric-gm/common/crypto/tlsgen"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/pkg/comm"
+	tls "gitee.com/zhaochuninhefei/gmgo/gmtls"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

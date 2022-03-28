@@ -8,12 +8,8 @@ SPDX-License-Identifier: Apache-2.0
 package msp
 
 import (
-	"crypto/ecdsa"
 	"crypto/elliptic"
 	"crypto/rand"
-	"crypto/sha256"
-
-	// "crypto/x509"
 	"crypto/x509/pkix"
 	"encoding/asn1"
 	"encoding/hex"
@@ -33,6 +29,8 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/core/config/configtest"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
 	"gitee.com/zhaochuninhefei/gmgo/pkcs12"
+	"gitee.com/zhaochuninhefei/gmgo/sm2"
+	"gitee.com/zhaochuninhefei/gmgo/sm3"
 	"gitee.com/zhaochuninhefei/gmgo/x509"
 	"github.com/golang/protobuf/proto"
 	"github.com/hyperledger/fabric-protos-go/msp"
@@ -290,9 +288,10 @@ func TestSerializeIdentities(t *testing.T) {
 	}
 }
 
-func computeSKI(key *ecdsa.PublicKey) []byte {
+// 国密改造后散列算法改为SM3
+func computeSKI(key *sm2.PublicKey) []byte {
 	raw := elliptic.Marshal(key.Curve, key.X, key.Y)
-	hash := sha256.Sum256(raw)
+	hash := sm3.Sm3Sum(raw)
 	return hash[:]
 }
 
@@ -331,9 +330,9 @@ func TestValidateCANameConstraintsMitigation(t *testing.T) {
 	//
 	// In Go 1.15, the behavior has changed and, by default, the same structure
 	// will validate. This test asserts on the old behavior.
-	caKey, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
+	caKey, err := sm2.GenerateKey(rand.Reader)
 	require.NoError(t, err)
-	leafKey, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
+	leafKey, err := sm2.GenerateKey(rand.Reader)
 	require.NoError(t, err)
 
 	caKeyUsage := x509.KeyUsageDigitalSignature | x509.KeyUsageKeyEncipherment | x509.KeyUsageCertSign | x509.KeyUsageCRLSign
@@ -348,7 +347,7 @@ func TestValidateCANameConstraintsMitigation(t *testing.T) {
 		IsCA:                        true,
 		BasicConstraintsValid:       true,
 		KeyUsage:                    caKeyUsage,
-		SubjectKeyId:                computeSKI(caKey.Public().(*ecdsa.PublicKey)),
+		SubjectKeyId:                computeSKI(caKey.Public().(*sm2.PublicKey)),
 	}
 	caCertBytes, err := x509.CreateCertificateFromReader(rand.Reader, &caTemplate, &caTemplate, caKey.Public(), caKey)
 	require.NoError(t, err)
@@ -361,7 +360,7 @@ func TestValidateCANameConstraintsMitigation(t *testing.T) {
 		NotBefore:    time.Now().Add(-1 * time.Hour),
 		NotAfter:     time.Now().Add(2 * time.Hour),
 		KeyUsage:     x509.KeyUsageDigitalSignature,
-		SubjectKeyId: computeSKI(leafKey.Public().(*ecdsa.PublicKey)),
+		SubjectKeyId: computeSKI(leafKey.Public().(*sm2.PublicKey)),
 	}
 	leafCertBytes, err := x509.CreateCertificateFromReader(rand.Reader, &leafTemplate, ca, leafKey.Public(), caKey)
 	require.NoError(t, err)

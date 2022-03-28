@@ -7,7 +7,6 @@ SPDX-License-Identifier: Apache-2.0
 package validation
 
 import (
-	"crypto/sha256"
 	"fmt"
 	"os"
 	"testing"
@@ -18,6 +17,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger/kvledger/txmgmt/rwsetutil"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger/kvledger/txmgmt/statedb"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger/util"
+	"gitee.com/zhaochuninhefei/gmgo/sm3"
 	"github.com/hyperledger/fabric-protos-go/ledger/rwset/kvrwset"
 	"github.com/hyperledger/fabric-protos-go/peer"
 	"github.com/stretchr/testify/require"
@@ -46,7 +46,7 @@ var (
 	}
 
 	testHashFunc = func(data []byte) ([]byte, error) {
-		h := sha256.New()
+		h := sm3.New()
 		if _, err := h.Write(data); err != nil {
 			return nil, err
 		}

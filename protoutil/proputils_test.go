@@ -8,7 +8,6 @@ package protoutil_test
 
 import (
 	"bytes"
-	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
 	"os"
@@ -19,6 +18,7 @@ import (
 	mspmgmt "gitee.com/zhaochuninhefei/fabric-gm/msp/mgmt"
 	msptesttools "gitee.com/zhaochuninhefei/fabric-gm/msp/mgmt/testtools"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
+	"gitee.com/zhaochuninhefei/gmgo/sm3"
 	"github.com/golang/protobuf/proto"
 	"github.com/hyperledger/fabric-protos-go/common"
 	pb "github.com/hyperledger/fabric-protos-go/peer"
@@ -455,7 +455,7 @@ func TestComputeProposalTxID(t *testing.T) {
 
 	// Compute the function computed by ComputeTxID,
 	// namely, base64(sha256(nonce||creator))
-	hf := sha256.New()
+	hf := sm3.New()
 	hf.Write([]byte{1})
 	hf.Write([]byte{1})
 	hashOut := hf.Sum(nil)

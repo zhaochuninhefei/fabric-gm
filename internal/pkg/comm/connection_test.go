@@ -7,7 +7,6 @@ SPDX-License-Identifier: Apache-2.0
 package comm
 
 import (
-	// "crypto/tls"
 	"fmt"
 	"io/ioutil"
 	"path/filepath"

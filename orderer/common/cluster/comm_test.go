@@ -9,7 +9,6 @@ package cluster_test
 import (
 	"context"
 	"crypto/rand"
-	"crypto/x509"
 	"fmt"
 	"net"
 	"strings"
@@ -27,6 +26,7 @@ import (
 	comm_utils "gitee.com/zhaochuninhefei/fabric-gm/internal/pkg/comm"
 	"gitee.com/zhaochuninhefei/fabric-gm/orderer/common/cluster"
 	"gitee.com/zhaochuninhefei/fabric-gm/orderer/common/cluster/mocks"
+	"gitee.com/zhaochuninhefei/gmgo/x509"
 	"github.com/golang/protobuf/proto"
 	"github.com/hyperledger/fabric-protos-go/common"
 	"github.com/hyperledger/fabric-protos-go/orderer"

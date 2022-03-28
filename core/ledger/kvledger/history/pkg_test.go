@@ -7,7 +7,6 @@ SPDX-License-Identifier: Apache-2.0
 package history
 
 import (
-	"crypto/sha256"
 	"io/ioutil"
 	"os"
 	"testing"
@@ -18,12 +17,13 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger/kvledger/txmgmt/privacyenabledstate"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger/kvledger/txmgmt/txmgr"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger/mock"
+	"gitee.com/zhaochuninhefei/gmgo/sm3"
 	"github.com/stretchr/testify/assert"
 )
 
 var (
 	testHashFunc = func(data []byte) ([]byte, error) {
-		h := sha256.New()
+		h := sm3.New()
 		if _, err := h.Write(data); err != nil {
 			return nil, err
 		}

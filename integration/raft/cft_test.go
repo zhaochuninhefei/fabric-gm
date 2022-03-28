@@ -8,8 +8,6 @@ package raft
 
 import (
 	"crypto/rand"
-
-	// "crypto/x509"
 	"encoding/pem"
 	"fmt"
 	"io/ioutil"

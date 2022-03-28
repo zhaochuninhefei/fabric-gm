@@ -8,7 +8,6 @@ package configtx
 
 import (
 	"crypto"
-	// "crypto/x509"
 	"encoding/pem"
 	"io/ioutil"
 	"os"

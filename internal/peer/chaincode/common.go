@@ -8,7 +8,6 @@ package chaincode
 
 import (
 	"context"
-	//"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"

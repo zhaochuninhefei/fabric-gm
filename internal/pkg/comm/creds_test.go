@@ -8,8 +8,6 @@ package comm_test
 
 import (
 	"context"
-	// "crypto/tls"
-	// "crypto/x509"
 	"io/ioutil"
 	"net"
 	"path/filepath"

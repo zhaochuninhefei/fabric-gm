@@ -7,7 +7,6 @@ SPDX-License-Identifier: Apache-2.0
 package signer
 
 import (
-	"crypto/x509"
 	"encoding/pem"
 	"io/ioutil"
 	"os"
@@ -17,6 +16,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/sw"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/util"
 	"gitee.com/zhaochuninhefei/gmgo/sm2"
+	"gitee.com/zhaochuninhefei/gmgo/x509"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -52,13 +52,13 @@ ZsQXrlIqlmNalfYPX+NDDELqlpXQBeEqnA==
 	pemBlock, _ := pem.Decode([]byte(key))
 	assert.NotNil(t, pemBlock)
 
-	ecPK, err := x509.ParseECPrivateKey(pemBlock.Bytes)
+	ecPK, err := x509.ParseSm2PrivateKey(pemBlock.Bytes)
 	assert.NoError(t, err)
 
 	ec1, err := x509.MarshalECPrivateKey(ecPK)
 	assert.NoError(t, err)
 
-	pkcs8, err := x509.MarshalPKCS8PrivateKey(ecPK)
+	pkcs8, err := x509.MarshalSm2PrivateKey(ecPK, nil)
 	assert.NoError(t, err)
 
 	for _, testCase := range []struct {

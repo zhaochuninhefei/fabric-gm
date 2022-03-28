@@ -7,7 +7,6 @@ SPDX-License-Identifier: Apache-2.0
 package confighistory
 
 import (
-	"crypto/sha256"
 	"fmt"
 	"hash"
 	"io/ioutil"
@@ -20,6 +19,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/common/ledger/snapshot"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger/mock"
+	"gitee.com/zhaochuninhefei/gmgo/sm3"
 	"github.com/golang/protobuf/proto"
 	"github.com/hyperledger/fabric-protos-go/common"
 	"github.com/hyperledger/fabric-protos-go/peer"
@@ -28,7 +28,7 @@ import (
 
 var (
 	testNewHashFunc = func() (hash.Hash, error) {
-		return sha256.New(), nil
+		return sm3.New(), nil
 	}
 )
 
@@ -505,13 +505,13 @@ func verifyExportedConfigHistory(t *testing.T, dir string, fileHashes map[string
 	dataFile := filepath.Join(dir, snapshotDataFileName)
 	dataFileContent, err := ioutil.ReadFile(dataFile)
 	require.NoError(t, err)
-	dataFileHash := sha256.Sum256(dataFileContent)
+	dataFileHash := sm3.Sm3Sum(dataFileContent)
 	require.Equal(t, dataFileHash[:], fileHashes[snapshotDataFileName])
 
 	metadataFile := filepath.Join(dir, snapshotMetadataFileName)
 	metadataFileContent, err := ioutil.ReadFile(metadataFile)
 	require.NoError(t, err)
-	metadataFileHash := sha256.Sum256(metadataFileContent)
+	metadataFileHash := sm3.Sm3Sum(metadataFileContent)
 	require.Equal(t, metadataFileHash[:], fileHashes[snapshotMetadataFileName])
 
 	metadataReader, err := snapshot.OpenFile(metadataFile, snapshotFileFormat)

@@ -6,12 +6,8 @@ SPDX-License-Identifier: Apache-2.0
 package csp_test
 
 import (
-	// "crypto/ecdsa"
-	"crypto/ecdsa"
 	"crypto/rand"
 	"crypto/rsa"
-
-	// "crypto/x509"
 	"encoding/asn1"
 	"encoding/pem"
 	"fmt"
@@ -137,7 +133,7 @@ func TestECDSASigner(t *testing.T) {
 	signer := csp.ECDSASigner{
 		PrivateKey: priv,
 	}
-	assert.Equal(t, priv.Public(), signer.Public().(*ecdsa.PublicKey))
+	assert.Equal(t, priv.Public(), signer.Public().(*sm2.PublicKey))
 	digest := []byte{1}
 	sig, err := signer.Sign(rand.Reader, digest, nil)
 	if err != nil {

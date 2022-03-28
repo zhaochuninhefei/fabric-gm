@@ -18,6 +18,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/common/grpclogging"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/grpclogging/fakes"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/grpclogging/testpb"
+	credentials "gitee.com/zhaochuninhefei/gmgo/gmtls/gmcredentials"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"go.uber.org/zap"
@@ -25,7 +26,6 @@ import (
 	"go.uber.org/zap/zaptest/observer"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/status"
 )
 

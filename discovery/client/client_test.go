@@ -8,8 +8,6 @@ package discovery
 
 import (
 	"context"
-	"crypto/tls"
-	"crypto/x509"
 	"fmt"
 	"io/ioutil"
 	"net"
@@ -30,6 +28,9 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/protoext"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/pkg/comm"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
+	tls "gitee.com/zhaochuninhefei/gmgo/gmtls"
+	credentials "gitee.com/zhaochuninhefei/gmgo/gmtls/gmcredentials"
+	"gitee.com/zhaochuninhefei/gmgo/x509"
 	"github.com/golang/protobuf/proto"
 	"github.com/hyperledger/fabric-protos-go/common"
 	"github.com/hyperledger/fabric-protos-go/discovery"
@@ -40,7 +41,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials"
 )
 
 const (

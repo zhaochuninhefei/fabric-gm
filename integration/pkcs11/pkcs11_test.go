@@ -7,11 +7,8 @@ SPDX-License-Identifier: Apache-2.0
 package pkcs11
 
 import (
-	"crypto/ecdsa"
 	"crypto/elliptic"
 	"crypto/rand"
-	"crypto/sha256"
-	"crypto/x509"
 	"crypto/x509/pkix"
 	"encoding/asn1"
 	"encoding/hex"
@@ -27,6 +24,9 @@ import (
 	bpkcs11 "gitee.com/zhaochuninhefei/fabric-gm/bccsp/pkcs11"
 	"gitee.com/zhaochuninhefei/fabric-gm/integration/nwo"
 	"gitee.com/zhaochuninhefei/fabric-gm/integration/nwo/fabricconfig"
+	"gitee.com/zhaochuninhefei/gmgo/sm2"
+	"gitee.com/zhaochuninhefei/gmgo/sm3"
+	"gitee.com/zhaochuninhefei/gmgo/x509"
 	"github.com/miekg/pkcs11"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -274,7 +274,7 @@ func findPKCS11Slot(ctx *pkcs11.Ctx, label string) uint {
 }
 
 // Creates CSR for provided organization and organizational unit
-func createCSR(ctx *pkcs11.Ctx, sess pkcs11.SessionHandle, org, ou string) (*ecdsa.PublicKey, *x509.CertificateRequest, *big.Int) {
+func createCSR(ctx *pkcs11.Ctx, sess pkcs11.SessionHandle, org, ou string) (*sm2.PublicKey, *x509.CertificateRequest, *big.Int) {
 	pubKey, pkcs11Key := generateKeyPair(ctx, sess)
 
 	csrTemplate := x509.CertificateRequest{
@@ -304,7 +304,7 @@ func createCSR(ctx *pkcs11.Ctx, sess pkcs11.SessionHandle, org, ou string) (*ecd
 	return pubKey, csr, serialNumber
 }
 
-func buildCert(caBytes []byte, org1CAPath string, csr *x509.CertificateRequest, serialNumber *big.Int, pubKey *ecdsa.PublicKey) []byte {
+func buildCert(caBytes []byte, org1CAPath string, csr *x509.CertificateRequest, serialNumber *big.Int, pubKey *sm2.PublicKey) []byte {
 	pemBlock, _ := pem.Decode(caBytes)
 	Expect(pemBlock).NotTo(BeNil())
 
@@ -316,9 +316,9 @@ func buildCert(caBytes []byte, org1CAPath string, csr *x509.CertificateRequest, 
 
 	pemBlock, _ = pem.Decode(keyBytes)
 	Expect(pemBlock).NotTo(BeNil())
-	key, err := x509.ParsePKCS8PrivateKey(pemBlock.Bytes)
+	key, err := x509.ParsePKCS8PrivateKey(pemBlock.Bytes, nil)
 	Expect(err).NotTo(HaveOccurred())
-	caKey := key.(*ecdsa.PrivateKey)
+	caKey := key
 
 	certTemplate := &x509.Certificate{
 		Signature:          csr.Signature,
@@ -337,7 +337,7 @@ func buildCert(caBytes []byte, org1CAPath string, csr *x509.CertificateRequest, 
 	}
 
 	// Use root CA to create and sign cert
-	signedCert, err := x509.CreateCertificate(rand.Reader, certTemplate, caCert, pubKey, caKey)
+	signedCert, err := x509.CreateCertificate(certTemplate, caCert, pubKey, caKey)
 	Expect(err).NotTo(HaveOccurred())
 
 	return pem.EncodeToMemory(&pem.Block{Bytes: signedCert, Type: "CERTIFICATE"})
@@ -356,7 +356,7 @@ func updateMSPFolder(path, certName string, cert []byte) {
 }
 
 // Generating key pair in HSM, convert, and return keys
-func generateKeyPair(ctx *pkcs11.Ctx, sess pkcs11.SessionHandle) (*ecdsa.PublicKey, *P11ECDSAKey) {
+func generateKeyPair(ctx *pkcs11.Ctx, sess pkcs11.SessionHandle) (*sm2.PublicKey, *P11ECDSAKey) {
 	publabel, privlabel := "BCPUB7", "BCPRV7"
 
 	curve := asn1.ObjectIdentifier{1, 2, 840, 10045, 3, 1, 7} // secp256r1 Curve
@@ -399,7 +399,7 @@ func generateKeyPair(ctx *pkcs11.Ctx, sess pkcs11.SessionHandle) (*ecdsa.PublicK
 	ecpt := ecPoint(ctx, sess, pubK)
 	Expect(ecpt).NotTo(BeEmpty(), "CKA_EC_POINT not found")
 
-	hash := sha256.Sum256(ecpt)
+	hash := sm3.Sm3Sum(ecpt)
 	ski := hash[:]
 
 	setskiT := []*pkcs11.Attribute{
@@ -420,7 +420,7 @@ func generateKeyPair(ctx *pkcs11.Ctx, sess pkcs11.SessionHandle) (*ecdsa.PublicK
 		Expect(x).NotTo(BeNil(), "Failed Unmarshaling Public Key")
 	}
 
-	pubKey := &ecdsa.PublicKey{Curve: nistCurve, X: x, Y: y}
+	pubKey := &sm2.PublicKey{Curve: nistCurve, X: x, Y: y}
 
 	pkcs11Key := &P11ECDSAKey{
 		ctx:              ctx,
@@ -463,8 +463,8 @@ func ecPoint(pkcs11lib *pkcs11.Ctx, session pkcs11.SessionHandle, key pkcs11.Obj
 	return ecpt
 }
 
-func skiForKey(pk *ecdsa.PublicKey) []byte {
-	ski := sha256.Sum256(elliptic.Marshal(pk.Curve, pk.X, pk.Y))
+func skiForKey(pk *sm2.PublicKey) []byte {
+	ski := sm3.Sm3Sum(elliptic.Marshal(pk.Curve, pk.X, pk.Y))
 	return ski[:]
 }
 

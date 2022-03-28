@@ -7,11 +7,11 @@ SPDX-License-Identifier: Apache-2.0
 package tlsgen
 
 import (
-	"crypto/tls"
-	"crypto/x509"
 	"encoding/pem"
 	"testing"
 
+	tls "gitee.com/zhaochuninhefei/gmgo/gmtls"
+	"gitee.com/zhaochuninhefei/gmgo/x509"
 	"github.com/stretchr/testify/assert"
 )
 

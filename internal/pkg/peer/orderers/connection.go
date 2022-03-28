@@ -8,12 +8,12 @@ package orderers
 
 import (
 	"bytes"
-	"crypto/sha256"
 	"math/rand"
 	"sync"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/common/flogging"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/pkg/comm"
+	"gitee.com/zhaochuninhefei/gmgo/sm3"
 	"gitee.com/zhaochuninhefei/gmgo/x509"
 
 	"github.com/pkg/errors"
@@ -65,7 +65,7 @@ func (cs *ConnectionSource) Update(globalAddrs []string, orgs map[string]Orderer
 	anyChange := false
 	hasOrgEndpoints := false
 	for orgName, org := range orgs {
-		hasher := sha256.New()
+		hasher := sm3.New()
 		for _, cert := range org.RootCerts {
 			hasher.Write(cert)
 		}

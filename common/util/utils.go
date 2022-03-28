@@ -19,6 +19,7 @@ import (
 
 // ComputeSHA256ButSm3 returns SHA2-256 on data
 // 散列结果 32 字节
+// 国密对应后实际使用SM3
 func ComputeSHA256ButSm3(data []byte) (hash []byte) {
 	// hash, err := factory.GetDefault().Hash(data, &bccsp.SHA256Opts{})
 	hash, err := factory.GetDefault().Hash(data, &bccsp.SM3Opts{})
@@ -40,6 +41,7 @@ func ComputeSM3(data []byte) (hash []byte) {
 
 // ComputeSHA3256ButSm3 returns SHA3-256 on data
 // 散列结果 32 字节
+// 国密对应后实际使用SM3
 func ComputeSHA3256ButSm3(data []byte) (hash []byte) {
 	// hash, err := factory.GetDefault().Hash(data, &bccsp.SHA3_256Opts{})
 	hash, err := factory.GetDefault().Hash(data, &bccsp.SM3Opts{})

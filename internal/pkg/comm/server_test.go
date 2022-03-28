@@ -9,8 +9,6 @@ package comm_test
 import (
 	"bytes"
 	"context"
-
-	// "crypto/x509"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -31,8 +29,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
-
-	// "google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/status"
 )
 

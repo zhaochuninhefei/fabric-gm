@@ -8,8 +8,6 @@ package peer_test
 
 import (
 	"context"
-	"crypto/tls"
-	"crypto/x509"
 	"errors"
 	"net"
 	"testing"
@@ -24,13 +22,15 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/pkg/txflags"
 	"gitee.com/zhaochuninhefei/fabric-gm/msp"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
+	tls "gitee.com/zhaochuninhefei/gmgo/gmtls"
+	credentials "gitee.com/zhaochuninhefei/gmgo/gmtls/gmcredentials"
+	"gitee.com/zhaochuninhefei/gmgo/x509"
 	cb "github.com/hyperledger/fabric-protos-go/common"
 	mspproto "github.com/hyperledger/fabric-protos-go/msp"
 	pb "github.com/hyperledger/fabric-protos-go/peer"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials"
 )
 
 // test server to be registered with the GRPCServer

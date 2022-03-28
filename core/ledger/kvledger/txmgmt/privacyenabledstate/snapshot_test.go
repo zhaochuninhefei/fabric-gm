@@ -7,7 +7,6 @@ SPDX-License-Identifier: Apache-2.0
 package privacyenabledstate
 
 import (
-	"crypto/sha256"
 	"fmt"
 	"hash"
 	"io/ioutil"
@@ -19,12 +18,13 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/common/ledger/snapshot"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger/internal/version"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger/kvledger/txmgmt/statedb"
+	"gitee.com/zhaochuninhefei/gmgo/sm3"
 	"github.com/stretchr/testify/require"
 )
 
 var (
 	testNewHashFunc = func() (hash.Hash, error) {
-		return sha256.New(), nil
+		return sm3.New(), nil
 	}
 )
 
@@ -133,7 +133,7 @@ func testSnapshotWithSampleData(t *testing.T, env TestEnv,
 	for f, h := range filesAndHashes {
 		expectedFile := filepath.Join(snapshotDir, f)
 		require.FileExists(t, expectedFile)
-		require.Equal(t, sha256ForFileForTest(t, expectedFile), h)
+		require.Equal(t, sm3ForFileForTest(t, expectedFile), h)
 	}
 
 	numFilesExpected := 0
@@ -166,10 +166,10 @@ func testSnapshotWithSampleData(t *testing.T, env TestEnv,
 	require.Len(t, filesAndHashes, numFilesExpected)
 }
 
-func sha256ForFileForTest(t *testing.T, file string) []byte {
+func sm3ForFileForTest(t *testing.T, file string) []byte {
 	data, err := ioutil.ReadFile(file)
 	require.NoError(t, err)
-	sha := sha256.Sum256(data)
+	sha := sm3.Sm3Sum(data)
 	return sha[:]
 }
 

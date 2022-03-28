@@ -9,9 +9,6 @@ package comm_test
 import (
 	"bytes"
 	"context"
-
-	// "crypto/tls"
-	// "crypto/x509"
 	"io/ioutil"
 	"net"
 	"path/filepath"
@@ -33,7 +30,6 @@ import (
 	"github.com/stretchr/testify/require"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/connectivity"
-	// "google.golang.org/grpc/credentials"
 )
 
 const testTimeout = 1 * time.Second // conservative

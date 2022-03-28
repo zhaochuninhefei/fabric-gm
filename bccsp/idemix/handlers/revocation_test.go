@@ -8,13 +8,11 @@ package handlers_test
 import (
 	"crypto/elliptic"
 	"crypto/rand"
-	"crypto/sha256"
-
-	// "crypto/x509"
 	"encoding/pem"
 	"math/big"
 
 	"gitee.com/zhaochuninhefei/gmgo/sm2"
+	"gitee.com/zhaochuninhefei/gmgo/sm3"
 	"gitee.com/zhaochuninhefei/gmgo/x509"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/idemix/handlers"
@@ -60,7 +58,8 @@ var _ = Describe("Revocation", func() {
 					D: big.NewInt(1)}
 
 				raw := elliptic.Marshal(idemixRevocationKey.Curve, idemixRevocationKey.PublicKey.X, idemixRevocationKey.PublicKey.Y)
-				hash := sha256.New()
+				// hash := sha256.New()
+				hash := sm3.New()
 				hash.Write(raw)
 				SKI = hash.Sum(nil)
 

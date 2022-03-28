@@ -13,10 +13,7 @@ SPDX-License-Identifier: Apache-2.0
 package main
 
 import (
-	"crypto/ecdsa"
-	"crypto/elliptic"
 	"crypto/rand"
-	"crypto/x509"
 	"crypto/x509/pkix"
 	"encoding/pem"
 	"flag"
@@ -25,6 +22,9 @@ import (
 	"net"
 	"os"
 	"time"
+
+	"gitee.com/zhaochuninhefei/gmgo/sm2"
+	"gitee.com/zhaochuninhefei/gmgo/x509"
 )
 
 //command line flags
@@ -68,8 +68,8 @@ func x509Template() (x509.Certificate, error) {
 }
 
 //generate an EC private key (P256 curve)
-func genKeyECDSA(name string) (*ecdsa.PrivateKey, error) {
-	priv, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
+func genKeyECDSA(name string) (*sm2.PrivateKey, error) {
+	priv, err := sm2.GenerateKey(rand.Reader)
 	if err != nil {
 		return nil, err
 	}
@@ -85,8 +85,8 @@ func genKeyECDSA(name string) (*ecdsa.PrivateKey, error) {
 }
 
 //generate a signed X509 certficate using ECDSA
-func genCertificateECDSA(name string, template, parent *x509.Certificate, pub *ecdsa.PublicKey,
-	priv *ecdsa.PrivateKey) (*x509.Certificate, error) {
+func genCertificateECDSA(name string, template, parent *x509.Certificate, pub *sm2.PublicKey,
+	priv *sm2.PrivateKey) (*x509.Certificate, error) {
 
 	//create the x509 public cert
 	certBytes, err := x509.CreateCertificate(rand.Reader, template, parent, pub, priv)
@@ -111,7 +111,7 @@ func genCertificateECDSA(name string, template, parent *x509.Certificate, pub *e
 }
 
 //generate an EC certificate appropriate for use by a TLS server
-func genServerCertificateECDSA(name string, signKey *ecdsa.PrivateKey, signCert *x509.Certificate) error {
+func genServerCertificateECDSA(name string, signKey *sm2.PrivateKey, signCert *x509.Certificate) error {
 	fmt.Println(name)
 	key, err := genKeyECDSA(name)
 	template, err := x509Template()
@@ -142,7 +142,7 @@ func genServerCertificateECDSA(name string, signKey *ecdsa.PrivateKey, signCert 
 }
 
 //generate an EC certificate appropriate for use by a TLS server
-func genClientCertificateECDSA(name string, signKey *ecdsa.PrivateKey, signCert *x509.Certificate) error {
+func genClientCertificateECDSA(name string, signKey *sm2.PrivateKey, signCert *x509.Certificate) error {
 	fmt.Println(name)
 	key, err := genKeyECDSA(name)
 	template, err := x509Template()
@@ -171,7 +171,7 @@ func genClientCertificateECDSA(name string, signKey *ecdsa.PrivateKey, signCert 
 
 //generate an EC certificate signing(CA) key pair and output as
 //PEM-encoded files
-func genCertificateAuthorityECDSA(name string) (*ecdsa.PrivateKey, *x509.Certificate, error) {
+func genCertificateAuthorityECDSA(name string) (*sm2.PrivateKey, *x509.Certificate, error) {
 
 	key, err := genKeyECDSA(name)
 	template, err := x509Template()
@@ -202,8 +202,8 @@ func genCertificateAuthorityECDSA(name string) (*ecdsa.PrivateKey, *x509.Certifi
 }
 
 //generate an EC certificate appropriate for use by a TLS server
-func genIntermediateCertificateAuthorityECDSA(name string, signKey *ecdsa.PrivateKey,
-	signCert *x509.Certificate) (*ecdsa.PrivateKey, *x509.Certificate, error) {
+func genIntermediateCertificateAuthorityECDSA(name string, signKey *sm2.PrivateKey,
+	signCert *x509.Certificate) (*sm2.PrivateKey, *x509.Certificate, error) {
 
 	fmt.Println(name)
 	key, err := genKeyECDSA(name)

@@ -7,7 +7,6 @@ SPDX-License-Identifier: Apache-2.0
 package e2e
 
 import (
-	"crypto/sha256"
 	"encoding/hex"
 	"io/ioutil"
 	"os"
@@ -18,6 +17,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/common/policydsl"
 	"gitee.com/zhaochuninhefei/fabric-gm/integration/nwo"
 	"gitee.com/zhaochuninhefei/fabric-gm/integration/nwo/commands"
+	"gitee.com/zhaochuninhefei/gmgo/sm3"
 	docker "github.com/fsouza/go-dockerclient"
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
@@ -210,7 +210,7 @@ func (lo *LSCCOperation) Tx(signer *signer.Signer) *common.Envelope {
 	timestamp, err := ptypes.TimestampProto(time.Now().UTC())
 	Expect(err).NotTo(HaveOccurred())
 
-	hasher := sha256.New()
+	hasher := sm3.New()
 	hasher.Write(nonce)
 	hasher.Write(creatorBytes)
 	txid := hex.EncodeToString(hasher.Sum(nil))
@@ -272,7 +272,7 @@ func (lo *LSCCOperation) Tx(signer *signer.Signer) *common.Envelope {
 		}),
 	})
 
-	propHash := sha256.New()
+	propHash := sm3.New()
 	propHash.Write(channelHeaderBytes)
 	propHash.Write(signatureHeaderBytes)
 	propHash.Write(proposalPayloadBytes)

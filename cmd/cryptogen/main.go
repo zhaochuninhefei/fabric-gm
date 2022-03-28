@@ -730,13 +730,13 @@ func getCA(caDir string, spec OrgSpec, name string) *ca.CA {
 	return &ca.CA{
 		Name:               name,
 		Signer:             priv,
-		SignSm2Cert:        cert,
+		SignCert:           cert,
 		Country:            spec.CA.Country,
 		Province:           spec.CA.Province,
 		Locality:           spec.CA.Locality,
 		OrganizationalUnit: spec.CA.OrganizationalUnit,
 		StreetAddress:      spec.CA.StreetAddress,
 		PostalCode:         spec.CA.PostalCode,
-		Sm2Key:             priv,
+		// Sm2Key:             priv,
 	}
 }

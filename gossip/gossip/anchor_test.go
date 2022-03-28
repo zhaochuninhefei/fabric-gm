@@ -8,7 +8,6 @@ package gossip
 
 import (
 	"context"
-	"crypto/tls"
 	"fmt"
 	"io"
 	"sync"
@@ -22,6 +21,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/protoext"
 	utilgossip "gitee.com/zhaochuninhefei/fabric-gm/gossip/util"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/pkg/comm"
+	tls "gitee.com/zhaochuninhefei/gmgo/gmtls"
 	proto "github.com/hyperledger/fabric-protos-go/gossip"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc"

@@ -8,7 +8,6 @@ package orderers_test
 
 import (
 	"bytes"
-	// "crypto/x509"
 	"io/ioutil"
 	"sort"
 

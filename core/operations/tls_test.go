@@ -7,13 +7,13 @@ SPDX-License-Identifier: Apache-2.0
 package operations_test
 
 import (
-	"crypto/tls"
-	"crypto/x509"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/core/operations"
+	tls "gitee.com/zhaochuninhefei/gmgo/gmtls"
+	"gitee.com/zhaochuninhefei/gmgo/x509"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )

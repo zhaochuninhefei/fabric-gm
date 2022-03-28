@@ -7,7 +7,6 @@ SPDX-License-Identifier: Apache-2.0
 package ccprovider_test
 
 import (
-	"crypto/sha256"
 	"io/ioutil"
 	"os"
 	"path"
@@ -18,6 +17,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/sw"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/chaincode"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/common/ccprovider"
+	"gitee.com/zhaochuninhefei/gmgo/sm3"
 	"github.com/golang/protobuf/proto"
 	"github.com/hyperledger/fabric-protos-go/peer"
 	"github.com/pkg/errors"
@@ -166,14 +166,14 @@ func setupDirectoryStructure(t *testing.T) (string, map[string][]byte) {
 			},
 		}
 
-		codehash := sha256.New()
+		codehash := sm3.New()
 		codehash.Write(cds.CodePackage)
 
-		metahash := sha256.New()
+		metahash := sm3.New()
 		metahash.Write([]byte(name))
 		metahash.Write([]byte(ver))
 
-		hash := sha256.New()
+		hash := sm3.New()
 		hash.Write(codehash.Sum(nil))
 		hash.Write(metahash.Sum(nil))
 

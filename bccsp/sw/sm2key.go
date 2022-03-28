@@ -17,11 +17,11 @@ package sw
 
 import (
 	"crypto/elliptic"
-	"crypto/sha256"
 	"fmt"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
 	"gitee.com/zhaochuninhefei/gmgo/sm2"
+	"gitee.com/zhaochuninhefei/gmgo/sm3"
 	"gitee.com/zhaochuninhefei/gmgo/x509"
 )
 
@@ -42,6 +42,7 @@ func (k *SM2PrivateKey) Bytes() (raw []byte, err error) {
 }
 
 // SKI returns the subject key identifier of this key.
+// 国密改造后散列算法改为SM3
 func (k *SM2PrivateKey) SKI() (ski []byte) {
 	if k.privKey == nil {
 		return nil
@@ -51,7 +52,7 @@ func (k *SM2PrivateKey) SKI() (ski []byte) {
 	raw := elliptic.Marshal(k.privKey.Curve, k.privKey.PublicKey.X, k.privKey.PublicKey.Y)
 
 	// Hash it
-	hash := sha256.New()
+	hash := sm3.New()
 	hash.Write(raw)
 	return hash.Sum(nil)
 }
@@ -94,6 +95,7 @@ func (k *SM2PublicKey) Bytes() (raw []byte, err error) {
 }
 
 // SKI returns the subject key identifier of this key.
+// 国密改造后散列算法改为SM3
 func (k *SM2PublicKey) SKI() (ski []byte) {
 	if k.pubKey == nil {
 		return nil
@@ -103,7 +105,7 @@ func (k *SM2PublicKey) SKI() (ski []byte) {
 	raw := elliptic.Marshal(k.pubKey.Curve, k.pubKey.X, k.pubKey.Y)
 
 	// Hash it
-	hash := sha256.New()
+	hash := sm3.New()
 	hash.Write(raw)
 	return hash.Sum(nil)
 }

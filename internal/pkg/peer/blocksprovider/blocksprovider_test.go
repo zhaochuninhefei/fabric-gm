@@ -7,7 +7,6 @@ SPDX-License-Identifier: Apache-2.0
 package blocksprovider_test
 
 import (
-	// "crypto/x509"
 	"fmt"
 	"sync"
 	"time"

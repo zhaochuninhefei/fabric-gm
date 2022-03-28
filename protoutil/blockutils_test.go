@@ -7,13 +7,13 @@ SPDX-License-Identifier: Apache-2.0
 package protoutil_test
 
 import (
-	"crypto/sha256"
 	"encoding/asn1"
 	"math"
 	"testing"
 
 	configtxtest "gitee.com/zhaochuninhefei/fabric-gm/common/configtx/test"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
+	"gitee.com/zhaochuninhefei/gmgo/sm3"
 	"github.com/golang/protobuf/proto"
 	"github.com/hyperledger/fabric-protos-go/common"
 	cb "github.com/hyperledger/fabric-protos-go/common"
@@ -47,7 +47,7 @@ func TestNewBlock(t *testing.T) {
 		DataHash:     protoutil.BlockDataHash(data),
 		PreviousHash: []byte("datahash"),
 	})
-	headerHash := sha256.Sum256(asn1Bytes)
+	headerHash := sm3.Sm3Sum(asn1Bytes)
 	assert.NoError(t, err)
 	assert.Equal(t, asn1Bytes, protoutil.BlockHeaderBytes(block.Header), "Incorrect marshaled blockheader bytes")
 	assert.Equal(t, headerHash[:], protoutil.BlockHeaderHash(block.Header), "Incorrect blockheader hash")

@@ -6,11 +6,11 @@ SPDX-License-Identifier: Apache-2.0
 
 package e2e
 
+// "net/http"只支持tls和x509，不支持gmtls和gmx509
 import (
 	"bufio"
 	"bytes"
 	"context"
-	"crypto/sha256"
 	"crypto/tls"
 	"crypto/x509"
 	"encoding/json"
@@ -28,6 +28,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/integration/nwo"
 	"gitee.com/zhaochuninhefei/fabric-gm/integration/nwo/commands"
 	"gitee.com/zhaochuninhefei/fabric-gm/integration/nwo/fabricconfig"
+	"gitee.com/zhaochuninhefei/gmgo/sm3"
 	docker "github.com/fsouza/go-dockerclient"
 	"github.com/golang/protobuf/proto"
 	"github.com/hyperledger/fabric-lib-go/healthz"
@@ -911,7 +912,7 @@ func hashFile(file string) string {
 	Expect(err).NotTo(HaveOccurred())
 	defer f.Close()
 
-	h := sha256.New()
+	h := sm3.New()
 	_, err = io.Copy(h, f)
 	Expect(err).NotTo(HaveOccurred())
 

@@ -7,11 +7,11 @@ SPDX-License-Identifier: Apache-2.0
 package rwsetutil
 
 import (
-	"crypto/sha256"
 	"fmt"
 	"testing"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger/internal/version"
+	"gitee.com/zhaochuninhefei/gmgo/sm3"
 	"github.com/golang/protobuf/proto"
 	"github.com/hyperledger/fabric-protos-go/ledger/rwset/kvrwset"
 	"github.com/stretchr/testify/require"
@@ -19,7 +19,7 @@ import (
 
 var (
 	testHashFunc = func(data []byte) ([]byte, error) {
-		h := sha256.New()
+		h := sm3.New()
 		if _, err := h.Write(data); err != nil {
 			return nil, err
 		}

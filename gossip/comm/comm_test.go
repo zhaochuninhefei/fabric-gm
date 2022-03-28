@@ -10,8 +10,6 @@ import (
 	"bytes"
 	"context"
 	"crypto/hmac"
-	"crypto/sha256"
-	"crypto/tls"
 	"errors"
 	"fmt"
 	"io"
@@ -35,12 +33,14 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/protoext"
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/util"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/pkg/comm"
+	tls "gitee.com/zhaochuninhefei/gmgo/gmtls"
+	credentials "gitee.com/zhaochuninhefei/gmgo/gmtls/gmcredentials"
+	"gitee.com/zhaochuninhefei/gmgo/sm3"
 	cb "github.com/hyperledger/fabric-protos-go/common"
 	proto "github.com/hyperledger/fabric-protos-go/gossip"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials"
 )
 
 func init() {
@@ -101,7 +101,7 @@ func (*naiveSecProvider) VerifyBlock(channelID common.ChannelID, seqNum uint64, 
 // Sign signs msg with this peer's signing key and outputs
 // the signature if no error occurred.
 func (*naiveSecProvider) Sign(msg []byte) ([]byte, error) {
-	mac := hmac.New(sha256.New, hmacKey)
+	mac := hmac.New(sm3.New, hmacKey)
 	mac.Write(msg)
 	return mac.Sum(nil), nil
 }
@@ -110,7 +110,7 @@ func (*naiveSecProvider) Sign(msg []byte) ([]byte, error) {
 // If the verification succeeded, Verify returns nil meaning no error occurred.
 // If peerCert is nil, then the signature is verified against this peer's verification key.
 func (*naiveSecProvider) Verify(peerIdentity api.PeerIdentityType, signature, message []byte) error {
-	mac := hmac.New(sha256.New, hmacKey)
+	mac := hmac.New(sm3.New, hmacKey)
 	mac.Write(message)
 	expected := mac.Sum(nil)
 	if !bytes.Equal(signature, expected) {
@@ -219,7 +219,7 @@ func handshaker(port int, endpoint string, comm Comm, t *testing.T, connMutator 
 	pkiID := common.PKIidType(endpoint)
 	assert.NoError(t, err, "%v", err)
 	msg, _ := c.createConnectionMsg(pkiID, clientCertHash, []byte(endpoint), func(msg []byte) ([]byte, error) {
-		mac := hmac.New(sha256.New, hmacKey)
+		mac := hmac.New(sm3.New, hmacKey)
 		mac.Write(msg)
 		return mac.Sum(nil), nil
 	}, false)
@@ -298,9 +298,28 @@ func getAvailablePort(t *testing.T) (port int, endpoint string, ll net.Listener)
 	return portInt, endpoint, ll
 }
 
+func TestSm3InHmac(t *testing.T) {
+	msg := []byte("天行健君子以自强不息")
+	mac := hmac.New(sm3.New, hmacKey)
+	mac.Write(msg)
+	hmacResult := mac.Sum(nil)
+	fmt.Println("hmacResult值: ", hmacResult)
+	fmt.Printf("hmacResult长度 : %d\n", len(hmacResult))
+	fmt.Printf("hmacResult字符串 : %s\n", byteToString(hmacResult))
+}
+
+func byteToString(b []byte) string {
+	ret := ""
+	for i := 0; i < len(b); i++ {
+		ret += fmt.Sprintf("%02x", b[i])
+	}
+	// fmt.Println("ret = ", ret)
+	return ret
+}
+
 func TestHandshake(t *testing.T) {
 	signer := func(msg []byte) ([]byte, error) {
-		mac := hmac.New(sha256.New, hmacKey)
+		mac := hmac.New(sm3.New, hmacKey)
 		mac.Write(msg)
 		return mac.Sum(nil), nil
 	}
@@ -550,7 +569,7 @@ func TestCloseConn(t *testing.T) {
 	c := &commImpl{}
 	tlsCertHash := certHashFromRawCert(tlsCfg.Certificates[0].Certificate[0])
 	connMsg, _ := c.createConnectionMsg(common.PKIidType("pkiID"), tlsCertHash, api.PeerIdentityType("pkiID"), func(msg []byte) ([]byte, error) {
-		mac := hmac.New(sha256.New, hmacKey)
+		mac := hmac.New(sm3.New, hmacKey)
 		mac.Write(msg)
 		return mac.Sum(nil), nil
 	}, false)
@@ -1020,7 +1039,7 @@ func establishSession(t *testing.T, port int) (proto.Gossip_GossipStreamClient, 
 	c := &commImpl{}
 	assert.NoError(t, err, "%v", err)
 	msg, _ := c.createConnectionMsg(pkiID, clientCertHash, []byte{1, 2, 3}, func(msg []byte) ([]byte, error) {
-		mac := hmac.New(sha256.New, hmacKey)
+		mac := hmac.New(sm3.New, hmacKey)
 		mac.Write(msg)
 		return mac.Sum(nil), nil
 	}, false)

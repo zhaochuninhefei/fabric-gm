@@ -7,7 +7,6 @@ SPDX-License-Identifier: Apache-2.0
 package etcdraft
 
 import (
-	// "crypto/x509"
 	"encoding/base64"
 	"fmt"
 	"io/ioutil"

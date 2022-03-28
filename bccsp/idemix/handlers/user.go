@@ -6,9 +6,8 @@ SPDX-License-Identifier: Apache-2.0
 package handlers
 
 import (
-	"crypto/sha256"
-
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
+	"gitee.com/zhaochuninhefei/gmgo/sm3"
 	"github.com/pkg/errors"
 )
 
@@ -36,12 +35,13 @@ func (k *userSecretKey) InsideKey() interface{} {
 	return k.sk
 }
 
+// 国密改造后散列算法改为SM3
 func (k *userSecretKey) SKI() []byte {
 	raw, err := k.sk.Bytes()
 	if err != nil {
 		return nil
 	}
-	hash := sha256.New()
+	hash := sm3.New()
 	hash.Write(raw)
 	return hash.Sum(nil)
 }

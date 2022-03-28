@@ -8,7 +8,6 @@ package etcdraft
 
 import (
 	"context"
-	"crypto/sha256"
 	"sync"
 	"sync/atomic"
 	"time"
@@ -16,6 +15,7 @@ import (
 	"code.cloudfoundry.org/clock"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/flogging"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
+	"gitee.com/zhaochuninhefei/gmgo/sm3"
 	"github.com/golang/protobuf/proto"
 	"github.com/hyperledger/fabric-protos-go/orderer"
 	"github.com/hyperledger/fabric-protos-go/orderer/etcdraft"
@@ -64,8 +64,8 @@ func (n *node) start(fresh, join bool) {
 
 			// determine the node to start campaign by selecting the node with ID equals to:
 			//                hash(channelID) % cluster_size + 1
-			sha := sha256.Sum256([]byte(n.chainID))
-			number, _ := proto.DecodeVarint(sha[24:])
+			hash := sm3.Sm3Sum([]byte(n.chainID))
+			number, _ := proto.DecodeVarint(hash[24:])
 			if n.config.ID == number%uint64(len(raftPeers))+1 {
 				campaign = true
 			}

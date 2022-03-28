@@ -6,6 +6,8 @@ SPDX-License-Identifier: Apache-2.0
 
 package comm
 
+// TODO gmtls的gmcredentials没有 `TransportCredentials`，
+// 因此目前无法替换 credentials
 import (
 	"context"
 	"errors"

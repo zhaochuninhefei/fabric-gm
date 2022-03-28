@@ -8,15 +8,15 @@ package tlsgen
 
 import (
 	"context"
-	"crypto/tls"
-	"crypto/x509"
 	"net"
 	"testing"
 	"time"
 
+	tls "gitee.com/zhaochuninhefei/gmgo/gmtls"
+	credentials "gitee.com/zhaochuninhefei/gmgo/gmtls/gmcredentials"
+	"gitee.com/zhaochuninhefei/gmgo/x509"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials"
 )
 
 func createTLSService(t *testing.T, ca CA, host string) *grpc.Server {

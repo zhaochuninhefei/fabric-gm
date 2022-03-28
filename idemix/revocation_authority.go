@@ -9,11 +9,11 @@ package idemix
 import (
 	//	"crypto/elliptic"
 	"crypto/rand"
-	"crypto/sha256"
 	"encoding/asn1"
 	"math/big"
 
 	"gitee.com/zhaochuninhefei/gmgo/sm2"
+	"gitee.com/zhaochuninhefei/gmgo/sm3"
 
 	"github.com/golang/protobuf/proto"
 	"github.com/hyperledger/fabric-amcl/amcl"
@@ -64,8 +64,8 @@ func CreateCRI(key *sm2.PrivateKey, unrevokedHandles []*FP256BN.BIG, epoch int, 
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to marshal CRI")
 	}
-	// TODO: 是否改为sm3
-	digest := sha256.Sum256(bytesToSign)
+	// 改为sm3
+	digest := sm3.Sm3Sum(bytesToSign)
 
 	cri.EpochPkSig, err = key.Sign(rand.Reader, digest[:], nil)
 	if err != nil {
@@ -96,8 +96,8 @@ func VerifyEpochPK(pk *sm2.PublicKey, epochPK *ECP2, epochPkSig []byte, epoch in
 	if err != nil {
 		return err
 	}
-	// TODO: 是否改为sm3
-	digest := sha256.Sum256(bytesToSign)
+	// 改为sm3
+	digest := sm3.Sm3Sum(bytesToSign)
 
 	var sig struct{ R, S *big.Int }
 	if _, err := asn1.Unmarshal(epochPkSig, &sig); err != nil {

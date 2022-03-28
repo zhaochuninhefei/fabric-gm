@@ -7,7 +7,6 @@ SPDX-License-Identifier: Apache-2.0
 package idemixca
 
 import (
-	"crypto/x509"
 	"encoding/pem"
 	"io/ioutil"
 	"os"
@@ -17,6 +16,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/sw"
 	"gitee.com/zhaochuninhefei/fabric-gm/idemix"
 	m "gitee.com/zhaochuninhefei/fabric-gm/msp"
+	"gitee.com/zhaochuninhefei/gmgo/x509"
 	"github.com/golang/protobuf/proto"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"

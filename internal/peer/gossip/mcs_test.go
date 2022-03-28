@@ -7,7 +7,6 @@ SPDX-License-Identifier: Apache-2.0
 package gossip
 
 import (
-	"crypto/sha256"
 	"errors"
 	"reflect"
 	"strings"
@@ -23,6 +22,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/msp"
 	"gitee.com/zhaochuninhefei/fabric-gm/msp/mgmt"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
+	"gitee.com/zhaochuninhefei/gmgo/sm3"
 	"github.com/golang/protobuf/proto"
 	"github.com/hyperledger/fabric-protos-go/common"
 	pmsp "github.com/hyperledger/fabric-protos-go/msp"
@@ -68,7 +68,7 @@ func TestPKIidOfCert(t *testing.T) {
 	assert.NoError(t, err, "Failed getting validated identity from [% x]", []byte(peerIdentity))
 	idRaw := append([]byte(id.Mspid), id.IdBytes...)
 	assert.NoError(t, err, "Failed marshalling identity identifier [% x]: [%s]", peerIdentity, err)
-	h := sha256.New()
+	h := sm3.New()
 	h.Write(idRaw)
 	digest := h.Sum(nil)
 	assert.Equal(t, digest, []byte(pkid), "PKID must be the SHA2-256 of peerIdentity")

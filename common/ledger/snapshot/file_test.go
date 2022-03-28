@@ -8,7 +8,6 @@ package snapshot
 
 import (
 	"bufio"
-	"crypto/sha256"
 	"errors"
 	"hash"
 	"io/ioutil"
@@ -16,6 +15,7 @@ import (
 	"path"
 	"testing"
 
+	"gitee.com/zhaochuninhefei/gmgo/sm3"
 	"github.com/golang/protobuf/proto"
 	"github.com/hyperledger/fabric-protos-go/common"
 	"github.com/stretchr/testify/require"
@@ -23,7 +23,7 @@ import (
 
 var (
 	testNewHashFunc = func() (hash.Hash, error) {
-		return sha256.New(), nil
+		return sm3.New(), nil
 	}
 )
 
@@ -56,7 +56,7 @@ func TestFileCreateAndRead(t *testing.T) {
 	require.Equal(
 		t,
 		dataHash,
-		computeSha256(t, path.Join(testDir, "dataFile")),
+		computeSm3(t, path.Join(testDir, "dataFile")),
 	)
 
 	// open the file and verify the reads
@@ -192,10 +192,10 @@ func TestFileReaderErrorPropagation(t *testing.T) {
 	require.Contains(t, err.Error(), "error while closing the snapshot file: "+closedFile)
 }
 
-func computeSha256(t *testing.T, file string) []byte {
+func computeSm3(t *testing.T, file string) []byte {
 	data, err := ioutil.ReadFile(file)
 	require.NoError(t, err)
-	sha := sha256.Sum256(data)
+	sha := sm3.Sm3Sum(data)
 	return sha[:]
 }
 

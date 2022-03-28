@@ -17,13 +17,13 @@ limitations under the License.
 package sw
 
 import (
-	"crypto/sha256"
 	"errors"
 	"reflect"
 	"testing"
 
 	mocks2 "gitee.com/zhaochuninhefei/fabric-gm/bccsp/mocks"
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/sw/mocks"
+	"gitee.com/zhaochuninhefei/gmgo/sm3"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -64,7 +64,7 @@ func TestGetHash(t *testing.T) {
 	t.Parallel()
 
 	expectedOpts := &mocks2.HashOpts{}
-	expectetValue := sha256.New()
+	expectetValue := sm3.New()
 	expectedErr := errors.New("Expected Error")
 
 	hashers := make(map[reflect.Type]Hasher)
@@ -93,17 +93,17 @@ func TestGetHash(t *testing.T) {
 func TestHasher(t *testing.T) {
 	t.Parallel()
 
-	hasher := &hasher{hash: sha256.New}
+	hasher := &hasher{hash: sm3.New}
 
 	msg := []byte("Hello World")
 	out, err := hasher.Hash(msg, nil)
 	assert.NoError(t, err)
-	h := sha256.New()
+	h := sm3.New()
 	h.Write(msg)
 	out2 := h.Sum(nil)
 	assert.Equal(t, out, out2)
 
 	hf, err := hasher.GetHash(nil)
 	assert.NoError(t, err)
-	assert.Equal(t, hf, sha256.New())
+	assert.Equal(t, hf, sm3.New())
 }

@@ -7,10 +7,10 @@ SPDX-License-Identifier: Apache-2.0
 package protoutil
 
 import (
-	"crypto/sha256"
 	"encoding/hex"
 	"time"
 
+	"gitee.com/zhaochuninhefei/gmgo/sm3"
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/hyperledger/fabric-protos-go/common"
@@ -357,7 +357,7 @@ func createProposalFromCDS(channelID string, msg proto.Message, creator []byte, 
 func ComputeTxID(nonce, creator []byte) string {
 	// TODO: Get the Hash function to be used from
 	// channel configuration
-	hasher := sha256.New()
+	hasher := sm3.New()
 	hasher.Write(nonce)
 	hasher.Write(creator)
 	return hex.EncodeToString(hasher.Sum(nil))

@@ -8,8 +8,8 @@ package idemix
 
 import (
 	"crypto/rand"
-	"crypto/sha256"
 
+	"gitee.com/zhaochuninhefei/gmgo/sm3"
 	"github.com/hyperledger/fabric-amcl/amcl"
 	"github.com/hyperledger/fabric-amcl/amcl/FP256BN"
 	"github.com/pkg/errors"
@@ -46,7 +46,8 @@ func RandModOrder(rng *amcl.RAND) *FP256BN.BIG {
 
 // HashModOrder hashes data into 0, ..., GroupOrder-1
 func HashModOrder(data []byte) *FP256BN.BIG {
-	digest := sha256.Sum256(data)
+	// TODO sha256改为sm3
+	digest := sm3.Sm3Sum(data)
 	digestBig := FP256BN.FromBytes(digest[:])
 	digestBig.Mod(GroupOrder)
 	return digestBig

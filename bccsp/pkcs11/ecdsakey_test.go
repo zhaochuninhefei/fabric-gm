@@ -10,10 +10,10 @@ SPDX-License-Identifier: Apache-2.0
 package pkcs11
 
 import (
-	"crypto/x509"
 	"testing"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
+	"gitee.com/zhaochuninhefei/gmgo/x509"
 	"github.com/stretchr/testify/assert"
 )
 

@@ -8,11 +8,7 @@ package grpclogging_test
 
 import (
 	"bytes"
-	"crypto/ecdsa"
-	"crypto/elliptic"
 	"crypto/rand"
-	"crypto/tls"
-	"crypto/x509"
 	"crypto/x509/pkix"
 	"encoding/pem"
 	"math/big"
@@ -21,6 +17,9 @@ import (
 	"time"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/common/grpclogging/testpb"
+	tls "gitee.com/zhaochuninhefei/gmgo/gmtls"
+	"gitee.com/zhaochuninhefei/gmgo/sm2"
+	"gitee.com/zhaochuninhefei/gmgo/x509"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
@@ -105,7 +104,7 @@ func newTemplate(subjectCN string, hosts ...string) x509.Certificate {
 	return template
 }
 
-func pemEncode(derCert []byte, key *ecdsa.PrivateKey) (pemCert, pemKey []byte) {
+func pemEncode(derCert []byte, key *sm2.PrivateKey) (pemCert, pemKey []byte) {
 	certBuf := &bytes.Buffer{}
 	err := pem.Encode(certBuf, &pem.Block{Type: "CERTIFICATE", Bytes: derCert})
 	Expect(err).NotTo(HaveOccurred())
@@ -121,7 +120,7 @@ func pemEncode(derCert []byte, key *ecdsa.PrivateKey) (pemCert, pemKey []byte) {
 }
 
 func generateCA(subjectCN string, hosts ...string) (pemCert, pemKey []byte) {
-	privateKey, err := ecdsa.GenerateKey(elliptic.P384(), rand.Reader)
+	privateKey, err := sm2.GenerateKey(rand.Reader)
 	Expect(err).NotTo(HaveOccurred())
 	publicKey := privateKey.Public()
 
@@ -129,7 +128,7 @@ func generateCA(subjectCN string, hosts ...string) (pemCert, pemKey []byte) {
 	template.KeyUsage |= x509.KeyUsageCertSign
 	template.IsCA = true
 
-	derBytes, err := x509.CreateCertificate(rand.Reader, &template, &template, publicKey, privateKey)
+	derBytes, err := x509.CreateCertificate(&template, &template, publicKey, privateKey)
 	Expect(err).NotTo(HaveOccurred())
 
 	return pemEncode(derBytes, privateKey)
@@ -142,12 +141,12 @@ func issueCertificate(caCert, caKey []byte, subjectCN string, hosts ...string) (
 	ca, err := x509.ParseCertificate(tlsCert.Certificate[0])
 	Expect(err).NotTo(HaveOccurred())
 
-	privateKey, err := ecdsa.GenerateKey(elliptic.P384(), rand.Reader)
+	privateKey, err := sm2.GenerateKey(rand.Reader)
 	Expect(err).NotTo(HaveOccurred())
 	publicKey := privateKey.Public()
 
 	template := newTemplate(subjectCN, hosts...)
-	derBytes, err := x509.CreateCertificate(rand.Reader, &template, ca, publicKey, tlsCert.PrivateKey)
+	derBytes, err := x509.CreateCertificateFromReader(rand.Reader, &template, ca, publicKey, tlsCert.PrivateKey)
 	Expect(err).NotTo(HaveOccurred())
 
 	return pemEncode(derBytes, privateKey)

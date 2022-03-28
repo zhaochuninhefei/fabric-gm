@@ -8,7 +8,6 @@ package raft
 
 import (
 	"bytes"
-	"crypto/x509"
 	"encoding/pem"
 	"fmt"
 	"io/ioutil"
@@ -25,6 +24,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/configtxgen/encoder"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/configtxgen/genesisconfig"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
+	"gitee.com/zhaochuninhefei/gmgo/x509"
 	docker "github.com/fsouza/go-dockerclient"
 	"github.com/golang/protobuf/proto"
 	"github.com/hyperledger/fabric-protos-go/common"

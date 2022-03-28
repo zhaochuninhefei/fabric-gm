@@ -6,6 +6,7 @@ SPDX-License-Identifier: Apache-2.0
 
 package operations_test
 
+// "net/http"只支持tls和x509，不支持gmtls和gmx509
 import (
 	"crypto/tls"
 	"crypto/x509"

@@ -8,7 +8,6 @@ package cluster_test
 
 import (
 	"bytes"
-	// "crypto/x509"
 	"encoding/pem"
 	"errors"
 	"fmt"

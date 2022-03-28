@@ -8,12 +8,12 @@ package pkcs11
 
 import (
 	"crypto"
-	"crypto/ecdsa"
 	"encoding/asn1"
 	"fmt"
 	"io"
 	"math/big"
 
+	"gitee.com/zhaochuninhefei/gmgo/sm2"
 	"github.com/miekg/pkcs11"
 )
 
@@ -21,7 +21,7 @@ import (
 type P11ECDSAKey struct {
 	ctx              *pkcs11.Ctx
 	session          pkcs11.SessionHandle
-	publicKey        *ecdsa.PublicKey
+	publicKey        *sm2.PublicKey
 	privateKeyHandle pkcs11.ObjectHandle
 }
 
@@ -51,12 +51,12 @@ func (k *P11ECDSAKey) Sign(rand io.Reader, digest []byte, opts crypto.SignerOpts
 		return nil, fmt.Errorf("sign failed: %s", err)
 	}
 
-	type ECDSASignature struct{ R, S *big.Int }
+	type SM2Signature struct{ R, S *big.Int }
 
 	R := new(big.Int)
 	S := new(big.Int)
 	R.SetBytes(signature[0 : len(signature)/2])
 	S.SetBytes(signature[len(signature)/2:])
 
-	return asn1.Marshal(ECDSASignature{R: R, S: S})
+	return asn1.Marshal(SM2Signature{R: R, S: S})
 }

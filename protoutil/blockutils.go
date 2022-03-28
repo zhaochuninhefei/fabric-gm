@@ -8,10 +8,10 @@ package protoutil
 
 import (
 	"bytes"
-	"crypto/sha256"
 	"encoding/asn1"
 	"math/big"
 
+	"gitee.com/zhaochuninhefei/gmgo/sm3"
 	"github.com/golang/protobuf/proto"
 	cb "github.com/hyperledger/fabric-protos-go/common"
 	"github.com/pkg/errors"
@@ -58,12 +58,12 @@ func BlockHeaderBytes(b *cb.BlockHeader) []byte {
 }
 
 func BlockHeaderHash(b *cb.BlockHeader) []byte {
-	sum := sha256.Sum256(BlockHeaderBytes(b))
+	sum := sm3.Sm3Sum(BlockHeaderBytes(b))
 	return sum[:]
 }
 
 func BlockDataHash(b *cb.BlockData) []byte {
-	sum := sha256.Sum256(bytes.Join(b.Data, nil))
+	sum := sm3.Sm3Sum(bytes.Join(b.Data, nil))
 	return sum[:]
 }
 

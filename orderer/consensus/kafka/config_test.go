@@ -7,11 +7,11 @@ SPDX-License-Identifier: Apache-2.0
 package kafka
 
 import (
-	"crypto/tls"
 	"testing"
 
 	localconfig "gitee.com/zhaochuninhefei/fabric-gm/orderer/common/localconfig"
 	"gitee.com/zhaochuninhefei/fabric-gm/orderer/mocks/util"
+	tls "gitee.com/zhaochuninhefei/gmgo/gmtls"
 	"gitee.com/zhaochuninhefei/saramagm/sarama"
 	"github.com/stretchr/testify/assert"
 )

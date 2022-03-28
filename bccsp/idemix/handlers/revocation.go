@@ -7,13 +7,13 @@ package handlers
 
 import (
 	"crypto/elliptic"
-	"crypto/sha256"
 	"encoding/pem"
 	"fmt"
 	"reflect"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
 	"gitee.com/zhaochuninhefei/gmgo/sm2"
+	"gitee.com/zhaochuninhefei/gmgo/sm3"
 	gmx509 "gitee.com/zhaochuninhefei/gmgo/x509"
 	"github.com/pkg/errors"
 )
@@ -42,12 +42,13 @@ func (k *revocationSecretKey) Bytes() ([]byte, error) {
 }
 
 // SKI returns the subject key identifier of this key.
+// 国密改造后散列算法改为SM3
 func (k *revocationSecretKey) SKI() []byte {
 	// Marshall the public key
 	raw := elliptic.Marshal(k.privKey.Curve, k.privKey.PublicKey.X, k.privKey.PublicKey.Y)
 
 	// Hash it
-	hash := sha256.New()
+	hash := sm3.New()
 	hash.Write(raw)
 	return hash.Sum(nil)
 }
@@ -97,12 +98,13 @@ func (k *revocationPublicKey) InsideKey() interface{} {
 }
 
 // SKI returns the subject key identifier of this key.
+// 国密改造后散列算法改为SM3
 func (k *revocationPublicKey) SKI() []byte {
 	// Marshall the public key
 	raw := elliptic.Marshal(k.pubKey.Curve, k.pubKey.X, k.pubKey.Y)
 
 	// Hash it
-	hash := sha256.New()
+	hash := sm3.New()
 	hash.Write(raw)
 	return hash.Sum(nil)
 }

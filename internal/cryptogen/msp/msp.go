@@ -6,7 +6,6 @@ SPDX-License-Identifier: Apache-2.0
 package msp
 
 import (
-	"crypto/x509"
 	"encoding/pem"
 	"os"
 	"path/filepath"
@@ -87,8 +86,8 @@ func GenerateLocalMSP(
 		ous,
 		nil,
 		&priv.PublicKey,
-		x509.KeyUsageDigitalSignature,
-		[]x509.ExtKeyUsage{},
+		gx509.KeyUsageDigitalSignature,
+		[]gx509.ExtKeyUsage{},
 	)
 	if err != nil {
 		return err
@@ -100,7 +99,7 @@ func GenerateLocalMSP(
 	//TODO
 	err = sm2Export(
 		filepath.Join(mspDir, "cacerts", x509Filename(signCA.Name)),
-		signCA.SignSm2Cert,
+		signCA.SignCert,
 	)
 	if err != nil {
 		return err
@@ -108,7 +107,7 @@ func GenerateLocalMSP(
 	// the TLS CA certificate goes into tlscacerts
 	err = sm2Export(
 		filepath.Join(mspDir, "tlscacerts", x509Filename(tlsCA.Name)),
-		tlsCA.SignSm2Cert,
+		tlsCA.SignCert,
 	)
 	if err != nil {
 		return err
@@ -151,14 +150,14 @@ func GenerateLocalMSP(
 		nil,
 		sans,
 		&tlsPrivKey.PublicKey,
-		x509.KeyUsageDigitalSignature|x509.KeyUsageKeyEncipherment,
-		[]x509.ExtKeyUsage{x509.ExtKeyUsageServerAuth,
-			x509.ExtKeyUsageClientAuth},
+		gx509.KeyUsageDigitalSignature|gx509.KeyUsageKeyEncipherment,
+		[]gx509.ExtKeyUsage{gx509.ExtKeyUsageServerAuth,
+			gx509.ExtKeyUsageClientAuth},
 	)
 	if err != nil {
 		return err
 	}
-	err = sm2Export(filepath.Join(tlsDir, "ca.crt"), tlsCA.SignSm2Cert)
+	err = sm2Export(filepath.Join(tlsDir, "ca.crt"), tlsCA.SignCert)
 	if err != nil {
 		return err
 	}
@@ -197,7 +196,7 @@ func GenerateVerifyingMSP(
 	// the signing CA certificate goes into cacerts
 	err = sm2Export(
 		filepath.Join(baseDir, "cacerts", x509Filename(signCA.Name)),
-		signCA.SignSm2Cert,
+		signCA.SignCert,
 	)
 	if err != nil {
 		return err
@@ -205,7 +204,7 @@ func GenerateVerifyingMSP(
 	// the TLS CA certificate goes into tlscacerts
 	err = sm2Export(
 		filepath.Join(baseDir, "tlscacerts", x509Filename(tlsCA.Name)),
-		tlsCA.SignSm2Cert,
+		tlsCA.SignCert,
 	)
 	if err != nil {
 		return err
@@ -241,8 +240,8 @@ func GenerateVerifyingMSP(
 		nil,
 		nil,
 		&priv.PublicKey,
-		x509.KeyUsageDigitalSignature,
-		[]x509.ExtKeyUsage{},
+		gx509.KeyUsageDigitalSignature,
+		[]gx509.ExtKeyUsage{},
 	)
 	if err != nil {
 		return err
@@ -279,9 +278,9 @@ func x509Filename(name string) string {
 	return name + "-cert.pem"
 }
 
-func x509Export(path string, cert *x509.Certificate) error {
-	return pemExport(path, "CERTIFICATE", cert.Raw)
-}
+// func x509Export(path string, cert *x509.Certificate) error {
+// 	return pemExport(path, "CERTIFICATE", cert.Raw)
+// }
 
 func sm2Export(path string, cert *gx509.Certificate) error {
 	return pemExport(path, "CERTIFICATE", cert.Raw)

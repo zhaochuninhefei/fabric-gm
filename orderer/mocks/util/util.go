@@ -8,24 +8,27 @@ package util
 
 import (
 	"crypto/rand"
-	"crypto/rsa"
-	"crypto/x509"
 	"crypto/x509/pkix"
 	"encoding/pem"
 	"math/big"
+
+	"gitee.com/zhaochuninhefei/gmgo/sm2"
+	"gitee.com/zhaochuninhefei/gmgo/x509"
 )
 
 // GenerateMockPublicPrivateKeyPairPEM returns public/private key pair encoded
 // as PEM strings.
 func GenerateMockPublicPrivateKeyPairPEM(isCA bool) (string, string, error) {
-	privateKey, err := rsa.GenerateKey(rand.Reader, 1024)
+	// privateKey, err := rsa.GenerateKey(rand.Reader, 1024)
+	privateKey, err := sm2.GenerateKey(rand.Reader)
 	if err != nil {
 		return "", "", err
 	}
+	der, _ := x509.MarshalSm2PrivateKey(privateKey, nil)
 	privateKeyPEM := string(pem.EncodeToMemory(
 		&pem.Block{
-			Type:  "RSA PRIVATE KEY",
-			Bytes: x509.MarshalPKCS1PrivateKey(privateKey),
+			Type:  "SM2 PRIVATE KEY",
+			Bytes: der,
 		},
 	))
 
@@ -40,7 +43,7 @@ func GenerateMockPublicPrivateKeyPairPEM(isCA bool) (string, string, error) {
 		template.KeyUsage |= x509.KeyUsageCertSign
 	}
 
-	publicKeyCert, err := x509.CreateCertificate(rand.Reader, &template, &template, privateKey.Public(), privateKey)
+	publicKeyCert, err := x509.CreateCertificate(&template, &template, privateKey.Public(), privateKey)
 	if err != nil {
 		return "", "", err
 	}

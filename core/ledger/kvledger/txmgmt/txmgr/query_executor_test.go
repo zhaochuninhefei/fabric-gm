@@ -7,7 +7,6 @@ SPDX-License-Identifier: Apache-2.0
 package txmgr
 
 import (
-	"crypto/sha256"
 	"testing"
 
 	commonledger "gitee.com/zhaochuninhefei/fabric-gm/common/ledger"
@@ -17,6 +16,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger/kvledger/txmgmt/rwsetutil"
 	btltestutil "gitee.com/zhaochuninhefei/fabric-gm/core/ledger/pvtdatapolicy/testutil"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger/util"
+	"gitee.com/zhaochuninhefei/gmgo/sm3"
 	"github.com/hyperledger/fabric-protos-go/ledger/queryresult"
 	"github.com/hyperledger/fabric-protos-go/ledger/rwset/kvrwset"
 	"github.com/stretchr/testify/require"
@@ -24,7 +24,7 @@ import (
 
 var (
 	testHashFunc = func(data []byte) ([]byte, error) {
-		h := sha256.New()
+		h := sm3.New()
 		if _, err := h.Write(data); err != nil {
 			return nil, err
 		}

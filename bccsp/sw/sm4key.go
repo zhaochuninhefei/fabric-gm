@@ -16,10 +16,10 @@ limitations under the License.
 package sw
 
 import (
-	"crypto/sha256"
 	"errors"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
+	"gitee.com/zhaochuninhefei/gmgo/sm3"
 )
 
 /*
@@ -43,8 +43,9 @@ func (k *SM4Key) Bytes() (raw []byte, err error) {
 }
 
 // SKI returns the subject key identifier of this key.
+// 国密改造后散列算法改为SM3
 func (k *SM4Key) SKI() (ski []byte) {
-	hash := sha256.New()
+	hash := sm3.New()
 	//hash := NewSM3()
 	hash.Write([]byte{0x01})
 	hash.Write(k.privKey)

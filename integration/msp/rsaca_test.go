@@ -8,11 +8,9 @@ package msp
 
 import (
 	"crypto"
-	"crypto/ecdsa"
 	"crypto/elliptic"
 	"crypto/rand"
 	"crypto/rsa"
-	"crypto/sha256"
 	"crypto/x509"
 	"crypto/x509/pkix"
 	"encoding/pem"
@@ -28,6 +26,8 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/integration/nwo"
 	"gitee.com/zhaochuninhefei/fabric-gm/integration/nwo/commands"
 	fabricmsp "gitee.com/zhaochuninhefei/fabric-gm/msp"
+	"gitee.com/zhaochuninhefei/gmgo/sm2"
+	"gitee.com/zhaochuninhefei/gmgo/sm3"
 	docker "github.com/fsouza/go-dockerclient"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -220,8 +220,7 @@ func createMSP(baseDir, domain string, nodeOUs bool) (signCA *CA, tlsCA *CA, adm
 }
 
 func writeCA(ca *CA, dir string) {
-	var err error
-	err = os.MkdirAll(dir, 0755)
+	err := os.MkdirAll(dir, 0755)
 	Expect(err).NotTo(HaveOccurred())
 
 	certFilename := filepath.Join(dir, ca.certFilename())
@@ -434,7 +433,7 @@ func generateRSAKey() crypto.Signer {
 }
 
 func generateECKey() crypto.Signer {
-	signer, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
+	signer, err := sm2.GenerateKey(rand.Reader)
 	Expect(err).NotTo(HaveOccurred())
 	return signer
 }
@@ -457,11 +456,13 @@ func computeSKI(key crypto.PublicKey) []byte {
 	switch key := key.(type) {
 	case *rsa.PublicKey:
 		raw = x509.MarshalPKCS1PublicKey(key)
-	case *ecdsa.PublicKey:
+	// case *ecdsa.PublicKey:
+	// 	raw = elliptic.Marshal(key.Curve, key.X, key.Y)
+	case *sm2.PublicKey:
 		raw = elliptic.Marshal(key.Curve, key.X, key.Y)
 	default:
 		panic(fmt.Sprintf("unexpected type: %T", key))
 	}
-	hash := sha256.Sum256(raw)
+	hash := sm3.Sm3Sum(raw)
 	return hash[:]
 }

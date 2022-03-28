@@ -6,9 +6,8 @@ SPDX-License-Identifier: Apache-2.0
 package handlers
 
 import (
-	"crypto/sha256"
-
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
+	"gitee.com/zhaochuninhefei/gmgo/sm3"
 	"github.com/pkg/errors"
 )
 
@@ -24,13 +23,16 @@ type nymSecretKey struct {
 	exportable bool
 }
 
+// 计算密钥的SKI
+// 国密改造后散列算法改为SM3
 func computeSKI(serialise func() ([]byte, error)) ([]byte, error) {
 	raw, err := serialise()
 	if err != nil {
 		return nil, err
 	}
 
-	hash := sha256.New()
+	// hash := sha256.New()
+	hash := sm3.New()
 	hash.Write(raw)
 	return hash.Sum(nil), nil
 

@@ -8,10 +8,6 @@ package csp
 import (
 	"crypto"
 	"crypto/rand"
-
-	//	"crypto/elliptic"
-	//	"crypto/rand"
-	// "crypto/x509"
 	"encoding/asn1"
 	"encoding/pem"
 	"io"
