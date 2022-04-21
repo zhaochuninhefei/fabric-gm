@@ -12,7 +12,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/core/endorser/mocks"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/handlers/endorsement/builtin"
 	mocks2 "gitee.com/zhaochuninhefei/fabric-gm/core/handlers/endorsement/builtin/mocks"
-	"github.com/hyperledger/fabric-protos-go/peer"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"

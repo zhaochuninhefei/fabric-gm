@@ -15,10 +15,10 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/configtxgen/genesisconfig"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/pkg/txflags"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
-	cb "github.com/hyperledger/fabric-protos-go/common"
-	mspproto "github.com/hyperledger/fabric-protos-go/msp"
-	"github.com/hyperledger/fabric-protos-go/peer"
-	pb "github.com/hyperledger/fabric-protos-go/peer"
+	cb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
+	mspproto "gitee.com/zhaochuninhefei/fabric-protos-go-gm/msp"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
+	pb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 )
 
 var logger = flogging.MustGetLogger("common.configtx.test")

@@ -20,9 +20,9 @@ import (
 	msgprocessormocks "gitee.com/zhaochuninhefei/fabric-gm/orderer/common/msgprocessor/mocks"
 	"gitee.com/zhaochuninhefei/fabric-gm/orderer/common/multichannel/mocks"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/orderer"
 	"github.com/golang/protobuf/proto"
-	"github.com/hyperledger/fabric-protos-go/common"
-	"github.com/hyperledger/fabric-protos-go/orderer"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
 )

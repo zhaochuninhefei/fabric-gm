@@ -14,7 +14,7 @@ import (
 	mockpolicies "gitee.com/zhaochuninhefei/fabric-gm/common/configtx/mock"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/policies"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
-	cb "github.com/hyperledger/fabric-protos-go/common"
+	cb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
 	"github.com/stretchr/testify/assert"
 )
 

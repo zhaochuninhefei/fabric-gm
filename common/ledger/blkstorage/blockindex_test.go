@@ -21,8 +21,8 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/common/metrics/disabled"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/pkg/txflags"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
 	"gitee.com/zhaochuninhefei/gmgo/sm3"
-	"github.com/hyperledger/fabric-protos-go/common"
 	"github.com/stretchr/testify/require"
 )
 

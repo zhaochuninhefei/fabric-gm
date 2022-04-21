@@ -9,11 +9,12 @@ package rest
 import (
 	"fmt"
 	"io/ioutil"
-	"net/http"
+
+	http "gitee.com/zhaochuninhefei/gmgo/gmhttp"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/configtxlator/update"
+	cb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
 	"github.com/golang/protobuf/proto"
-	cb "github.com/hyperledger/fabric-protos-go/common"
 )
 
 func fieldBytes(fieldName string, r *http.Request) ([]byte, error) {

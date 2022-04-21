@@ -18,8 +18,8 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/peer/common"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/peer/common/mock"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
-	cb "github.com/hyperledger/fabric-protos-go/common"
-	ab "github.com/hyperledger/fabric-protos-go/orderer"
+	cb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
+	ab "gitee.com/zhaochuninhefei/fabric-protos-go-gm/orderer"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
 )

@@ -18,9 +18,9 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/factory"
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/signer"
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/sw"
+	m "gitee.com/zhaochuninhefei/fabric-protos-go-gm/msp"
 	gmx509 "gitee.com/zhaochuninhefei/gmgo/x509"
 	"github.com/golang/protobuf/proto"
-	m "github.com/hyperledger/fabric-protos-go/msp"
 	"github.com/pkg/errors"
 )
 

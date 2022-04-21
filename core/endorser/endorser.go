@@ -21,9 +21,9 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/pkg/identity"
 	"gitee.com/zhaochuninhefei/fabric-gm/msp"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
+	pb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/transientstore"
 	"github.com/golang/protobuf/proto"
-	pb "github.com/hyperledger/fabric-protos-go/peer"
-	"github.com/hyperledger/fabric-protos-go/transientstore"
 	"github.com/pkg/errors"
 	"go.uber.org/zap"
 )

@@ -14,9 +14,9 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/common/flogging"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/util"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/pkg/comm"
-	"github.com/hyperledger/fabric-protos-go/orderer"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/orderer"
+	"gitee.com/zhaochuninhefei/gmgo/grpc"
 	"go.uber.org/zap"
-	"google.golang.org/grpc"
 )
 
 //go:generate mockery -dir . -name Dispatcher -case underscore -output ./mocks/

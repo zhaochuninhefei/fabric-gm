@@ -10,7 +10,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/core/chaincode"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/chaincode/mock"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/common/ccprovider"
-	pb "github.com/hyperledger/fabric-protos-go/peer"
+	pb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )

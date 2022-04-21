@@ -5,7 +5,7 @@ import (
 	"sync"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/common/deliver"
-	"github.com/hyperledger/fabric-protos-go/common"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
 )
 
 type Receiver struct {

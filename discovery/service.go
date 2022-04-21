@@ -19,7 +19,7 @@ import (
 	discovery2 "gitee.com/zhaochuninhefei/fabric-gm/gossip/discovery"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/pkg/comm"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
-	"github.com/hyperledger/fabric-protos-go/discovery"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/discovery"
 	"github.com/pkg/errors"
 )
 

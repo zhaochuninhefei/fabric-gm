@@ -14,7 +14,7 @@ import (
 	"time"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/util"
-	proto "github.com/hyperledger/fabric-protos-go/gossip"
+	proto "gitee.com/zhaochuninhefei/fabric-protos-go-gm/gossip"
 	"github.com/stretchr/testify/assert"
 )
 

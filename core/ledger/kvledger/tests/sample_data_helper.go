@@ -11,7 +11,7 @@ import (
 	"testing"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger"
-	protopeer "github.com/hyperledger/fabric-protos-go/peer"
+	protopeer "gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 	"github.com/stretchr/testify/assert"
 )
 

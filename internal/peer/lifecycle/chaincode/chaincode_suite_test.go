@@ -15,7 +15,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/peer/common"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/peer/lifecycle/chaincode"
 	msptesttools "gitee.com/zhaochuninhefei/fabric-gm/msp/mgmt/testtools"
-	pb "github.com/hyperledger/fabric-protos-go/peer"
+	pb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )

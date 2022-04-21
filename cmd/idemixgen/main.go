@@ -18,6 +18,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/utils"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/tools/idemixgen/idemixca"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/tools/idemixgen/metadata"
 	"gitee.com/zhaochuninhefei/fabric-gm/idemix"
@@ -64,7 +65,7 @@ func main() {
 		revocationKey, err := idemix.GenerateLongTermRevocationKey()
 		handleError(err)
 		//TODO
-		encodedRevocationSK, err := x509.MarshalSm2UnecryptedPrivateKey(revocationKey)
+		encodedRevocationSK, err := utils.PrivateKeyToDER(revocationKey)
 		handleError(err)
 		pemEncodedRevocationSK := pem.EncodeToMemory(&pem.Block{Type: "PRIVATE KEY", Bytes: encodedRevocationSK})
 		handleError(err)
@@ -166,11 +167,12 @@ func readRevocationKey() *sm2.PrivateKey {
 		handleError(errors.Wrapf(err, "failed to open revocation secret key file: %s", path))
 	}
 
-	block, _ := pem.Decode(keyBytes)
-	if block == nil {
-		handleError(errors.Errorf("failed to decode SM2 private key"))
-	}
-	key, err := x509.ParseSm2PrivateKey(block.Bytes)
+	// block, _ := pem.Decode(keyBytes)
+	// if block == nil {
+	// 	handleError(errors.Errorf("failed to decode SM2 private key"))
+	// }
+	// key, err := x509.ParseSm2PrivateKey(block.Bytes)
+	key, err := utils.PEMToSm2PrivateKey(keyBytes, nil)
 	handleError(err)
 
 	return key

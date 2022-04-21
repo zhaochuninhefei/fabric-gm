@@ -4,7 +4,7 @@ package fake
 import (
 	"sync"
 
-	commona "github.com/hyperledger/fabric-protos-go/common"
+	commona "gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/common"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/pkg/peer/blocksprovider"
 )

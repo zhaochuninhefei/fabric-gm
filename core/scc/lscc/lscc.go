@@ -36,9 +36,9 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/msp"
 	"gitee.com/zhaochuninhefei/fabric-gm/msp/mgmt"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
+	mb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/msp"
+	pb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 	"github.com/golang/protobuf/proto"
-	mb "github.com/hyperledger/fabric-protos-go/msp"
-	pb "github.com/hyperledger/fabric-protos-go/peer"
 	"github.com/pkg/errors"
 )
 

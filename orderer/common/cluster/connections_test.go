@@ -13,9 +13,9 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/common/metrics/disabled"
 	"gitee.com/zhaochuninhefei/fabric-gm/orderer/common/cluster"
 	"gitee.com/zhaochuninhefei/fabric-gm/orderer/common/cluster/mocks"
+	"gitee.com/zhaochuninhefei/gmgo/grpc"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"google.golang.org/grpc"
 )
 
 func TestConcurrentConnections(t *testing.T) {

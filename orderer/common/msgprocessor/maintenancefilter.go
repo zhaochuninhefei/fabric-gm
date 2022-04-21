@@ -13,10 +13,10 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/common/channelconfig"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/configtx"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
+	cb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/orderer"
+	protoetcdraft "gitee.com/zhaochuninhefei/fabric-protos-go-gm/orderer/etcdraft"
 	"github.com/golang/protobuf/proto"
-	cb "github.com/hyperledger/fabric-protos-go/common"
-	"github.com/hyperledger/fabric-protos-go/orderer"
-	protoetcdraft "github.com/hyperledger/fabric-protos-go/orderer/etcdraft"
 	"github.com/pkg/errors"
 )
 

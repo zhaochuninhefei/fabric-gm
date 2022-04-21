@@ -14,9 +14,9 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/core/chaincode/lifecycle/mock"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/dispatcher"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
-	"github.com/hyperledger/fabric-protos-go/ledger/queryresult"
-	pb "github.com/hyperledger/fabric-protos-go/peer"
-	lb "github.com/hyperledger/fabric-protos-go/peer/lifecycle"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/ledger/queryresult"
+	pb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
+	lb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer/lifecycle"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"

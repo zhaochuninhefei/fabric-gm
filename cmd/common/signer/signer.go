@@ -8,15 +8,14 @@ package signer
 
 import (
 	"crypto/rand"
-	"encoding/pem"
 	"io/ioutil"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/sw"
+	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/utils"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/util"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/msp"
 	"gitee.com/zhaochuninhefei/gmgo/sm2"
-	"gitee.com/zhaochuninhefei/gmgo/x509"
-	"github.com/hyperledger/fabric-protos-go/msp"
 	"github.com/pkg/errors"
 )
 
@@ -90,11 +89,11 @@ func loadPrivateKey(file string) (*sm2.PrivateKey, error) {
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}
-	bl, _ := pem.Decode(b)
-	if bl == nil {
-		return nil, errors.Errorf("failed to decode PEM block from %s", file)
-	}
-	key, err := x509.ParsePKCS8UnecryptedPrivateKey(bl.Bytes)
+	// bl, _ := pem.Decode(b)
+	// if bl == nil {
+	// 	return nil, errors.Errorf("failed to decode PEM block from %s", file)
+	// }
+	key, err := utils.PEMToSm2PrivateKey(b, nil)
 	if err != nil {
 		return nil, err
 	}

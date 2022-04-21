@@ -13,7 +13,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/sw"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/config/configtest"
 	"gitee.com/zhaochuninhefei/fabric-gm/msp"
-	mspprotos "github.com/hyperledger/fabric-protos-go/msp"
+	mspprotos "gitee.com/zhaochuninhefei/fabric-protos-go-gm/msp"
 	"github.com/stretchr/testify/assert"
 )
 

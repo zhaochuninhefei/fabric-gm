@@ -10,7 +10,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/common/policies"
 	"gitee.com/zhaochuninhefei/fabric-gm/msp"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
-	"github.com/hyperledger/fabric-protos-go/peer"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 	"github.com/pkg/errors"
 )
 

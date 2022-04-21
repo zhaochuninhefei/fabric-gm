@@ -23,13 +23,13 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/pkg/comm"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/pkg/comm/testpb"
 	tls "gitee.com/zhaochuninhefei/gmgo/gmtls"
-	credentials "gitee.com/zhaochuninhefei/gmgo/gmtls/gmcredentials"
+	"gitee.com/zhaochuninhefei/gmgo/grpc"
+	"gitee.com/zhaochuninhefei/gmgo/grpc/codes"
+	"gitee.com/zhaochuninhefei/gmgo/grpc/credentials"
+	"gitee.com/zhaochuninhefei/gmgo/grpc/status"
 	"gitee.com/zhaochuninhefei/gmgo/x509"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 )
 
 // Embedded certificates for testing

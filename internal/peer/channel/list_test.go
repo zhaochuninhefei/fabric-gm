@@ -12,8 +12,8 @@ import (
 
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/peer/common"
 	"gitee.com/zhaochuninhefei/fabric-gm/msp"
+	pb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 	"github.com/golang/protobuf/proto"
-	pb "github.com/hyperledger/fabric-protos-go/peer"
 	"github.com/stretchr/testify/assert"
 )
 

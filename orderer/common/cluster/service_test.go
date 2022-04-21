@@ -19,7 +19,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/pkg/comm"
 	"gitee.com/zhaochuninhefei/fabric-gm/orderer/common/cluster"
 	"gitee.com/zhaochuninhefei/fabric-gm/orderer/common/cluster/mocks"
-	"github.com/hyperledger/fabric-protos-go/orderer"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/orderer"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"

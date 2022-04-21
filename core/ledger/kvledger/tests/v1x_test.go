@@ -20,8 +20,8 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger/kvledger/txmgmt/statedb/statecouchdb"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger/mock"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
-	"github.com/hyperledger/fabric-protos-go/common"
-	protopeer "github.com/hyperledger/fabric-protos-go/peer"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
+	protopeer "gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 	"github.com/stretchr/testify/require"
 )
 

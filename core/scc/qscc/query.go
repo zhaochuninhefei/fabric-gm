@@ -15,7 +15,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/core/aclmgmt"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
-	pb "github.com/hyperledger/fabric-protos-go/peer"
+	pb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 )
 
 // LedgerGetter gets the PeerLedger associated with a channel.

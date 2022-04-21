@@ -11,8 +11,8 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/common/flogging"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/policies"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/policies/inquire"
+	common2 "gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
 	"github.com/golang/protobuf/proto"
-	common2 "github.com/hyperledger/fabric-protos-go/common"
 )
 
 var logger = flogging.MustGetLogger("discovery.DiscoverySupport")

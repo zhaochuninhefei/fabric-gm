@@ -9,7 +9,7 @@ package pvtdatastorage
 import (
 	"gitee.com/zhaochuninhefei/fabric-gm/common/ledger/util/leveldbhelper"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger"
-	"github.com/hyperledger/fabric-protos-go/ledger/rwset"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/ledger/rwset"
 	"github.com/pkg/errors"
 	"github.com/willf/bitset"
 )

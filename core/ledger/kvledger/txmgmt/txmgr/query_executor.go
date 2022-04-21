@@ -16,8 +16,8 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger/kvledger/txmgmt/statedb"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger/kvledger/txmgmt/statemetadata"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger/util"
-	"github.com/hyperledger/fabric-protos-go/ledger/queryresult"
-	"github.com/hyperledger/fabric-protos-go/ledger/rwset/kvrwset"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/ledger/queryresult"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/ledger/rwset/kvrwset"
 	"github.com/pkg/errors"
 )
 

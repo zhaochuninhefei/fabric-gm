@@ -17,7 +17,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/common/viperutil"
 	cf "gitee.com/zhaochuninhefei/fabric-gm/core/config"
 	"gitee.com/zhaochuninhefei/fabric-gm/msp"
-	"github.com/hyperledger/fabric-protos-go/orderer/etcdraft"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/orderer/etcdraft"
 	"github.com/spf13/viper"
 )
 

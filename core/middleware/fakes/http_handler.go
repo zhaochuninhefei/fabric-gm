@@ -2,7 +2,7 @@
 package fakes
 
 import (
-	"net/http"
+	http "gitee.com/zhaochuninhefei/gmgo/gmhttp"
 	"sync"
 )
 

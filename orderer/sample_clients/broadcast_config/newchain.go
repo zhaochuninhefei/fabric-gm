@@ -7,7 +7,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/configtxgen/encoder"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/configtxgen/genesisconfig"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/pkg/identity"
-	cb "github.com/hyperledger/fabric-protos-go/common"
+	cb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
 )
 
 func newChainRequest(

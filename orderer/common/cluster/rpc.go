@@ -13,10 +13,10 @@ import (
 	"time"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/common/flogging"
-	"github.com/hyperledger/fabric-protos-go/orderer"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/orderer"
+	"gitee.com/zhaochuninhefei/gmgo/grpc"
 	"github.com/pkg/errors"
 	"go.uber.org/zap/zapcore"
-	"google.golang.org/grpc"
 )
 
 //go:generate mockery -dir . -name StepClient -case underscore -output ./mocks/

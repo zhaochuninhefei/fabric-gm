@@ -5,7 +5,7 @@ import (
 	"sync"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger"
-	"github.com/hyperledger/fabric-protos-go/peer"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 )
 
 type ChaincodeInfoProvider struct {

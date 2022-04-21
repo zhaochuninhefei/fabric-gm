@@ -12,14 +12,17 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net"
-	"net/http"
-	_ "net/http/pprof" // This is essentially the main package for the orderer
 	"os"
 	"os/signal"
 	"sync"
 	"syscall"
 	"time"
 
+	_ "gitee.com/zhaochuninhefei/gmgo/gmhttp/pprof" // This is essentially the main package for the orderer
+
+	http "gitee.com/zhaochuninhefei/gmgo/gmhttp"
+
+	"gitee.com/zhaochuninhefei/fabric-config-gm/healthz"
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/factory"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/channelconfig"
@@ -46,12 +49,11 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/orderer/consensus/kafka"
 	"gitee.com/zhaochuninhefei/fabric-gm/orderer/consensus/solo"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
+	cb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
+	ab "gitee.com/zhaochuninhefei/fabric-protos-go-gm/orderer"
+	"gitee.com/zhaochuninhefei/gmgo/grpc"
 	"github.com/golang/protobuf/proto"
-	"github.com/hyperledger/fabric-lib-go/healthz"
-	cb "github.com/hyperledger/fabric-protos-go/common"
-	ab "github.com/hyperledger/fabric-protos-go/orderer"
 	"go.uber.org/zap/zapcore"
-	"google.golang.org/grpc"
 	"gopkg.in/alecthomas/kingpin.v2"
 )
 

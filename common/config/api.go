@@ -6,7 +6,7 @@ SPDX-License-Identifier: Apache-2.0
 package config
 
 import (
-	cb "github.com/hyperledger/fabric-protos-go/common"
+	cb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
 )
 
 // Config encapsulates config (channel or resource) tree

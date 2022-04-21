@@ -52,13 +52,13 @@ ZsQXrlIqlmNalfYPX+NDDELqlpXQBeEqnA==
 	pemBlock, _ := pem.Decode([]byte(key))
 	assert.NotNil(t, pemBlock)
 
-	ecPK, err := x509.ParseSm2PrivateKey(pemBlock.Bytes)
+	ecPK, err := x509.ParseECPrivateKey(pemBlock.Bytes)
 	assert.NoError(t, err)
 
 	ec1, err := x509.MarshalECPrivateKey(ecPK)
 	assert.NoError(t, err)
 
-	pkcs8, err := x509.MarshalSm2PrivateKey(ecPK, nil)
+	pkcs8, err := x509.MarshalECPrivateKey(ecPK)
 	assert.NoError(t, err)
 
 	for _, testCase := range []struct {

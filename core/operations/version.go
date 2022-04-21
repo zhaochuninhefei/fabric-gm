@@ -9,7 +9,8 @@ package operations
 import (
 	"encoding/json"
 	"fmt"
-	"net/http"
+
+	http "gitee.com/zhaochuninhefei/gmgo/gmhttp"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/common/flogging"
 )

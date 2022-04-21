@@ -9,8 +9,8 @@ package flogging
 import (
 	"io"
 
+	"gitee.com/zhaochuninhefei/gmgo/grpc/grpclog"
 	"go.uber.org/zap/zapcore"
-	"google.golang.org/grpc/grpclog"
 )
 
 const (
@@ -19,6 +19,7 @@ const (
 )
 
 var Global *Logging
+
 // var logger *FabricLogger
 
 func init() {

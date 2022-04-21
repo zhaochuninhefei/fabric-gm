@@ -15,9 +15,8 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/common/flogging"
 	"gitee.com/zhaochuninhefei/fabric-gm/msp"
 	"gitee.com/zhaochuninhefei/gmgo/gmtls"
-	"gitee.com/zhaochuninhefei/gmgo/gmtls/gmcredentials"
+	"gitee.com/zhaochuninhefei/gmgo/grpc/credentials"
 	"gitee.com/zhaochuninhefei/gmgo/x509"
-	"google.golang.org/grpc/credentials"
 )
 
 var commLogger = flogging.MustGetLogger("comm")
@@ -74,7 +73,7 @@ func (cs *CredentialSupport) GetPeerCredentials() credentials.TransportCredentia
 	}
 
 	// TODO important done
-	return gmcredentials.NewTLS(&gmtls.Config{
+	return credentials.NewTLS(&gmtls.Config{
 		Certificates: []gmtls.Certificate{cs.clientCert},
 		RootCAs:      certPool,
 	})

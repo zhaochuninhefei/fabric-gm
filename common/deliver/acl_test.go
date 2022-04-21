@@ -12,7 +12,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/common/deliver"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/deliver/mock"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
-	cb "github.com/hyperledger/fabric-protos-go/common"
+	cb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"github.com/pkg/errors"

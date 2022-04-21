@@ -5,8 +5,8 @@ package mocks
 import (
 	context "context"
 
-	gossip "github.com/hyperledger/fabric-protos-go/gossip"
-	metadata "google.golang.org/grpc/metadata"
+	gossip "gitee.com/zhaochuninhefei/fabric-protos-go-gm/gossip"
+	metadata "gitee.com/zhaochuninhefei/gmgo/grpc/metadata"
 
 	mock "github.com/stretchr/testify/mock"
 )

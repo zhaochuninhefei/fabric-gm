@@ -10,8 +10,8 @@ import (
 	"testing"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
-	"github.com/hyperledger/fabric-protos-go/common"
-	"github.com/hyperledger/fabric-protos-go/peer"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/core/committer/txvalidator/v20/valinforetriever"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/committer/txvalidator/v20/valinforetriever/mocks"

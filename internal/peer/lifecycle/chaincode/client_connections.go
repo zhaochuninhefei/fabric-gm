@@ -10,8 +10,8 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/peer/common"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/pkg/identity"
+	pb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 	tls "gitee.com/zhaochuninhefei/gmgo/gmtls"
-	pb "github.com/hyperledger/fabric-protos-go/peer"
 	"github.com/pkg/errors"
 	"github.com/spf13/viper"
 )

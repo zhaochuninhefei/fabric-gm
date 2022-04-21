@@ -12,7 +12,7 @@ import (
 
 	"gitee.com/zhaochuninhefei/fabric-gm/msp"
 	"gitee.com/zhaochuninhefei/fabric-gm/msp/mocks"
-	msp2 "github.com/hyperledger/fabric-protos-go/msp"
+	msp2 "gitee.com/zhaochuninhefei/fabric-protos-go-gm/msp"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"

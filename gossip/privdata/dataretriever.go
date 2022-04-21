@@ -12,8 +12,8 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/core/transientstore"
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/privdata/common"
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/util"
-	protosgossip "github.com/hyperledger/fabric-protos-go/gossip"
-	"github.com/hyperledger/fabric-protos-go/ledger/rwset"
+	protosgossip "gitee.com/zhaochuninhefei/fabric-protos-go-gm/gossip"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/ledger/rwset"
 	"github.com/pkg/errors"
 )
 

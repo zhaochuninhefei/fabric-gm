@@ -19,7 +19,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/pkg/identity"
 	"gitee.com/zhaochuninhefei/fabric-gm/orderer/common/localconfig"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
-	"github.com/hyperledger/fabric-protos-go/common"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
 	"github.com/pkg/errors"
 )
 

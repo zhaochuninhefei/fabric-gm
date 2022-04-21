@@ -17,13 +17,13 @@ import (
 	"time"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/util"
+	proto "gitee.com/zhaochuninhefei/fabric-protos-go-gm/gossip"
 	tls "gitee.com/zhaochuninhefei/gmgo/gmtls"
-	credentials "gitee.com/zhaochuninhefei/gmgo/gmtls/gmcredentials"
+	"gitee.com/zhaochuninhefei/gmgo/grpc"
+	"gitee.com/zhaochuninhefei/gmgo/grpc/credentials"
 	"gitee.com/zhaochuninhefei/gmgo/sm2"
 	"gitee.com/zhaochuninhefei/gmgo/x509"
-	proto "github.com/hyperledger/fabric-protos-go/gossip"
 	"github.com/stretchr/testify/assert"
-	"google.golang.org/grpc"
 )
 
 type gossipTestServer struct {
@@ -129,7 +129,7 @@ func GenerateCertificatesOrPanic() tls.Certificate {
 		SerialNumber: sn,
 		ExtKeyUsage:  []x509.ExtKeyUsage{x509.ExtKeyUsageServerAuth},
 	}
-	rawBytes, err := x509.CreateCertificate(&template, &template, &privateKey.PublicKey, privateKey)
+	rawBytes, err := x509.CreateCertificate(rand.Reader, &template, &template, &privateKey.PublicKey, privateKey)
 	if err != nil {
 		panic(err)
 	}

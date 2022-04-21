@@ -15,7 +15,7 @@ import (
 	vmocks "gitee.com/zhaochuninhefei/fabric-gm/core/handlers/validation/builtin/mocks"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/handlers/validation/builtin/v12/mocks"
 	v20mocks "gitee.com/zhaochuninhefei/fabric-gm/core/handlers/validation/builtin/v20/mocks"
-	"github.com/hyperledger/fabric-protos-go/common"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"

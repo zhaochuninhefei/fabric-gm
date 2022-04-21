@@ -13,8 +13,8 @@ import (
 	endorsertx "gitee.com/zhaochuninhefei/fabric-gm/core/tx/endorser"
 	"gitee.com/zhaochuninhefei/fabric-gm/pkg/tx"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
-	"github.com/hyperledger/fabric-protos-go/common"
-	"github.com/hyperledger/fabric-protos-go/peer"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )

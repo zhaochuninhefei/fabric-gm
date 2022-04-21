@@ -8,9 +8,9 @@ package discovery
 
 import (
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/protoext"
-	"github.com/hyperledger/fabric-protos-go/discovery"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/discovery"
+	"gitee.com/zhaochuninhefei/gmgo/grpc"
 	"github.com/pkg/errors"
-	"google.golang.org/grpc"
 )
 
 var (

@@ -8,8 +8,8 @@ package channelconfig
 
 import (
 	"gitee.com/zhaochuninhefei/fabric-gm/common/capabilities"
-	cb "github.com/hyperledger/fabric-protos-go/common"
-	pb "github.com/hyperledger/fabric-protos-go/peer"
+	cb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
+	pb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 	"github.com/pkg/errors"
 )
 

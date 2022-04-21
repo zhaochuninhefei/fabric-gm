@@ -11,9 +11,9 @@ import (
 
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger/mock"
-	"github.com/hyperledger/fabric-protos-go/common"
-	"github.com/hyperledger/fabric-protos-go/ledger/rwset/kvrwset"
-	"github.com/hyperledger/fabric-protos-go/peer"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/ledger/rwset/kvrwset"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 	"github.com/stretchr/testify/require"
 )
 

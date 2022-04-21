@@ -21,7 +21,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/scc"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/pkg/identity"
-	pb "github.com/hyperledger/fabric-protos-go/peer"
+	pb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 	"github.com/pkg/errors"
 )
 

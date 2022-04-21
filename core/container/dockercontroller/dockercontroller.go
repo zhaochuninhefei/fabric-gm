@@ -26,8 +26,8 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/core/chaincode/persistence"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/container"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/container/ccintf"
+	pb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 	docker "github.com/fsouza/go-dockerclient"
-	pb "github.com/hyperledger/fabric-protos-go/peer"
 	"github.com/pkg/errors"
 )
 

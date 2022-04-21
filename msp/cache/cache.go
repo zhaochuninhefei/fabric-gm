@@ -9,7 +9,7 @@ package cache
 import (
 	"gitee.com/zhaochuninhefei/fabric-gm/common/flogging"
 	"gitee.com/zhaochuninhefei/fabric-gm/msp"
-	pmsp "github.com/hyperledger/fabric-protos-go/msp"
+	pmsp "gitee.com/zhaochuninhefei/fabric-protos-go-gm/msp"
 	"github.com/pkg/errors"
 )
 

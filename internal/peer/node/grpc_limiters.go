@@ -12,8 +12,8 @@ import (
 
 	"gitee.com/zhaochuninhefei/fabric-gm/common/semaphore"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/peer"
+	"gitee.com/zhaochuninhefei/gmgo/grpc"
 	"github.com/pkg/errors"
-	"google.golang.org/grpc"
 )
 
 func initGrpcSemaphores(config *peer.Config) map[string]semaphore.Semaphore {

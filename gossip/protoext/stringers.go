@@ -10,9 +10,9 @@ import (
 	"encoding/hex"
 	"fmt"
 
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/gossip"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/msp"
 	"github.com/golang/protobuf/proto"
-	"github.com/hyperledger/fabric-protos-go/gossip"
-	"github.com/hyperledger/fabric-protos-go/msp"
 )
 
 // MemberToString prints Endpoint and PKI-id

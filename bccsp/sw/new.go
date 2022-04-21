@@ -32,7 +32,7 @@ func NewDefaultSecurityLevel(keyStorePath string) (bccsp.BCCSP, error) {
 	}
 	// 改为使用国密
 	// return NewWithParams(256, "SHA2", ks)
-	return NewWithParams(true, 256, "SHA2", ks)
+	return NewWithParams(true, 256, "SM3", ks)
 }
 
 // NewDefaultSecurityLevel returns a new instance of the software-based BCCSP
@@ -40,7 +40,7 @@ func NewDefaultSecurityLevel(keyStorePath string) (bccsp.BCCSP, error) {
 func NewDefaultSecurityLevelWithKeystore(keyStore bccsp.KeyStore) (bccsp.BCCSP, error) {
 	// 改为使用国密
 	// return NewWithParams(256, "SHA2", keyStore)
-	return NewWithParams(true, 256, "SHA2", keyStore)
+	return NewWithParams(true, 256, "SM3", keyStore)
 }
 
 // NewWithParams returns a new instance of the software-based BCCSP

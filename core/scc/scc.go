@@ -10,7 +10,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-chaincode-go-gm/shim"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/flogging"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/container/ccintf"
-	pb "github.com/hyperledger/fabric-protos-go/peer"
+	pb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 )
 
 // SysCCVersion is a constant used for the version field of system chaincodes.

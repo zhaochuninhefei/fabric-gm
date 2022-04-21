@@ -12,8 +12,8 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/common/ledger"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/ledger/snapshot"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/ledger/util/leveldbhelper"
-	"github.com/hyperledger/fabric-protos-go/common"
-	"github.com/hyperledger/fabric-protos-go/peer"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 )
 
 // BlockStore - filesystem based implementation for `BlockStore`

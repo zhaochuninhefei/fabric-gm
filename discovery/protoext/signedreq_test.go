@@ -10,8 +10,8 @@ import (
 	"testing"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/discovery/protoext"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/discovery"
 	"github.com/golang/protobuf/proto"
-	"github.com/hyperledger/fabric-protos-go/discovery"
 	"github.com/stretchr/testify/assert"
 )
 

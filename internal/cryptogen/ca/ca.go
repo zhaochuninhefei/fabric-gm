@@ -339,7 +339,7 @@ func genCertificateSM21(
 	// }
 	//x509Cert, err := sm2.ReadCertificateFromPem(fileName)
 
-	x509Cert, err := gx509.ReadCertificateFromMem(certBytes)
+	x509Cert, err := gx509.ReadCertificateFromPem(certBytes)
 	if err != nil {
 		return nil, err
 	}
@@ -358,7 +358,7 @@ func genCertificateSM2(
 ) (*gx509.Certificate, error) {
 
 	//create the x509 public cert
-	certBytes, err := gx509.CreateCertificateFromReader(rand.Reader, template, parent, pub, priv)
+	certBytes, err := gx509.CreateCertificate(rand.Reader, template, parent, pub, priv)
 	if err != nil {
 		return nil, err
 	}

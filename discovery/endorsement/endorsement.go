@@ -17,8 +17,8 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/api"
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/common"
 	. "gitee.com/zhaochuninhefei/fabric-gm/gossip/discovery"
-	"github.com/hyperledger/fabric-protos-go/discovery"
-	"github.com/hyperledger/fabric-protos-go/msp"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/discovery"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/msp"
 	"github.com/pkg/errors"
 )
 

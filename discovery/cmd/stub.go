@@ -14,7 +14,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/cmd/common/signer"
 	discoveryclient "gitee.com/zhaochuninhefei/fabric-gm/discovery/client"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
-	"github.com/hyperledger/fabric-protos-go/discovery"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/discovery"
 	"github.com/pkg/errors"
 )
 

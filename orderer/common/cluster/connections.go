@@ -11,9 +11,9 @@ import (
 
 	"gitee.com/zhaochuninhefei/fabric-gm/common/crypto"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/metrics"
+	"gitee.com/zhaochuninhefei/gmgo/grpc"
 	"gitee.com/zhaochuninhefei/gmgo/x509"
 	"github.com/pkg/errors"
-	"google.golang.org/grpc"
 )
 
 // RemoteVerifier verifies the connection to the remote host

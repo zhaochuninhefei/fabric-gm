@@ -7,8 +7,6 @@ SPDX-License-Identifier: Apache-2.0
 package sw
 
 import (
-
-	// "crypto/rsa"
 	"errors"
 	"fmt"
 	"reflect"
@@ -256,13 +254,15 @@ func (*sm2PrivateKeyOptsKeyImporter) KeyImport(raw interface{}, opts bccsp.KeyIm
 		return nil, errors.New("invalid raw material, It must botbe nil")
 	}
 
-	sm2SK, err := gmx509.ParsePKCS8UnecryptedPrivateKey(der)
-
+	sm2SK, err := gmx509.ParsePKCS8PrivateKey(der)
 	if err != nil {
 		return nil, fmt.Errorf("failed converting to SM2 private key [%s]", err)
 	}
-
-	return &SM2PrivateKey{sm2SK}, nil
+	privSm2, ok := sm2SK.(*sm2.PrivateKey)
+	if !ok {
+		return nil, errors.New("key type is not *sm2.PrivateKey")
+	}
+	return &SM2PrivateKey{privSm2}, nil
 }
 
 // sm2公钥(PKIX标准的der字节流)导入器
@@ -280,13 +280,15 @@ func (*sm2PublicKeyOptsKeyImporter) KeyImport(raw interface{}, opts bccsp.KeyImp
 		return nil, errors.New("invalid raw material, It must botbe nil")
 	}
 
-	sm2Pub, err := gmx509.ParseSm2PublicKey(der)
-
+	sm2Pub, err := gmx509.ParsePKIXPublicKey(der)
 	if err != nil {
 		return nil, fmt.Errorf("failed converting to SM2 private key [%s]", err)
 	}
-
-	return &SM2PublicKey{sm2Pub}, nil
+	pubSm2, ok := sm2Pub.(*sm2.PublicKey)
+	if !ok {
+		return nil, errors.New("key type is not *sm2.PublicKey")
+	}
+	return &SM2PublicKey{pubSm2}, nil
 }
 
 // sm2公钥(Go结构体*sm2.PublicKey)导入器

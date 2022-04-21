@@ -4,7 +4,7 @@ package mocks
 import (
 	"sync"
 
-	mspa "github.com/hyperledger/fabric-protos-go/msp"
+	mspa "gitee.com/zhaochuninhefei/fabric-protos-go-gm/msp"
 	"gitee.com/zhaochuninhefei/fabric-gm/msp"
 )
 

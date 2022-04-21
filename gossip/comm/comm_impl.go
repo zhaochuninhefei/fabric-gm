@@ -22,10 +22,10 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/metrics"
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/protoext"
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/util"
-	proto "github.com/hyperledger/fabric-protos-go/gossip"
+	proto "gitee.com/zhaochuninhefei/fabric-protos-go-gm/gossip"
+	"gitee.com/zhaochuninhefei/gmgo/grpc"
+	"gitee.com/zhaochuninhefei/gmgo/grpc/peer"
 	"github.com/pkg/errors"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/peer"
 
 	tls "gitee.com/zhaochuninhefei/gmgo/gmtls"
 )

@@ -16,8 +16,8 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/pkg/identity"
 	"gitee.com/zhaochuninhefei/fabric-gm/orderer/common/localconfig"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
+	cb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
 	"github.com/golang/protobuf/proto"
-	cb "github.com/hyperledger/fabric-protos-go/common"
 	"github.com/pkg/errors"
 )
 

@@ -14,10 +14,10 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/common/channelconfig"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/flogging"
 	mspconstants "gitee.com/zhaochuninhefei/fabric-gm/msp"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/discovery"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/msp"
 	"github.com/golang/protobuf/proto"
-	"github.com/hyperledger/fabric-protos-go/common"
-	"github.com/hyperledger/fabric-protos-go/discovery"
-	"github.com/hyperledger/fabric-protos-go/msp"
 	"github.com/pkg/errors"
 )
 

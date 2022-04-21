@@ -21,10 +21,10 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/protoext"
 	utilgossip "gitee.com/zhaochuninhefei/fabric-gm/gossip/util"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/pkg/comm"
+	proto "gitee.com/zhaochuninhefei/fabric-protos-go-gm/gossip"
 	tls "gitee.com/zhaochuninhefei/gmgo/gmtls"
-	proto "github.com/hyperledger/fabric-protos-go/gossip"
+	"gitee.com/zhaochuninhefei/gmgo/grpc"
 	"github.com/stretchr/testify/assert"
-	"google.golang.org/grpc"
 )
 
 type peerMock struct {

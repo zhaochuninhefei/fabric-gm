@@ -11,7 +11,7 @@ import (
 
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger/pvtdatapolicy"
-	"github.com/hyperledger/fabric-protos-go/ledger/rwset"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/ledger/rwset"
 	"github.com/willf/bitset"
 )
 

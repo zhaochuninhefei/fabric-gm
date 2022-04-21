@@ -12,9 +12,9 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/common/configtx"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/policies"
 	"gitee.com/zhaochuninhefei/fabric-gm/msp"
-	cb "github.com/hyperledger/fabric-protos-go/common"
-	ab "github.com/hyperledger/fabric-protos-go/orderer"
-	pb "github.com/hyperledger/fabric-protos-go/peer"
+	cb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
+	ab "gitee.com/zhaochuninhefei/fabric-protos-go-gm/orderer"
+	pb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 )
 
 // Org stores the common organizational config

@@ -13,11 +13,11 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/sw"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/peer/lifecycle/chaincode"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/peer/lifecycle/chaincode/mock"
+	pb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 	tls "gitee.com/zhaochuninhefei/gmgo/gmtls"
-	pb "github.com/hyperledger/fabric-protos-go/peer"
+	"gitee.com/zhaochuninhefei/gmgo/grpc"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
-	"google.golang.org/grpc"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"

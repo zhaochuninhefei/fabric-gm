@@ -18,7 +18,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/core/container/externalbuilder"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
-	lb "github.com/hyperledger/fabric-protos-go/peer/lifecycle"
+	lb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer/lifecycle"
 
 	"github.com/pkg/errors"
 )

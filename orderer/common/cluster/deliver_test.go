@@ -26,18 +26,18 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/orderer/common/cluster"
 	"gitee.com/zhaochuninhefei/fabric-gm/orderer/common/cluster/mocks"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/orderer"
+	"gitee.com/zhaochuninhefei/gmgo/grpc"
+	"gitee.com/zhaochuninhefei/gmgo/grpc/balancer"
+	"gitee.com/zhaochuninhefei/gmgo/grpc/balancer/roundrobin"
 	"github.com/golang/protobuf/proto"
-	"github.com/hyperledger/fabric-protos-go/common"
-	"github.com/hyperledger/fabric-protos-go/orderer"
 	"github.com/onsi/gomega"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/balancer"
-	"google.golang.org/grpc/balancer/roundrobin"
 )
 
 // protects gRPC balancer registration
@@ -55,7 +55,7 @@ type signerSerializer interface {
 
 type wrappedBalancer struct {
 	balancer.Balancer
-	// TODO 1.44.0的"google.golang.org/grpc"的balancer里没有V2Balancer，v1.29.1有
+	// TODO 1.44.0的"gitee.com/zhaochuninhefei/gmgo/grpc"的balancer里没有V2Balancer，v1.29.1有
 	// balancer.V2Balancer
 	cd *countingDialer
 }

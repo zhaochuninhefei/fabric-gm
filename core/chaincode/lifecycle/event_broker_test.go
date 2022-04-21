@@ -17,7 +17,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/core/container/externalbuilder"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger"
 	ledgermock "gitee.com/zhaochuninhefei/fabric-gm/core/ledger/mock"
-	lb "github.com/hyperledger/fabric-protos-go/peer/lifecycle"
+	lb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer/lifecycle"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"github.com/pkg/errors"

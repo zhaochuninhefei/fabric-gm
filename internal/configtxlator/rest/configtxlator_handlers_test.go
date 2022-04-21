@@ -9,12 +9,12 @@ package rest
 import (
 	"bytes"
 	"mime/multipart"
-	"net/http"
-	"net/http/httptest"
 	"testing"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
-	cb "github.com/hyperledger/fabric-protos-go/common"
+	cb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
+	http "gitee.com/zhaochuninhefei/gmgo/gmhttp"
+	"gitee.com/zhaochuninhefei/gmgo/gmhttp/httptest"
 	"github.com/stretchr/testify/assert"
 )
 

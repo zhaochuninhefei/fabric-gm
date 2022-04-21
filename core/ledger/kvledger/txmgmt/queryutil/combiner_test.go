@@ -20,7 +20,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger/kvledger/txmgmt/queryutil/mock"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger/kvledger/txmgmt/statedb"
 	statedbmock "gitee.com/zhaochuninhefei/fabric-gm/core/ledger/kvledger/txmgmt/statedb/mock"
-	"github.com/hyperledger/fabric-protos-go/ledger/queryresult"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/ledger/queryresult"
 	"github.com/stretchr/testify/require"
 )
 

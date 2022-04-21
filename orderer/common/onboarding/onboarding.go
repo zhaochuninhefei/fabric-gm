@@ -23,8 +23,8 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/orderer/common/localconfig"
 	"gitee.com/zhaochuninhefei/fabric-gm/orderer/consensus/etcdraft"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
 	"github.com/golang/protobuf/proto"
-	"github.com/hyperledger/fabric-protos-go/common"
 	"github.com/pkg/errors"
 )
 

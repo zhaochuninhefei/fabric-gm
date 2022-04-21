@@ -11,7 +11,7 @@ import (
 
 	"gitee.com/zhaochuninhefei/fabric-gm/common/channelconfig"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/flogging"
-	cb "github.com/hyperledger/fabric-protos-go/common"
+	cb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
 )
 
 var logger = flogging.MustGetLogger("orderer.common.blockcutter")

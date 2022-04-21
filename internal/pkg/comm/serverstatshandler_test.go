@@ -16,9 +16,9 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/common/metrics/metricsfakes"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/pkg/comm"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/pkg/comm/testpb"
+	"gitee.com/zhaochuninhefei/gmgo/grpc"
+	"gitee.com/zhaochuninhefei/gmgo/grpc/stats"
 	. "github.com/onsi/gomega"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/stats"
 )
 
 func TestConnectionCounters(t *testing.T) {

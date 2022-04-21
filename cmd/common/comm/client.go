@@ -12,8 +12,8 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/common/crypto/tlsgen"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/util"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/pkg/comm"
+	"gitee.com/zhaochuninhefei/gmgo/grpc"
 	"github.com/pkg/errors"
-	"google.golang.org/grpc"
 )
 
 const defaultTimeout = time.Second * 5

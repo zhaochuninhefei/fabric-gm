@@ -17,10 +17,10 @@ import (
 	mspmgmt "gitee.com/zhaochuninhefei/fabric-gm/msp/mgmt"
 	msptesttools "gitee.com/zhaochuninhefei/fabric-gm/msp/mgmt/testtools"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
+	mspprotos "gitee.com/zhaochuninhefei/fabric-protos-go-gm/msp"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 	"github.com/golang/protobuf/proto"
-	"github.com/hyperledger/fabric-protos-go/common"
-	mspprotos "github.com/hyperledger/fabric-protos-go/msp"
-	"github.com/hyperledger/fabric-protos-go/peer"
 )
 
 func ownerCreateCCDepSpec(codepackage []byte, sigpolicy *common.SignaturePolicyEnvelope, owner msp.SigningIdentity) (*common.Envelope, error) {

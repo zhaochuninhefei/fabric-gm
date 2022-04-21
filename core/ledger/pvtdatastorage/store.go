@@ -16,8 +16,8 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/common/ledger/util/leveldbhelper"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger/pvtdatapolicy"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/ledger/rwset"
 	"github.com/golang/protobuf/proto"
-	"github.com/hyperledger/fabric-protos-go/ledger/rwset"
 	"github.com/willf/bitset"
 )
 

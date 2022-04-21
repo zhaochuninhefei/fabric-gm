@@ -22,7 +22,6 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
 	"gitee.com/zhaochuninhefei/gmgo/sm2"
 	"gitee.com/zhaochuninhefei/gmgo/sm3"
-	"gitee.com/zhaochuninhefei/gmgo/x509"
 )
 
 /*
@@ -38,7 +37,7 @@ type SM2PrivateKey struct {
 // 获取sm2私钥的asn1编码结果，未对私钥加密
 func (k *SM2PrivateKey) Bytes() (raw []byte, err error) {
 	// return nil, errors.New("not supported")
-	return x509.MarshalSm2UnecryptedPrivateKey(k.privKey)
+	return privateKeyToDER(k.privKey)
 }
 
 // SKI returns the subject key identifier of this key.
@@ -87,7 +86,7 @@ type SM2PublicKey struct {
 // if this operation is allowed.
 // 返回sm2公钥的asn1编码结果
 func (k *SM2PublicKey) Bytes() (raw []byte, err error) {
-	raw, err = x509.MarshalSm2PublicKey(k.pubKey)
+	raw, err = publicKeyToDER(k.pubKey)
 	if err != nil {
 		return nil, fmt.Errorf("failed marshalling key [%s]", err)
 	}

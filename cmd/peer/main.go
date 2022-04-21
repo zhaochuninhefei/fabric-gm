@@ -7,9 +7,10 @@ SPDX-License-Identifier: Apache-2.0
 package main
 
 import (
-	_ "net/http/pprof"
 	"os"
 	"strings"
+
+	_ "gitee.com/zhaochuninhefei/gmgo/gmhttp/pprof"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/factory"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/peer/chaincode"

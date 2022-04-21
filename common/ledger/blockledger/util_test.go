@@ -11,7 +11,7 @@ import (
 
 	"gitee.com/zhaochuninhefei/fabric-gm/common/deliver/mock"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/ledger/blockledger"
-	"github.com/hyperledger/fabric-protos-go/common"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
 	"github.com/stretchr/testify/assert"
 )
 

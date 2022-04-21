@@ -21,7 +21,7 @@ import (
 	v12 "gitee.com/zhaochuninhefei/fabric-gm/core/handlers/validation/builtin/v12"
 	v13 "gitee.com/zhaochuninhefei/fabric-gm/core/handlers/validation/builtin/v13"
 	v20 "gitee.com/zhaochuninhefei/fabric-gm/core/handlers/validation/builtin/v20"
-	"github.com/hyperledger/fabric-protos-go/common"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
 	"github.com/pkg/errors"
 )
 

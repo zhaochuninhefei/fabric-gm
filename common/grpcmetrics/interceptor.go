@@ -12,8 +12,8 @@ import (
 	"time"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/common/metrics"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/status"
+	"gitee.com/zhaochuninhefei/gmgo/grpc"
+	"gitee.com/zhaochuninhefei/gmgo/grpc/status"
 )
 
 type UnaryMetrics struct {

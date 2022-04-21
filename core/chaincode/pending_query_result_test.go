@@ -10,8 +10,8 @@ import (
 	"fmt"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/core/chaincode"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/ledger/queryresult"
 	"github.com/golang/protobuf/proto"
-	"github.com/hyperledger/fabric-protos-go/ledger/queryresult"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"github.com/pkg/errors"

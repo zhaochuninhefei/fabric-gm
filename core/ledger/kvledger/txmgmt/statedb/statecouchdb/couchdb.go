@@ -18,8 +18,6 @@ import (
 	"log"
 	"mime"
 	"mime/multipart"
-	"net/http"
-	"net/http/httputil"
 	"net/textproto"
 	"net/url"
 	"regexp"
@@ -30,6 +28,8 @@ import (
 
 	"gitee.com/zhaochuninhefei/fabric-gm/common/flogging"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger"
+	http "gitee.com/zhaochuninhefei/gmgo/gmhttp"
+	"gitee.com/zhaochuninhefei/gmgo/gmhttp/httputil"
 	"github.com/pkg/errors"
 	"go.uber.org/zap/zapcore"
 )

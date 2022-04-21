@@ -6,17 +6,17 @@ SPDX-License-Identifier: Apache-2.0
 
 package operations_test
 
-// "net/http"只支持tls和x509，不支持gmtls和gmx509
+// http "gitee.com/zhaochuninhefei/gmgo/gmhttp"只支持tls和x509，不支持gmtls和gmx509
 import (
-	"crypto/tls"
-	"crypto/x509"
 	"io/ioutil"
-	"net/http"
 	"path/filepath"
 	"testing"
 
+	"gitee.com/zhaochuninhefei/fabric-config-gm/healthz"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/crypto/tlsgen"
-	"github.com/hyperledger/fabric-lib-go/healthz"
+	http "gitee.com/zhaochuninhefei/gmgo/gmhttp"
+	tls "gitee.com/zhaochuninhefei/gmgo/gmtls"
+	"gitee.com/zhaochuninhefei/gmgo/x509"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )

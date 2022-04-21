@@ -7,19 +7,20 @@
 package etcdraft_test
 
 import (
-	"gitee.com/zhaochuninhefei/fabric-gm/common/channelconfig"
-	"gitee.com/zhaochuninhefei/fabric-gm/orderer/consensus/etcdraft/mocks"
 	"io/ioutil"
 	"time"
+
+	"gitee.com/zhaochuninhefei/fabric-gm/common/channelconfig"
+	"gitee.com/zhaochuninhefei/fabric-gm/orderer/consensus/etcdraft/mocks"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/sw"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/crypto/tlsgen"
 	"gitee.com/zhaochuninhefei/fabric-gm/orderer/consensus/etcdraft"
 	consensusmocks "gitee.com/zhaochuninhefei/fabric-gm/orderer/consensus/mocks"
+	etcdraftproto "gitee.com/zhaochuninhefei/fabric-protos-go-gm/orderer/etcdraft"
+	raftprotos "gitee.com/zhaochuninhefei/fabric-protos-go-gm/orderer/etcdraft"
 	"github.com/golang/protobuf/proto"
-	etcdraftproto "github.com/hyperledger/fabric-protos-go/orderer/etcdraft"
-	raftprotos "github.com/hyperledger/fabric-protos-go/orderer/etcdraft"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )

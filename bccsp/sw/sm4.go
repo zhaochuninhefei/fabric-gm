@@ -16,126 +16,175 @@ limitations under the License.
 package sw
 
 import (
+	"bytes"
+	"crypto/cipher"
+	"crypto/rand"
+	"errors"
+	"fmt"
+	"io"
+
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
 	"gitee.com/zhaochuninhefei/gmgo/sm4"
 )
 
 /*
 bccsp/sw/sm4.go 实现`sw.Encryptor`接口和`sw.Decryptor`接口(bccsp/sw/internals.go)
-目前存在问题: 没有分组逻辑，直接调用了sm4对每组明文/密文的分组加解密函数。
 */
 
-// GetRandomBytes returns len random looking bytes
-// func GetRandomBytes(len int) ([]byte, error) {
-// 	if len < 0 {
-// 		return nil, errors.New("Len must be larger than 0")
-// 	}
+// SM4CBCPKCS7Encrypt combines CBC encryption and PKCS7 padding
 
-// 	buffer := make([]byte, len)
-
-// 	n, err := rand.Read(buffer)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	if n != len {
-// 		return nil, fmt.Errorf("Buffer not filled. Requested [%d], got [%d]", len, n)
-// 	}
-
-// 	return buffer, nil
-// }
-
-// AESCBCPKCS7Encrypt combines CBC encryption and PKCS7 padding
-
-// 直接调用sm4分组加密 分组在哪做?
-func SM4Encrypt(key, src []byte) ([]byte, error) {
-	// // First pad
-	// tmp := pkcs7Padding(src)
-
-	// // Then encrypt
-	// return aesCBCEncrypt(key, tmp)
-	dst := make([]byte, len(src))
-	sm4.EncryptBlock(key, dst, src)
-	return dst, nil
+func pkcs7Padding(src []byte) []byte {
+	padding := sm4.BlockSize - len(src)%sm4.BlockSize
+	padtext := bytes.Repeat([]byte{byte(padding)}, padding)
+	return append(src, padtext...)
 }
 
-// AESCBCPKCS7Decrypt combines CBC decryption and PKCS7 unpadding
+func pkcs7UnPadding(src []byte) ([]byte, error) {
+	length := len(src)
+	unpadding := int(src[length-1])
 
-// 直接调用sm4分组解密 分组在哪做?
-func SM4Decrypt(key, src []byte) ([]byte, error) {
+	if unpadding > sm4.BlockSize || unpadding == 0 {
+		return nil, errors.New("invalid pkcs7 padding (unpadding > sm4.BlockSize || unpadding == 0)")
+	}
+
+	pad := src[len(src)-unpadding:]
+	for i := 0; i < unpadding; i++ {
+		if pad[i] != byte(unpadding) {
+			return nil, errors.New("invalid pkcs7 padding (pad[i] != unpadding)")
+		}
+	}
+
+	return src[:(length - unpadding)], nil
+}
+
+func sm4CBCEncrypt(key, s []byte) ([]byte, error) {
+	return sm4CBCEncryptWithRand(rand.Reader, key, s)
+}
+
+func sm4CBCEncryptWithRand(prng io.Reader, key, s []byte) ([]byte, error) {
+	if len(s)%sm4.BlockSize != 0 {
+		return nil, errors.New("invalid plaintext. It must be a multiple of the block size")
+	}
+	block, err := sm4.NewCipher(key)
+	if err != nil {
+		return nil, err
+	}
+	ciphertext := make([]byte, sm4.BlockSize+len(s))
+	iv := ciphertext[:sm4.BlockSize]
+	if _, err := io.ReadFull(prng, iv); err != nil {
+		return nil, err
+	}
+	mode := cipher.NewCBCEncrypter(block, iv)
+	mode.CryptBlocks(ciphertext[sm4.BlockSize:], s)
+	return ciphertext, nil
+}
+
+func sm4CBCEncryptWithIV(IV []byte, key, s []byte) ([]byte, error) {
+	if len(s)%sm4.BlockSize != 0 {
+		return nil, errors.New("invalid plaintext. It must be a multiple of the block size")
+	}
+	if len(IV) != sm4.BlockSize {
+		return nil, errors.New("invalid IV. It must have length the block size")
+	}
+	block, err := sm4.NewCipher(key)
+	if err != nil {
+		return nil, err
+	}
+	ciphertext := make([]byte, sm4.BlockSize+len(s))
+	copy(ciphertext[:sm4.BlockSize], IV)
+	mode := cipher.NewCBCEncrypter(block, IV)
+	mode.CryptBlocks(ciphertext[sm4.BlockSize:], s)
+	return ciphertext, nil
+}
+
+func sm4CBCDecrypt(key, src []byte) ([]byte, error) {
+	block, err := sm4.NewCipher(key)
+	if err != nil {
+		return nil, err
+	}
+	if len(src) < sm4.BlockSize {
+		return nil, errors.New("invalid ciphertext. It must be a multiple of the block size")
+	}
+	iv := src[:sm4.BlockSize]
+	src = src[sm4.BlockSize:]
+	if len(src)%sm4.BlockSize != 0 {
+		return nil, errors.New("invalid ciphertext. It must be a multiple of the block size")
+	}
+	mode := cipher.NewCBCDecrypter(block, iv)
+	mode.CryptBlocks(src, src)
+	return src, nil
+}
+
+// SM4CBCPKCS7Encrypt combines CBC encryption and PKCS7 padding
+func SM4CBCPKCS7Encrypt(key, src []byte) ([]byte, error) {
+	// First pad
+	tmp := pkcs7Padding(src)
+	// Then encrypt
+	return sm4CBCEncrypt(key, tmp)
+}
+
+// SM4CBCPKCS7EncryptWithRand combines CBC encryption and PKCS7 padding using as prng the passed to the function
+func SM4CBCPKCS7EncryptWithRand(prng io.Reader, key, src []byte) ([]byte, error) {
+	// First pad
+	tmp := pkcs7Padding(src)
+	// Then encrypt
+	return sm4CBCEncryptWithRand(prng, key, tmp)
+}
+
+// SM4CBCPKCS7EncryptWithIV combines CBC encryption and PKCS7 padding, the IV used is the one passed to the function
+func SM4CBCPKCS7EncryptWithIV(IV []byte, key, src []byte) ([]byte, error) {
+	// First pad
+	tmp := pkcs7Padding(src)
+	// Then encrypt
+	return sm4CBCEncryptWithIV(IV, key, tmp)
+}
+
+// SM4CBCPKCS7Decrypt combines CBC decryption and PKCS7 unpadding
+func SM4CBCPKCS7Decrypt(key, src []byte) ([]byte, error) {
 	// First decrypt
-	// pt, err := aesCBCDecrypt(key, src)
-	// if err == nil {
-	// 	return pkcs7UnPadding(pt)
-	// }
-
-	dst := make([]byte, len(src))
-	sm4.DecryptBlock(key, dst, src)
-	return dst, nil
+	pt, err := sm4CBCDecrypt(key, src)
+	if err == nil {
+		return pkcs7UnPadding(pt)
+	}
+	return nil, err
 }
 
 type sm4Encryptor struct{}
 
 // 实现 Encryptor 接口
-// 不能直接调用 SM4Encrypt 因为没有分组
 func (e *sm4Encryptor) Encrypt(k bccsp.Key, plaintext []byte, opts bccsp.EncrypterOpts) (ciphertext []byte, err error) {
-	key := k.(*SM4Key).privKey
 	switch o := opts.(type) {
 	case *bccsp.SM4EncrypterDecrypterOpts:
-		iv := o.IV
-		switch o.MODE {
-		case "ECB":
-			return sm4.Sm4Ecb(key, plaintext, true)
-		case "CBC":
-			return sm4.Sm4Cbc(key, iv, plaintext, true)
-		case "CFB":
-			return sm4.Sm4CFB(key, iv, plaintext, true)
-		case "OFB":
-			return sm4.Sm4OFB(key, iv, plaintext, true)
-		default:
-			return sm4.Sm4Ecb(key, plaintext, true)
+		// SM4 in CBC mode with PKCS7 padding
+		if len(o.IV) != 0 && o.PRNG != nil {
+			return nil, errors.New("invalid options. Either IV or PRNG should be different from nil, or both nil")
 		}
+		if len(o.IV) != 0 {
+			// Encrypt with the passed IV
+			return SM4CBCPKCS7EncryptWithIV(o.IV, k.(*SM4Key).privKey, plaintext)
+		} else if o.PRNG != nil {
+			// Encrypt with PRNG
+			return SM4CBCPKCS7EncryptWithRand(o.PRNG, k.(*SM4Key).privKey, plaintext)
+		}
+		// SM4 in CBC mode with PKCS7 padding
+		return SM4CBCPKCS7Encrypt(k.(*SM4Key).privKey, plaintext)
 	case bccsp.SM4EncrypterDecrypterOpts:
 		return e.Encrypt(k, plaintext, &o)
 	default:
-		return e.Encrypt(k, plaintext, &bccsp.SM4EncrypterDecrypterOpts{})
+		return nil, fmt.Errorf("mode not recognized [%s]", opts)
 	}
-	// return SM4Encrypt(k.(*sm4Key).privKey, plaintext)
-	//return AESCBCPKCS7Encrypt(k.(*sm4PrivateKey).privKey, plaintext)
-	// key := k.(*sm4Key).privKey
-	// var en = make([]byte, 16)
-	// sms4(plaintext, 16, key, en, 1)
-	// return en, nil
 }
 
 type sm4Decryptor struct{}
 
 // 实现 Decryptor 接口
-// 不能直接调用 SM4Decrypt 因为没有分组
 func (e *sm4Decryptor) Decrypt(k bccsp.Key, ciphertext []byte, opts bccsp.DecrypterOpts) (plaintext []byte, err error) {
-	key := k.(*SM4Key).privKey
-	switch o := opts.(type) {
-	case *bccsp.SM4EncrypterDecrypterOpts:
-		iv := o.IV
-		switch o.MODE {
-		case "ECB":
-			return sm4.Sm4Ecb(key, ciphertext, false)
-		case "CBC":
-			return sm4.Sm4Cbc(key, iv, ciphertext, false)
-		case "CFB":
-			return sm4.Sm4CFB(key, iv, ciphertext, false)
-		case "OFB":
-			return sm4.Sm4OFB(key, iv, ciphertext, false)
-		default:
-			return sm4.Sm4Ecb(key, ciphertext, false)
-		}
-	case bccsp.SM4EncrypterDecrypterOpts:
-		return e.Decrypt(k, ciphertext, &o)
+	// check for mode
+	switch opts.(type) {
+	case *bccsp.SM4EncrypterDecrypterOpts, bccsp.SM4EncrypterDecrypterOpts:
+		// SM4 in CBC mode with PKCS7 padding
+		return SM4CBCPKCS7Decrypt(k.(*SM4Key).privKey, ciphertext)
 	default:
-		return e.Decrypt(k, ciphertext, &bccsp.SM4EncrypterDecrypterOpts{})
+		return nil, fmt.Errorf("mode not recognized [%s]", opts)
 	}
-	// return SM4Decrypt(k.(*sm4Key).privKey, ciphertext)
-	// var dc = make([]byte, 16)
-	// key := k.(*sm4Key).privKey
-	// sms4(ciphertext, 16, key, dc, 0)
-	// return dc, nil
 }

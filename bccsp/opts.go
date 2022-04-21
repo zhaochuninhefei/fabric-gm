@@ -6,6 +6,8 @@ SPDX-License-Identifier: Apache-2.0
 
 package bccsp
 
+import "io"
+
 /*
  * bccsp/opts.go 实现部分`bccsp.KeyGenOpts`、`bccsp.KeyImportOpts`与`bccsp.KeyDerivOpts`接口。
  * ecdsa相关: ECDSAKeyGenOpts, ECDSAPrivateKeyImportOpts, ECDSAPKIXPublicKeyImportOpts, ECDSAGoPublicKeyImportOpts, ECDSAReRandKeyOpts
@@ -371,10 +373,11 @@ func (opts *SM4ImportKeyOpts) Ephemeral() bool {
 }
 
 type SM4EncrypterDecrypterOpts struct {
-	// sm4的分组模式，目前支持: ECB, CBC, CFB, OFB
-	MODE string
 	// 初始偏移量 在 CBC, CFB, OFB 分组模式下需要
 	IV []byte
+	// PRNG is an instance of a PRNG to be used by the underlying cipher.
+	// It is used only if different from nil.
+	PRNG io.Reader
 }
 
 //SM2PrivateKeyImportOpts  实现  bccsp.KeyImportOpts 接口

@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/msp"
-	mspa "github.com/hyperledger/fabric-protos-go/msp"
+	mspa "gitee.com/zhaochuninhefei/fabric-protos-go-gm/msp"
 )
 
 type SigningIdentity struct {

@@ -5,8 +5,8 @@ import (
 	"context"
 	"sync"
 
-	"github.com/hyperledger/fabric-protos-go/peer"
-	"google.golang.org/grpc"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
+	"gitee.com/zhaochuninhefei/gmgo/grpc"
 )
 
 type PeerDeliverClient struct {

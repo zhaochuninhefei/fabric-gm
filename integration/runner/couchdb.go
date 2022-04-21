@@ -11,12 +11,13 @@ import (
 	"fmt"
 	"io"
 	"net"
-	"net/http"
 	"os"
 	"runtime/debug"
 	"strconv"
 	"sync"
 	"time"
+
+	http "gitee.com/zhaochuninhefei/gmgo/gmhttp"
 
 	docker "github.com/fsouza/go-dockerclient"
 	"github.com/pkg/errors"

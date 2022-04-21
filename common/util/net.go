@@ -9,7 +9,7 @@ package util
 import (
 	"context"
 
-	"google.golang.org/grpc/peer"
+	"gitee.com/zhaochuninhefei/gmgo/grpc/peer"
 )
 
 func ExtractRemoteAddress(ctx context.Context) string {

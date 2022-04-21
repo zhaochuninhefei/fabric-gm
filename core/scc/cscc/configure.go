@@ -27,9 +27,9 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/core/policy"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/pkg/txflags"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
+	pb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 	"github.com/golang/protobuf/proto"
-	"github.com/hyperledger/fabric-protos-go/common"
-	pb "github.com/hyperledger/fabric-protos-go/peer"
 	"github.com/pkg/errors"
 )
 

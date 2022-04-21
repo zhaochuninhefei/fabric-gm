@@ -8,9 +8,10 @@ package statecouchdb
 
 import (
 	"context"
-	"net/http"
 	"net/url"
 	"testing"
+
+	http "gitee.com/zhaochuninhefei/gmgo/gmhttp"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/common/metrics/disabled"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/metrics/metricsfakes"

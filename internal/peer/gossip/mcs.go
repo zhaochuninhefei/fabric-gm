@@ -21,7 +21,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/msp"
 	"gitee.com/zhaochuninhefei/fabric-gm/msp/mgmt"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
-	pcommon "github.com/hyperledger/fabric-protos-go/common"
+	pcommon "gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
 	"github.com/pkg/errors"
 )
 

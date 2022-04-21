@@ -60,8 +60,8 @@ BCCSP:
 
 	// sm4加密
 	sm4Opts := &bccsp.SM4EncrypterDecrypterOpts{
-		MODE: "OFB",
-		IV:   sm4IV}
+		// MODE: "OFB",
+		IV: sm4IV}
 	ciphertext, err := (*csp).Encrypt(sm4Key, plaintext, sm4Opts)
 	if err != nil {
 		t.Fatalf("sm4加密失败: %s", err)

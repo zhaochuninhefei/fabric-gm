@@ -10,24 +10,25 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net"
-	"net/http"
 	"os"
 	"reflect"
+
+	http "gitee.com/zhaochuninhefei/gmgo/gmhttp"
 
 	"gitee.com/zhaochuninhefei/fabric-config-gm/protolator"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/flogging"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/configtxlator/metadata"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/configtxlator/rest"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/configtxlator/update"
+	_ "gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
+	cb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/common" // Import these to register the proto types
+	_ "gitee.com/zhaochuninhefei/fabric-protos-go-gm/msp"
+	_ "gitee.com/zhaochuninhefei/fabric-protos-go-gm/orderer"
+	_ "gitee.com/zhaochuninhefei/fabric-protos-go-gm/orderer/etcdraft"
+	_ "gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 	"github.com/golang/protobuf/proto"
-	_ "github.com/hyperledger/fabric-protos-go/common"
-	cb "github.com/hyperledger/fabric-protos-go/common" // Import these to register the proto types
-	_ "github.com/hyperledger/fabric-protos-go/msp"
-	_ "github.com/hyperledger/fabric-protos-go/orderer"
-	_ "github.com/hyperledger/fabric-protos-go/orderer/etcdraft"
-	_ "github.com/hyperledger/fabric-protos-go/peer"
 
-	"github.com/gorilla/handlers"
+	"gitee.com/zhaochuninhefei/gmgo/handlers"
 	"github.com/pkg/errors"
 	"gopkg.in/alecthomas/kingpin.v2"
 )

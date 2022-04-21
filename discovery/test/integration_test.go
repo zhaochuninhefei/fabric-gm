@@ -11,7 +11,6 @@ import (
 	"context"
 	"crypto/rand"
 	"encoding/hex"
-	"encoding/pem"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -22,6 +21,7 @@ import (
 	"time"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/sw"
+	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/utils"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/cauthdsl"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/configtx"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/crypto/tlsgen"
@@ -48,18 +48,17 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/pkg/comm"
 	"gitee.com/zhaochuninhefei/fabric-gm/msp"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
+	. "gitee.com/zhaochuninhefei/fabric-protos-go-gm/discovery"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/gossip"
+	msprotos "gitee.com/zhaochuninhefei/fabric-protos-go-gm/msp"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
+	"gitee.com/zhaochuninhefei/gmgo/grpc"
 	"gitee.com/zhaochuninhefei/gmgo/sm2"
-	gmx509 "gitee.com/zhaochuninhefei/gmgo/x509"
 	"github.com/golang/protobuf/proto"
-	"github.com/hyperledger/fabric-protos-go/common"
-	. "github.com/hyperledger/fabric-protos-go/discovery"
-	"github.com/hyperledger/fabric-protos-go/gossip"
-	msprotos "github.com/hyperledger/fabric-protos-go/msp"
-	"github.com/hyperledger/fabric-protos-go/peer"
 	"github.com/onsi/gomega/gexec"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
-	"google.golang.org/grpc"
 )
 
 var (
@@ -959,8 +958,9 @@ func loadPrivateKey(file string) (*sm2.PrivateKey, error) {
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}
-	bl, _ := pem.Decode(b)
-	key, err := gmx509.ParseSm2PrivateKey(bl.Bytes)
+	// bl, _ := pem.Decode(b)
+	// key, err := gmx509.ParseSm2PrivateKey(bl.Bytes)
+	key, err := utils.PEMToSm2PrivateKey(b, nil)
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}

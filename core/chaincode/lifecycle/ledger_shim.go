@@ -11,7 +11,7 @@ import (
 	commonledger "gitee.com/zhaochuninhefei/fabric-gm/common/ledger"
 	validatorstate "gitee.com/zhaochuninhefei/fabric-gm/core/handlers/validation/api/state"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger"
-	"github.com/hyperledger/fabric-protos-go/ledger/queryresult"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/ledger/queryresult"
 
 	"github.com/pkg/errors"
 )

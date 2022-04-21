@@ -12,7 +12,7 @@ import (
 
 	"gitee.com/zhaochuninhefei/fabric-gm/common/ledger/testutil"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/ledger/util"
-	"github.com/hyperledger/fabric-protos-go/common"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
 	"github.com/stretchr/testify/require"
 )
 

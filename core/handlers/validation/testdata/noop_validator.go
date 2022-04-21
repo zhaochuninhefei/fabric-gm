@@ -8,7 +8,7 @@ package main
 
 import (
 	validation "gitee.com/zhaochuninhefei/fabric-gm/core/handlers/validation/api"
-	"github.com/hyperledger/fabric-protos-go/common"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
 )
 
 // NoOpValidator is used to test validation plugin infrastructure

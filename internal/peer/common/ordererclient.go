@@ -11,7 +11,7 @@ import (
 	tls "gitee.com/zhaochuninhefei/gmgo/gmtls"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/pkg/comm"
-	ab "github.com/hyperledger/fabric-protos-go/orderer"
+	ab "gitee.com/zhaochuninhefei/fabric-protos-go-gm/orderer"
 	"github.com/pkg/errors"
 )
 

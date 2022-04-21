@@ -21,8 +21,8 @@ import (
 
 	"gitee.com/zhaochuninhefei/fabric-gm/integration/nwo"
 	"gitee.com/zhaochuninhefei/fabric-gm/integration/nwo/commands"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
 	docker "github.com/fsouza/go-dockerclient"
-	"github.com/hyperledger/fabric-protos-go/common"
 	"github.com/onsi/gomega/gbytes"
 	"github.com/onsi/gomega/gexec"
 	"github.com/tedsuo/ifrit"

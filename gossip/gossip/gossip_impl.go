@@ -28,10 +28,10 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/metrics"
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/protoext"
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/util"
+	pg "gitee.com/zhaochuninhefei/fabric-protos-go-gm/gossip"
+	"gitee.com/zhaochuninhefei/gmgo/grpc"
 	"github.com/golang/protobuf/proto"
-	pg "github.com/hyperledger/fabric-protos-go/gossip"
 	"github.com/pkg/errors"
-	"google.golang.org/grpc"
 )
 
 const (

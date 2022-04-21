@@ -16,9 +16,9 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/pkg/identity"
 	mspmgmt "gitee.com/zhaochuninhefei/fabric-gm/msp/mgmt"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
+	pcommon "gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
+	pb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 	"github.com/golang/protobuf/proto"
-	pcommon "github.com/hyperledger/fabric-protos-go/common"
-	pb "github.com/hyperledger/fabric-protos-go/peer"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )

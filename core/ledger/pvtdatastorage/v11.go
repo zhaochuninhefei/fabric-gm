@@ -10,8 +10,8 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/common/ledger/util/leveldbhelper"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger/internal/version"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/ledger/rwset"
 	"github.com/golang/protobuf/proto"
-	"github.com/hyperledger/fabric-protos-go/ledger/rwset"
 )
 
 func v11Format(datakeyBytes []byte) (bool, error) {

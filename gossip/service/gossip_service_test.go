@@ -43,12 +43,12 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/pkg/peer/orderers"
 	"gitee.com/zhaochuninhefei/fabric-gm/msp/mgmt"
 	msptesttools "gitee.com/zhaochuninhefei/fabric-gm/msp/mgmt/testtools"
-	"github.com/hyperledger/fabric-protos-go/common"
-	"github.com/hyperledger/fabric-protos-go/peer"
-	transientstore2 "github.com/hyperledger/fabric-protos-go/transientstore"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
+	transientstore2 "gitee.com/zhaochuninhefei/fabric-protos-go-gm/transientstore"
+	"gitee.com/zhaochuninhefei/gmgo/grpc"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"google.golang.org/grpc"
 )
 
 const TIMEOUT = 45 * time.Second

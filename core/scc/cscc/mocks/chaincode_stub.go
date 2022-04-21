@@ -6,7 +6,7 @@ import (
 
 	"github.com/golang/protobuf/ptypes/timestamp"
 	"gitee.com/zhaochuninhefei/fabric-chaincode-go-gm/shim"
-	"github.com/hyperledger/fabric-protos-go/peer"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 )
 
 type ChaincodeStub struct {

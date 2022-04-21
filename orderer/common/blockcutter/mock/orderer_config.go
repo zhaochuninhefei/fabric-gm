@@ -5,7 +5,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/hyperledger/fabric-protos-go/orderer"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/orderer"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/channelconfig"
 )
 

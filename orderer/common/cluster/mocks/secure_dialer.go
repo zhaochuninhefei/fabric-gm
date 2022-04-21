@@ -4,7 +4,7 @@ package mocks
 
 import (
 	cluster "gitee.com/zhaochuninhefei/fabric-gm/orderer/common/cluster"
-	grpc "google.golang.org/grpc"
+	grpc "gitee.com/zhaochuninhefei/gmgo/grpc"
 
 	mock "github.com/stretchr/testify/mock"
 )

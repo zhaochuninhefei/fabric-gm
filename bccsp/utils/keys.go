@@ -81,7 +81,7 @@ bccsp/utils/keys.go 定义PKCS#8标准结构体与椭圆曲线私钥结构体，
 // }
 
 // PrivateKeyToDER 将私钥转换为PKCS#8标准的字节流(der)
-// privateKey : *sm2.PrivateKey or *ecdsa.PrivateKey
+//  - privateKey : *sm2.PrivateKey or *ecdsa.PrivateKey
 // 国密对应后只支持sm2
 func PrivateKeyToDER(privateKey interface{}) ([]byte, error) {
 	if privateKey == nil {
@@ -99,9 +99,9 @@ func PrivateKeyToDER(privateKey interface{}) ([]byte, error) {
 }
 
 // PrivateKeyToPEM converts the private key to PEM format. 将私钥转为pem字节流。
-// privateKey : *sm2.PrivateKey or *ecdsa.PrivateKey or *rsa.PrivateKey
+//  - privateKey : *sm2.PrivateKey or *ecdsa.PrivateKey or *rsa.PrivateKey
 // 国密对应后只支持sm2
-// pwd : 私钥转为pkcs格式字节流后进行加密的密码
+//  - pwd : 私钥转为pkcs格式字节流后进行加密的密码
 // 对于sm2，将私钥转为pkcs8格式字节流，根据pwd是否为空决定是否加密，然后包装为pem字节流
 // EC private keys are converted to PKCS#8 format.
 // RSA private keys are converted to PKCS#1 format.
@@ -138,7 +138,7 @@ func PrivateKeyToPEM(privateKey interface{}, pwd []byte) ([]byte, error) {
 	// 	})
 
 	// 	if err != nil {
-	// 		return nil, fmt.Errorf("error marshaling EC key to asn1 [%s]", err)
+	// 		return nil, fmt.Errorf("error marshaling EC key to asn1: [%s]", err)
 	// 	}
 
 	// 	var pkcs8Key pkcs8Info
@@ -150,7 +150,7 @@ func PrivateKeyToPEM(privateKey interface{}, pwd []byte) ([]byte, error) {
 
 	// 	pkcs8Bytes, err := asn1.Marshal(pkcs8Key)
 	// 	if err != nil {
-	// 		return nil, fmt.Errorf("error marshaling EC key to asn1 [%s]", err)
+	// 		return nil, fmt.Errorf("error marshaling EC key to asn1: [%s]", err)
 	// 	}
 	// 	return pem.EncodeToMemory(
 	// 		&pem.Block{
@@ -174,14 +174,14 @@ func PrivateKeyToPEM(privateKey interface{}, pwd []byte) ([]byte, error) {
 		if k == nil {
 			return nil, errors.New("invalid sm2 private key. It must be different from nil")
 		}
-		return gmx509.WritePrivateKeytoMem(k, nil)
+		return gmx509.WritePrivateKeyToPem(k, nil)
 	default:
 		return nil, errors.New("invalid key type. It must be *sm2.PrivateKey")
 	}
 }
 
 // PrivateKeyToEncryptedPEM converts a private key to an encrypted PEM. 将私钥转为加密的pem字节流。
-// privateKey : *sm2.PrivateKey or *ecdsa.PrivateKey
+//  - privateKey : *sm2.PrivateKey or *ecdsa.PrivateKey
 // 对于sm2，先将私钥转为pkcs8格式字节流，根据pwd是否为空决定是否加密，然后包装为pem字节流
 // 国密对应后只支持sm2
 func PrivateKeyToEncryptedPEM(privateKey interface{}, pwd []byte) ([]byte, error) {
@@ -216,46 +216,45 @@ func PrivateKeyToEncryptedPEM(privateKey interface{}, pwd []byte) ([]byte, error
 		if k == nil {
 			return nil, errors.New("invalid sm2 private key. It must be different from nil")
 		}
-
-		return gmx509.WritePrivateKeytoMem(k, pwd)
+		return gmx509.WritePrivateKeyToPem(k, pwd)
 	default:
 		return nil, errors.New("invalid key type. It must be *sm2.PrivateKey")
 	}
 }
 
 // DERToPrivateKey unmarshals a der to private key. 将PKCS1/PKCS8标准的der字节流转为私钥。
-// der : pkcs格式字节流,必须是sm2/ecdsa/rsa私钥转换成的PKCS1/PKCS8标准的der字节流
+//  - der : pkcs格式字节流,必须是sm2/ecdsa/rsa私钥转换成的PKCS1/PKCS8标准的der字节流
 // 国密对应后只支持sm2
 func DERToPrivateKey(der []byte) (key interface{}, err error) {
-	// 添加sm2私钥分支
-	if key, err = gmx509.ParsePKCS8UnecryptedPrivateKey(der); err == nil {
+	if key, err = gmx509.ParsePKCS8PrivateKey(der); err == nil {
+		switch key.(type) {
+		case *sm2.PrivateKey:
+			return
+		default:
+			return nil, errors.New("found private key type not sm2 in PKCS#8 wrapping")
+		}
+	}
+	if key, err = gmx509.ParseECPrivateKey(der); err == nil {
 		return
 	}
-
-	// if key, err = x509.ParsePKCS1PrivateKey(der); err == nil {
-	// 	return key, nil
-	// }
-
-	// if key, err = x509.ParsePKCS8PrivateKey(der); err == nil {
-	// 	switch key.(type) {
-	// 	case *rsa.PrivateKey, *ecdsa.PrivateKey:
-	// 		return
-	// 	default:
-	// 		return nil, errors.New("found unknown private key type in PKCS#8 wrapping")
-	// 	}
-	// }
-
-	// if key, err = x509.ParseECPrivateKey(der); err == nil {
-	// 	return
-	// }
+	if key, err = gmx509.ParsePKCS1PrivateKey(der); err == nil {
+		return key, nil
+	}
 
 	return nil, errors.New("invalid key type. The DER must contain an sm2.PrivateKey")
 }
 
 // 将der字节流转为sm2私钥
-func DERToSm2Priv(der []byte, pwd []byte) (key *sm2.PrivateKey, err error) {
-	key, err = gmx509.ParsePKCS8PrivateKey(der, pwd)
-	return
+func DERToSm2Priv(der []byte) (*sm2.PrivateKey, error) {
+	keyRaw, err := gmx509.ParsePKCS8PrivateKey(der)
+	if err != nil {
+		return nil, err
+	}
+	key, ok := keyRaw.(*sm2.PrivateKey)
+	if !ok {
+		return nil, errors.New("bccsp/utils/keys.go DERToSm2Priv : der is not sm2 privatekey")
+	}
+	return key, nil
 }
 
 // // 将der字节流转为ecdsa私钥
@@ -276,8 +275,8 @@ func DERToSm2Priv(der []byte, pwd []byte) (key *sm2.PrivateKey, err error) {
 // }
 
 // PEMtoPrivateKey unmarshals a pem to private key. 将pem字节流转为私钥。
-// raw : pem字节流,必须是sm2/ecdsa/rsa私钥转换成的PKCS1/PKCS8标准的pem字节流
-// pwd : 如果私钥转为pkcs格式字节流后进行过加密，这里需要传入当时加密的密码以进行解密
+//  - raw : pem字节流,必须是sm2/ecdsa/rsa私钥转换成的PKCS1/PKCS8标准的pem字节流
+//  - pwd : 如果私钥转为pkcs格式字节流后进行过加密，这里需要传入当时加密的密码以进行解密
 // 国密对应后只支持sm2
 func PEMtoPrivateKey(raw []byte, pwd []byte) (interface{}, error) {
 	if len(raw) == 0 {
@@ -287,45 +286,42 @@ func PEMtoPrivateKey(raw []byte, pwd []byte) (interface{}, error) {
 	if block == nil {
 		return nil, fmt.Errorf("failed decoding PEM. Block must be different from nil. [% x]", raw)
 	}
-	// 添加sm2私钥分支
-	sm2Priv, err := gmx509.ParsePKCS8PrivateKey(block.Bytes, pwd)
-	return sm2Priv, err
-	// if err == nil {
-	// 	return sm2Priv, nil
-	// }
 
-	// // derive from header the type of the key
-	// if gmx509.IsEncryptedPEMBlock(block) {
-	// 	if len(pwd) == 0 {
-	// 		return nil, errors.New("encrypted Key. Need a password")
-	// 	}
-	// 	decrypted, err := gmx509.DecryptPEMBlock(block, pwd)
-	// 	if err != nil {
-	// 		return nil, fmt.Errorf("failed PEM decryption [%s]", err)
-	// 	}
+	// derive from header the type of the key
+	if gmx509.IsEncryptedPEMBlock(block) {
+		if len(pwd) == 0 {
+			return nil, errors.New("encrypted Key. Need a password")
+		}
+		decrypted, err := gmx509.DecryptPEMBlock(block, pwd)
+		if err != nil {
+			return nil, fmt.Errorf("failed PEM decryption: [%s]", err)
+		}
 
-	// 	key, err := DERToPrivateKey(decrypted)
-	// 	if err != nil {
-	// 		return nil, err
-	// 	}
-	// 	return key, err
-	// }
+		key, err := DERToPrivateKey(decrypted)
+		if err != nil {
+			return nil, err
+		}
+		return key, err
+	}
 
-	// cert, err := DERToPrivateKey(block.Bytes)
-	// if err != nil {
-	// 	return nil, err
-	// }
-	// return cert, err
+	privKey, err := DERToPrivateKey(block.Bytes)
+	if err != nil {
+		return nil, err
+	}
+	return privKey, err
 }
 
 // 将pem字节流转为sm2私钥
 func PEMToSm2PrivateKey(raw []byte, pwd []byte) (*sm2.PrivateKey, error) {
-	block, _ := pem.Decode(raw)
-	if block == nil {
-		return nil, fmt.Errorf("failed decoding PEM. Block must be different from nil [% x]", raw)
+	privKey, err := PEMtoPrivateKey(raw, pwd)
+	if err != nil {
+		return nil, err
 	}
-	sm2Priv, err := DERToSm2Priv(block.Bytes, pwd)
-	return sm2Priv, err
+	key, ok := privKey.(*sm2.PrivateKey)
+	if !ok {
+		return nil, errors.New("bccsp/utils/keys.go PEMToSm2PrivateKey : pem is not sm2 privatekey")
+	}
+	return key, nil
 }
 
 // // 将pem字节流转为ecdsa私钥
@@ -398,7 +394,6 @@ func PEMToSM4(raw []byte, pwd []byte) ([]byte, error) {
 		if len(pwd) == 0 {
 			return nil, errors.New("encrypted Key. Password must be different fom nil")
 		}
-
 		decrypted, err := gmx509.DecryptPEMBlock(block, pwd)
 		if err != nil {
 			return nil, fmt.Errorf("failed PEM decryption. [%s]", err)
@@ -453,10 +448,10 @@ func SM4ToEncryptedPEM(raw []byte, pwd []byte) ([]byte, error) {
 
 	block, err := gmx509.EncryptPEMBlock(
 		rand.Reader,
-		"SM4 PRIVATE KEY",
+		"ENCRYPTED SM4 PRIVATE KEY",
 		raw,
 		pwd,
-		gmx509.PEMCipherAES256)
+		gmx509.PEMCipherSM4)
 
 	if err != nil {
 		return nil, err
@@ -466,7 +461,7 @@ func SM4ToEncryptedPEM(raw []byte, pwd []byte) ([]byte, error) {
 }
 
 // PublicKeyToPEM marshals a public key to the pem format. 将公钥转为pem字节流
-// 对于sm2公钥，转为PKIX格式字节流并包装为pem字节流
+//  对于sm2公钥，转为PKIX格式字节流并包装为pem字节流
 // 国密对应后只支持sm2
 func PublicKeyToPEM(publicKey interface{}, pwd []byte) ([]byte, error) {
 	if len(pwd) != 0 {
@@ -512,9 +507,7 @@ func PublicKeyToPEM(publicKey interface{}, pwd []byte) ([]byte, error) {
 		if k == nil {
 			return nil, errors.New("invalid sm2 public key. It must be different from nil")
 		}
-
-		return gmx509.WritePublicKeytoMem(k, nil)
-
+		return gmx509.WritePublicKeyToPem(k)
 	default:
 		return nil, errors.New("invalid key type. It must be *sm2.PublicKey")
 	}
@@ -550,7 +543,7 @@ func PublicKeyToDER(publicKey interface{}) ([]byte, error) {
 		if k == nil {
 			return nil, errors.New("invalid sm2 public key. It must be different from nil")
 		}
-		return gmx509.MarshalSm2PublicKey(k)
+		return gmx509.MarshalPKIXPublicKey(k)
 	default:
 		return nil, errors.New("invalid key type. It must be *sm2.PublicKey")
 	}
@@ -576,29 +569,46 @@ func PublicKeyToEncryptedPEM(publicKey interface{}, pwd []byte) ([]byte, error) 
 	// 	if err != nil {
 	// 		return nil, err
 	// 	}
+
 	// 	block, err := gmx509.EncryptPEMBlock(
 	// 		rand.Reader,
 	// 		"PUBLIC KEY",
 	// 		raw,
 	// 		pwd,
 	// 		gmx509.PEMCipherAES256)
+
 	// 	if err != nil {
 	// 		return nil, err
 	// 	}
+
 	// 	return pem.EncodeToMemory(block), nil
 	case *sm2.PublicKey:
 		if k == nil {
-			return nil, errors.New("invalid ecdsa public key. It must be different from nil")
+			return nil, errors.New("invalid sm2 public key. It must be different from nil")
 		}
-		return gmx509.WritePublicKeytoMem(k, nil)
+		raw, err := gmx509.MarshalPKIXPublicKey(k)
+		if err != nil {
+			return nil, err
+		}
+		block, err := gmx509.EncryptPEMBlock(
+			rand.Reader,
+			"ENCRYPTED SM2 PUBLIC KEY",
+			raw,
+			pwd,
+			gmx509.PEMCipherSM4)
+
+		if err != nil {
+			return nil, err
+		}
+		return pem.EncodeToMemory(block), nil
 	default:
 		return nil, errors.New("invalid key type. It must be *sm2.PublicKey")
 	}
 }
 
-// PEMtoPublicKey unmarshals a pem to public key. 将pem字节流转为公钥
+// PEMToPublicKey unmarshals a pem to public key. 将pem字节流转为公钥
 // 国密对应后只支持sm2
-func PEMtoPublicKey(raw []byte, pwd []byte) (interface{}, error) {
+func PEMToPublicKey(raw []byte, pwd []byte) (interface{}, error) {
 	if len(raw) == 0 {
 		return nil, errors.New("invalid PEM. It must be different from nil")
 	}
@@ -607,48 +617,40 @@ func PEMtoPublicKey(raw []byte, pwd []byte) (interface{}, error) {
 		return nil, fmt.Errorf("failed decoding. Block must be different from nil. [% x]", raw)
 	}
 
-	sm2PubKey, err := gmx509.ParseSm2PublicKey(block.Bytes)
-	return sm2PubKey, err
-	// if err == nil {
-	// 	return sm2PubKey, nil
-	// }
+	// derive from header the type of the key
+	if gmx509.IsEncryptedPEMBlock(block) {
+		if len(pwd) == 0 {
+			return nil, errors.New("encrypted Key. Password must be different from nil")
+		}
+		decrypted, err := gmx509.DecryptPEMBlock(block, pwd)
+		if err != nil {
+			return nil, fmt.Errorf("failed PEM decryption: [%s]", err)
+		}
+		key, err := DERToPublicKey(decrypted)
+		if err != nil {
+			return nil, err
+		}
+		return key, err
+	}
 
-	// // derive from header the type of the key
-	// if gmx509.IsEncryptedPEMBlock(block) {
-	// 	if len(pwd) == 0 {
-	// 		return nil, errors.New("encrypted Key. Password must be different from nil")
-	// 	}
-
-	// 	decrypted, err := gmx509.DecryptPEMBlock(block, pwd)
-	// 	if err != nil {
-	// 		return nil, fmt.Errorf("failed PEM decryption: [%s]", err)
-	// 	}
-
-	// 	key, err := DERToPublicKey(decrypted)
-	// 	if err != nil {
-	// 		return nil, err
-	// 	}
-	// 	return key, err
-	// }
-
-	// cert, err := DERToPublicKey(block.Bytes)
-	// if err != nil {
-	// 	return nil, err
-	// }
-	// return cert, err
+	key, err := DERToPublicKey(block.Bytes)
+	if err != nil {
+		return nil, err
+	}
+	return key, err
 }
 
 // 将pem字节流转为sm2公钥
 func PEMToSm2PublicKey(raw []byte, pwd []byte) (*sm2.PublicKey, error) {
-	if len(raw) == 0 {
-		return nil, errors.New("invalid PEM. It must be different from nil")
+	pubKey, err := PEMToPublicKey(raw, pwd)
+	if err != nil {
+		return nil, err
 	}
-	block, _ := pem.Decode(raw)
-	if block == nil {
-		return nil, fmt.Errorf("failed decoding. Block must be different from nil [% x]", raw)
+	key, ok := pubKey.(*sm2.PublicKey)
+	if !ok {
+		return nil, errors.New("bccsp/utils/keys.go PEMToSm2PublicKey : pem is not sm2 PublicKey")
 	}
-	sm2PubKey, err := DERToSm2PublicKey(block.Bytes)
-	return sm2PubKey, err
+	return key, nil
 }
 
 // // 将pem字节流转为ecdsa或rsa公钥
@@ -692,29 +694,21 @@ func DERToPublicKey(raw []byte) (pub interface{}, err error) {
 	if len(raw) == 0 {
 		return nil, errors.New("invalid DER. It must be different from nil")
 	}
-
-	sm2PubKey, err := gmx509.ParseSm2PublicKey(raw)
-	return sm2PubKey, err
-	// if err == nil {
-	// 	return sm2PubKey, err
-	// }
-
-	// key, err := x509.ParsePKIXPublicKey(raw)
-	// // if err != nil {
-	// // 	key, err = gmx509.ParseSm2PublicKey(raw)
-	// // }
-
-	// return key, err
+	pubkey, err := gmx509.ParsePKIXPublicKey(raw)
+	return pubkey, err
 }
 
 // 将der字节流转为sm2公钥
-func DERToSm2PublicKey(raw []byte) (pub *sm2.PublicKey, err error) {
-	if len(raw) == 0 {
-		return nil, errors.New("invalid DER. It must be different from nil")
+func DERToSm2PublicKey(raw []byte) (*sm2.PublicKey, error) {
+	pubkey, err := DERToPublicKey(raw)
+	if err != nil {
+		return nil, err
 	}
-
-	sm2PubKey, err := gmx509.ParseSm2PublicKey(raw)
-	return sm2PubKey, err
+	key, ok := pubkey.(*sm2.PublicKey)
+	if !ok {
+		return nil, errors.New("bccsp/utils/keys.go DERToSm2PublicKey : der is not sm2 PublicKey")
+	}
+	return key, nil
 }
 
 // // 将der字节流转为ecdsa或rsa公钥

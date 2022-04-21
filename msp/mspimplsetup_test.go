@@ -9,8 +9,8 @@ package msp
 import (
 	"testing"
 
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/msp"
 	"gitee.com/zhaochuninhefei/gmgo/x509"
-	"github.com/hyperledger/fabric-protos-go/msp"
 
 	"github.com/onsi/gomega"
 )

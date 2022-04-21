@@ -11,8 +11,8 @@ import (
 	"fmt"
 	"testing"
 
+	"gitee.com/zhaochuninhefei/gmgo/grpc"
 	"github.com/stretchr/testify/require"
-	"google.golang.org/grpc"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/core/peer"
 )

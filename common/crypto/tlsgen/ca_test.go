@@ -13,10 +13,10 @@ import (
 	"time"
 
 	tls "gitee.com/zhaochuninhefei/gmgo/gmtls"
-	credentials "gitee.com/zhaochuninhefei/gmgo/gmtls/gmcredentials"
+	"gitee.com/zhaochuninhefei/gmgo/grpc"
+	"gitee.com/zhaochuninhefei/gmgo/grpc/credentials"
 	"gitee.com/zhaochuninhefei/gmgo/x509"
 	"github.com/stretchr/testify/assert"
-	"google.golang.org/grpc"
 )
 
 func createTLSService(t *testing.T, ca CA, host string) *grpc.Server {

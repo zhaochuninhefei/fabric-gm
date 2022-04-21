@@ -16,7 +16,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/core/config/configtest"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/configtxgen/encoder"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/configtxgen/genesisconfig"
-	cb "github.com/hyperledger/fabric-protos-go/common"
+	cb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
 
 	"github.com/pkg/errors"
 )

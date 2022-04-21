@@ -17,8 +17,8 @@ import (
 	"path/filepath"
 	"strings"
 
+	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/utils"
 	"gitee.com/zhaochuninhefei/gmgo/sm2"
-	"gitee.com/zhaochuninhefei/gmgo/x509"
 	"github.com/pkg/errors"
 )
 
@@ -39,11 +39,10 @@ func LoadPrivateKey(keystorePath string) (*sm2.PrivateKey, error) {
 		}
 
 		//		priv, err = parsePrivateKeyPEM(rawKey)
-		priv, err = x509.ReadPrivateKeyFromMem(rawKey, nil)
+		priv, err = utils.PEMToSm2PrivateKey(rawKey, nil)
 		if err != nil {
 			return errors.WithMessage(err, path)
 		}
-
 		return nil
 	}
 
@@ -84,7 +83,7 @@ func GeneratePrivateKey(keystorePath string) (*sm2.PrivateKey, error) {
 		return nil, errors.WithMessage(err, "failed to generate private key")
 	}
 
-	pkcs8Encoded, err := x509.MarshalSm2PrivateKey(priv, nil)
+	pkcs8Encoded, err := utils.PrivateKeyToDER(priv)
 	if err != nil {
 		return nil, errors.WithMessage(err, "failed to marshal private key")
 	}

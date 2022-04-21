@@ -12,8 +12,8 @@ import (
 	"math"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger/internal/version"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/ledger/rwset"
 	"github.com/golang/protobuf/proto"
-	"github.com/hyperledger/fabric-protos-go/ledger/rwset"
 	"github.com/pkg/errors"
 	"github.com/willf/bitset"
 )

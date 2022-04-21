@@ -10,7 +10,7 @@ import (
 	"context"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/common/metrics"
-	"google.golang.org/grpc/stats"
+	"gitee.com/zhaochuninhefei/gmgo/grpc/stats"
 )
 
 type ServerStatsHandler struct {

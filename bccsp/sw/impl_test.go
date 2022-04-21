@@ -8,6 +8,7 @@ package sw
 
 import (
 	"bytes"
+	"crypto/rand"
 	"crypto/x509/pkix"
 	"encoding/asn1"
 	"fmt"
@@ -999,7 +1000,7 @@ func TestKeyImportFromX509Sm2PublicKey(t *testing.T) {
 		t.Fatalf("Failed converting raw to ECDSA.PublicKey [%s]", err)
 	}
 	// gmx509只支持对 sm2公钥进行 签名
-	certRaw, err := gmx509.CreateCertificate(&template, &template, pub, cryptoSigner)
+	certRaw, err := gmx509.CreateCertificate(rand.Reader, &template, &template, pub, cryptoSigner)
 	// certRaw, err := x509.CreateCertificate(rand.Reader, &template, &template, pub, cryptoSigner)
 	if err != nil {
 		t.Fatalf("Failed generating self-signed certificate [%s]", err)

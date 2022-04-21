@@ -14,8 +14,8 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/configtxgen/encoder"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/configtxgen/genesisconfig"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
-	cb "github.com/hyperledger/fabric-protos-go/common"
-	"github.com/hyperledger/fabric-protos-go/peer"
+	cb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 	"github.com/stretchr/testify/assert"
 )
 

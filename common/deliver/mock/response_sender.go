@@ -6,7 +6,7 @@ import (
 
 	"gitee.com/zhaochuninhefei/fabric-gm/common/deliver"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
-	"github.com/hyperledger/fabric-protos-go/common"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
 )
 
 type ResponseSender struct {

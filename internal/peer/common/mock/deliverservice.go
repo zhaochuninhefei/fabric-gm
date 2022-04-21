@@ -5,9 +5,9 @@ import (
 	"context"
 	"sync"
 
-	commona "github.com/hyperledger/fabric-protos-go/common"
-	"github.com/hyperledger/fabric-protos-go/orderer"
-	"google.golang.org/grpc/metadata"
+	commona "gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/orderer"
+	"gitee.com/zhaochuninhefei/gmgo/grpc/metadata"
 )
 
 type DeliverService struct {

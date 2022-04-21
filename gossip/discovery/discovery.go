@@ -11,8 +11,8 @@ import (
 
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/common"
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/protoext"
+	proto "gitee.com/zhaochuninhefei/fabric-protos-go-gm/gossip"
 	protolib "github.com/golang/protobuf/proto"
-	proto "github.com/hyperledger/fabric-protos-go/gossip"
 )
 
 // CryptoService is an interface that the discovery expects to be implemented and passed on creation

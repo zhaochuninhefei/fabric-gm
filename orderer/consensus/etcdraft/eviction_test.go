@@ -16,7 +16,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/orderer/common/cluster"
 	"gitee.com/zhaochuninhefei/fabric-gm/orderer/common/cluster/mocks"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
-	"github.com/hyperledger/fabric-protos-go/common"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
 	"github.com/onsi/gomega"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"

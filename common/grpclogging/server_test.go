@@ -18,15 +18,15 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/common/grpclogging"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/grpclogging/fakes"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/grpclogging/testpb"
-	credentials "gitee.com/zhaochuninhefei/gmgo/gmtls/gmcredentials"
+	"gitee.com/zhaochuninhefei/gmgo/grpc"
+	"gitee.com/zhaochuninhefei/gmgo/grpc/codes"
+	"gitee.com/zhaochuninhefei/gmgo/grpc/credentials"
+	"gitee.com/zhaochuninhefei/gmgo/grpc/status"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"go.uber.org/zap/zaptest/observer"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 )
 
 var _ = Describe("Server", func() {

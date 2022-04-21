@@ -16,7 +16,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger/ledgermgmt"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger/ledgermgmt/ledgermgmttest"
-	"github.com/hyperledger/fabric-protos-go/common"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
 )
 
 // ChainID is a type used for the ids for the chains for experiments

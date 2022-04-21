@@ -14,7 +14,7 @@ import (
 
 	"gitee.com/zhaochuninhefei/fabric-gm/core/chaincode/lifecycle"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/chaincode/lifecycle/mock"
-	"github.com/hyperledger/fabric-protos-go/ledger/queryresult"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/ledger/queryresult"
 )
 
 var _ = Describe("LedgerShims", func() {

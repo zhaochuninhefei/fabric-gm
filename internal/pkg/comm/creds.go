@@ -15,12 +15,10 @@ import (
 	"sync"
 	"time"
 
-	tls "gitee.com/zhaochuninhefei/gmgo/gmtls"
-	"gitee.com/zhaochuninhefei/gmgo/gmtls/gmcredentials"
-	"gitee.com/zhaochuninhefei/gmgo/x509"
-
 	"gitee.com/zhaochuninhefei/fabric-gm/common/flogging"
-	"google.golang.org/grpc/credentials"
+	tls "gitee.com/zhaochuninhefei/gmgo/gmtls"
+	"gitee.com/zhaochuninhefei/gmgo/grpc/credentials"
+	"gitee.com/zhaochuninhefei/gmgo/x509"
 )
 
 var (
@@ -114,7 +112,7 @@ func (sc *serverCreds) ServerHandshake(rawConn net.Conn) (net.Conn, credentials.
 		return nil, nil, err
 	}
 	l.Debugf("Server TLS handshake completed in %s", time.Since(start))
-	return conn, gmcredentials.TLSInfo{State: conn.ConnectionState()}, nil
+	return conn, credentials.TLSInfo{State: conn.ConnectionState()}, nil
 }
 
 // Info provides the ProtocolInfo of this TransportCredentials.
@@ -153,7 +151,7 @@ func (dtc *DynamicClientCredentials) latestConfig() *tls.Config {
 
 func (dtc *DynamicClientCredentials) ClientHandshake(ctx context.Context, authority string, rawConn net.Conn) (net.Conn, credentials.AuthInfo, error) {
 	l := tlsClientLogger.With("remote address", rawConn.RemoteAddr().String())
-	creds := gmcredentials.NewTLS(dtc.latestConfig())
+	creds := credentials.NewTLS(dtc.latestConfig())
 	start := time.Now()
 	conn, auth, err := creds.ClientHandshake(ctx, authority, rawConn)
 	if err != nil {
@@ -169,11 +167,11 @@ func (dtc *DynamicClientCredentials) ServerHandshake(rawConn net.Conn) (net.Conn
 }
 
 func (dtc *DynamicClientCredentials) Info() credentials.ProtocolInfo {
-	return gmcredentials.NewTLS(dtc.latestConfig()).Info()
+	return credentials.NewTLS(dtc.latestConfig()).Info()
 }
 
 func (dtc *DynamicClientCredentials) Clone() credentials.TransportCredentials {
-	return gmcredentials.NewTLS(dtc.latestConfig())
+	return credentials.NewTLS(dtc.latestConfig())
 }
 
 func (dtc *DynamicClientCredentials) OverrideServerName(name string) error {

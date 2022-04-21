@@ -19,9 +19,9 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/pkg/identity"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/pkg/peer/blocksprovider"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/pkg/peer/orderers"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/orderer"
+	"gitee.com/zhaochuninhefei/gmgo/grpc"
 	"gitee.com/zhaochuninhefei/gmgo/x509"
-	"github.com/hyperledger/fabric-protos-go/orderer"
-	"google.golang.org/grpc"
 )
 
 var logger = flogging.MustGetLogger("deliveryClient")

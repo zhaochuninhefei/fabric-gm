@@ -21,8 +21,8 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/protoext"
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/util"
 	"gitee.com/zhaochuninhefei/fabric-gm/msp"
-	proto "github.com/hyperledger/fabric-protos-go/gossip"
-	"github.com/hyperledger/fabric-protos-go/peer"
+	proto "gitee.com/zhaochuninhefei/fabric-protos-go-gm/gossip"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )

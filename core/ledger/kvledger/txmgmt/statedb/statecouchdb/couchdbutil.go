@@ -10,12 +10,13 @@ import (
 	"bytes"
 	"encoding/hex"
 	"net"
-	"net/http"
 	"net/url"
 	"regexp"
 	"strconv"
 	"strings"
 	"time"
+
+	http "gitee.com/zhaochuninhefei/gmgo/gmhttp"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/common/metrics"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/metrics/disabled"

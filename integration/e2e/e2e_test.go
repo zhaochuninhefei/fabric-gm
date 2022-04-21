@@ -6,18 +6,15 @@ SPDX-License-Identifier: Apache-2.0
 
 package e2e
 
-// "net/http"只支持tls和x509，不支持gmtls和gmx509
+// http "gitee.com/zhaochuninhefei/gmgo/gmhttp"只支持tls和x509，不支持gmtls和gmx509
 import (
 	"bufio"
 	"bytes"
 	"context"
-	"crypto/tls"
-	"crypto/x509"
 	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
-	"net/http"
 	"os"
 	"path"
 	"path/filepath"
@@ -25,14 +22,17 @@ import (
 	"syscall"
 	"time"
 
+	"gitee.com/zhaochuninhefei/fabric-config-gm/healthz"
 	"gitee.com/zhaochuninhefei/fabric-gm/integration/nwo"
 	"gitee.com/zhaochuninhefei/fabric-gm/integration/nwo/commands"
 	"gitee.com/zhaochuninhefei/fabric-gm/integration/nwo/fabricconfig"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/orderer/etcdraft"
+	http "gitee.com/zhaochuninhefei/gmgo/gmhttp"
+	tls "gitee.com/zhaochuninhefei/gmgo/gmtls"
 	"gitee.com/zhaochuninhefei/gmgo/sm3"
+	"gitee.com/zhaochuninhefei/gmgo/x509"
 	docker "github.com/fsouza/go-dockerclient"
 	"github.com/golang/protobuf/proto"
-	"github.com/hyperledger/fabric-lib-go/healthz"
-	"github.com/hyperledger/fabric-protos-go/orderer/etcdraft"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"github.com/onsi/gomega/gbytes"

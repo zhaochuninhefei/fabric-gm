@@ -17,7 +17,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/transientstore"
 	"gitee.com/zhaochuninhefei/fabric-gm/msp"
-	"github.com/hyperledger/fabric-protos-go/common"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
 )
 
 // Channel manages objects and configuration associated with a Channel.

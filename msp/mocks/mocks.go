@@ -10,7 +10,7 @@ import (
 	"time"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/msp"
-	pmsp "github.com/hyperledger/fabric-protos-go/msp"
+	pmsp "gitee.com/zhaochuninhefei/fabric-protos-go-gm/msp"
 	"github.com/stretchr/testify/mock"
 )
 

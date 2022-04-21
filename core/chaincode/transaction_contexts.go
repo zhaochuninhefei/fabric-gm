@@ -11,7 +11,7 @@ import (
 
 	commonledger "gitee.com/zhaochuninhefei/fabric-gm/common/ledger"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/common/ccprovider"
-	pb "github.com/hyperledger/fabric-protos-go/peer"
+	pb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 	"github.com/pkg/errors"
 )
 

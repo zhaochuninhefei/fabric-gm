@@ -10,7 +10,7 @@ import (
 	"fmt"
 
 	"gitee.com/zhaochuninhefei/fabric-chaincode-go-gm/shim"
-	pb "github.com/hyperledger/fabric-protos-go/peer"
+	pb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 )
 
 // SimpleChaincode example simple Chaincode implementation

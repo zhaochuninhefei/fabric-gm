@@ -14,8 +14,8 @@ import (
 	"time"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/common/capabilities"
-	cb "github.com/hyperledger/fabric-protos-go/common"
-	ab "github.com/hyperledger/fabric-protos-go/orderer"
+	cb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
+	ab "gitee.com/zhaochuninhefei/fabric-protos-go-gm/orderer"
 	"github.com/pkg/errors"
 )
 

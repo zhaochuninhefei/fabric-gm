@@ -20,10 +20,10 @@ import (
 	privdatacommon "gitee.com/zhaochuninhefei/fabric-gm/gossip/privdata/common"
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/util"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
-	"github.com/hyperledger/fabric-protos-go/common"
-	"github.com/hyperledger/fabric-protos-go/ledger/rwset"
-	"github.com/hyperledger/fabric-protos-go/peer"
-	protostransientstore "github.com/hyperledger/fabric-protos-go/transientstore"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/ledger/rwset"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
+	protostransientstore "gitee.com/zhaochuninhefei/fabric-protos-go-gm/transientstore"
 	"github.com/pkg/errors"
 )
 

@@ -11,7 +11,7 @@ import (
 
 	commonledger "gitee.com/zhaochuninhefei/fabric-gm/common/ledger"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger/kvledger/txmgmt/statedb"
-	"github.com/hyperledger/fabric-protos-go/ledger/queryresult"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/ledger/queryresult"
 )
 
 type itrCombiner struct {

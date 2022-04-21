@@ -15,7 +15,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/common/policies"
 	"gitee.com/zhaochuninhefei/fabric-gm/msp"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
-	mspproto "github.com/hyperledger/fabric-protos-go/msp"
+	mspproto "gitee.com/zhaochuninhefei/fabric-protos-go-gm/msp"
 )
 
 type MockChannelPolicyManagerGetter struct {

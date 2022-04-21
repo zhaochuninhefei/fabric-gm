@@ -21,7 +21,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/orderer/common/types"
 	"gitee.com/zhaochuninhefei/fabric-gm/orderer/consensus"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
-	cb "github.com/hyperledger/fabric-protos-go/common"
+	cb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
 )
 
 type mockConsenter struct {

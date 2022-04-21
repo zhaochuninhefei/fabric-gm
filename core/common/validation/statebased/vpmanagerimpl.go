@@ -12,7 +12,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/common/flogging"
 	validation "gitee.com/zhaochuninhefei/fabric-gm/core/handlers/validation/api/state"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger/kvledger/txmgmt/rwsetutil"
-	pb "github.com/hyperledger/fabric-protos-go/peer"
+	pb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 	"github.com/pkg/errors"
 )
 

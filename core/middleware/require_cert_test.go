@@ -6,14 +6,13 @@ SPDX-License-Identifier: Apache-2.0
 
 package middleware_test
 
-// "net/http"只支持tls和x509，不支持gmtls和gmx509
+// http "gitee.com/zhaochuninhefei/gmgo/gmhttp"只支持tls和x509，不支持gmtls和gmx509
 import (
-	"crypto/x509"
-	"net/http"
-	"net/http/httptest"
-
 	"gitee.com/zhaochuninhefei/fabric-gm/core/middleware"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/middleware/fakes"
+	http "gitee.com/zhaochuninhefei/gmgo/gmhttp"
+	"gitee.com/zhaochuninhefei/gmgo/gmhttp/httptest"
+	"gitee.com/zhaochuninhefei/gmgo/x509"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )

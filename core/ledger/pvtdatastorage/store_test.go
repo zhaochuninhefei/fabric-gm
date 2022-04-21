@@ -18,8 +18,8 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger/kvledger/txmgmt/rwsetutil"
 	btltestutil "gitee.com/zhaochuninhefei/fabric-gm/core/ledger/pvtdatapolicy/testutil"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/ledger/rwset"
 	"github.com/golang/protobuf/proto"
-	"github.com/hyperledger/fabric-protos-go/ledger/rwset"
 	"github.com/stretchr/testify/require"
 )
 

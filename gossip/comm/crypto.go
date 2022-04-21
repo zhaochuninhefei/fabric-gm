@@ -10,8 +10,8 @@ import (
 	"context"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/common/util"
-	credentials "gitee.com/zhaochuninhefei/gmgo/gmtls/gmcredentials"
-	"google.golang.org/grpc/peer"
+	"gitee.com/zhaochuninhefei/gmgo/grpc/credentials"
+	"gitee.com/zhaochuninhefei/gmgo/grpc/peer"
 )
 
 func certHashFromRawCert(rawCert []byte) []byte {

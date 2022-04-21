@@ -24,7 +24,7 @@ func GenerateMockPublicPrivateKeyPairPEM(isCA bool) (string, string, error) {
 	if err != nil {
 		return "", "", err
 	}
-	der, _ := x509.MarshalSm2PrivateKey(privateKey, nil)
+	der, _ := x509.MarshalECPrivateKey(privateKey)
 	privateKeyPEM := string(pem.EncodeToMemory(
 		&pem.Block{
 			Type:  "SM2 PRIVATE KEY",
@@ -43,7 +43,7 @@ func GenerateMockPublicPrivateKeyPairPEM(isCA bool) (string, string, error) {
 		template.KeyUsage |= x509.KeyUsageCertSign
 	}
 
-	publicKeyCert, err := x509.CreateCertificate(&template, &template, privateKey.Public(), privateKey)
+	publicKeyCert, err := x509.CreateCertificate(rand.Reader, &template, &template, privateKey.Public(), privateKey)
 	if err != nil {
 		return "", "", err
 	}

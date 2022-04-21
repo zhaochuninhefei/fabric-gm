@@ -12,7 +12,7 @@ import (
 	commonledger "gitee.com/zhaochuninhefei/fabric-gm/common/ledger"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/common/privdata"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger"
-	pb "github.com/hyperledger/fabric-protos-go/peer"
+	pb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 )
 
 type TransactionContext struct {

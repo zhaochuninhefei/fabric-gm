@@ -28,12 +28,11 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/sw"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/config/configtest"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
-	"gitee.com/zhaochuninhefei/gmgo/pkcs12"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/msp"
 	"gitee.com/zhaochuninhefei/gmgo/sm2"
 	"gitee.com/zhaochuninhefei/gmgo/sm3"
 	"gitee.com/zhaochuninhefei/gmgo/x509"
 	"github.com/golang/protobuf/proto"
-	"github.com/hyperledger/fabric-protos-go/msp"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -349,7 +348,7 @@ func TestValidateCANameConstraintsMitigation(t *testing.T) {
 		KeyUsage:                    caKeyUsage,
 		SubjectKeyId:                computeSKI(caKey.Public().(*sm2.PublicKey)),
 	}
-	caCertBytes, err := x509.CreateCertificateFromReader(rand.Reader, &caTemplate, &caTemplate, caKey.Public(), caKey)
+	caCertBytes, err := x509.CreateCertificate(rand.Reader, &caTemplate, &caTemplate, caKey.Public(), caKey)
 	require.NoError(t, err)
 	ca, err := x509.ParseCertificate(caCertBytes)
 	require.NoError(t, err)
@@ -362,10 +361,10 @@ func TestValidateCANameConstraintsMitigation(t *testing.T) {
 		KeyUsage:     x509.KeyUsageDigitalSignature,
 		SubjectKeyId: computeSKI(leafKey.Public().(*sm2.PublicKey)),
 	}
-	leafCertBytes, err := x509.CreateCertificateFromReader(rand.Reader, &leafTemplate, ca, leafKey.Public(), caKey)
+	leafCertBytes, err := x509.CreateCertificate(rand.Reader, &leafTemplate, ca, leafKey.Public(), caKey)
 	require.NoError(t, err)
 
-	keyBytes, err := pkcs12.MarshalPKCS8PrivateKey(leafKey)
+	keyBytes, err := x509.MarshalPKCS8PrivateKey(leafKey)
 	require.NoError(t, err)
 
 	caCertPem := pem.EncodeToMemory(&pem.Block{Type: "CERTIFICATE", Bytes: caCertBytes})
@@ -404,7 +403,7 @@ func TestValidateCANameConstraintsMitigation(t *testing.T) {
 		leafTemplate := leafTemplate
 		leafTemplate.DNSNames = []string{"localhost"}
 
-		leafCertBytes, err := x509.CreateCertificateFromReader(rand.Reader, &leafTemplate, caCert, leafKey.Public(), caKey)
+		leafCertBytes, err := x509.CreateCertificate(rand.Reader, &leafTemplate, caCert, leafKey.Public(), caKey)
 		require.NoError(t, err)
 
 		leafCert, err := x509.ParseCertificate(leafCertBytes)

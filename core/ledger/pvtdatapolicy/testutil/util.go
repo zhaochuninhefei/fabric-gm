@@ -9,7 +9,7 @@ package testutil
 import (
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger/pvtdatapolicy"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger/pvtdatapolicy/mock"
-	"github.com/hyperledger/fabric-protos-go/peer"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 )
 
 // SampleBTLPolicy helps tests create a sample BTLPolicy

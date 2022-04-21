@@ -11,7 +11,7 @@ import (
 
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/api"
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/common"
-	"github.com/hyperledger/fabric-protos-go/gossip"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/gossip"
 )
 
 // ReceivedMessage is a GossipMessage wrapper that

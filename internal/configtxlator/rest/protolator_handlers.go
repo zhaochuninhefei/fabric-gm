@@ -10,12 +10,13 @@ import (
 	"bytes"
 	"fmt"
 	"io/ioutil"
-	"net/http"
 	"reflect"
 
+	http "gitee.com/zhaochuninhefei/gmgo/gmhttp"
+
 	"gitee.com/zhaochuninhefei/fabric-config-gm/protolator"
+	"gitee.com/zhaochuninhefei/gmgo/mux"
 	"github.com/golang/protobuf/proto"
-	"github.com/gorilla/mux"
 )
 
 func getMsgType(r *http.Request) (proto.Message, error) {

@@ -29,11 +29,11 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/integration/nwo"
 	"gitee.com/zhaochuninhefei/fabric-gm/integration/nwo/commands"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/msp"
 	"gitee.com/zhaochuninhefei/gmgo/x509"
 	docker "github.com/fsouza/go-dockerclient"
 	"github.com/golang/protobuf/proto"
-	"github.com/hyperledger/fabric-protos-go/common"
-	"github.com/hyperledger/fabric-protos-go/msp"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"github.com/onsi/gomega/gbytes"
@@ -851,7 +851,7 @@ func renewOrdererCertificates(network *nwo.Network, orderers ...*nwo.Orderer) {
 func expireCertificate(certPEM, caCertPEM, caKeyPEM []byte, expirationTime time.Time) (expiredcertPEM []byte, earlyMadeCACertPEM []byte) {
 	keyAsDER, _ := pem.Decode(caKeyPEM)
 	// TODO 确认
-	caKey, err := x509.ParsePKCS8PrivateKey(keyAsDER.Bytes, nil)
+	caKey, err := x509.ParsePKCS8PrivateKey(keyAsDER.Bytes)
 	Expect(err).NotTo(HaveOccurred())
 	// caKey := caKeyWithoutType.(*ecdsa.PrivateKey)
 
@@ -873,11 +873,11 @@ func expireCertificate(certPEM, caCertPEM, caKeyPEM []byte, expirationTime time.
 	cert.NotAfter = expirationTime
 
 	// The CA signs the certificate
-	certBytes, err := x509.CreateCertificateFromReader(rand.Reader, cert, caCert, cert.PublicKey, caKey)
+	certBytes, err := x509.CreateCertificate(rand.Reader, cert, caCert, cert.PublicKey, caKey)
 	Expect(err).NotTo(HaveOccurred())
 
 	// The CA signs its own certificate
-	caCertBytes, err := x509.CreateCertificateFromReader(rand.Reader, caCert, caCert, caCert.PublicKey, caKey)
+	caCertBytes, err := x509.CreateCertificate(rand.Reader, caCert, caCert, caCert.PublicKey, caKey)
 	Expect(err).NotTo(HaveOccurred())
 
 	expiredcertPEM = pem.EncodeToMemory(&pem.Block{Bytes: certBytes, Type: "CERTIFICATE"})

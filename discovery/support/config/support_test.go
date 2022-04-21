@@ -23,10 +23,10 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/configtxgen/encoder"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/configtxgen/genesisconfig"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/discovery"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/msp"
 	"github.com/golang/protobuf/proto"
-	"github.com/hyperledger/fabric-protos-go/common"
-	"github.com/hyperledger/fabric-protos-go/discovery"
-	"github.com/hyperledger/fabric-protos-go/msp"
 	"github.com/onsi/gomega/gexec"
 	"github.com/stretchr/testify/assert"
 )

@@ -11,18 +11,19 @@ import (
 	"io/ioutil"
 	"mime"
 	"mime/multipart"
-	"net/http"
 	"path"
 	"strconv"
 	"strings"
+
+	http "gitee.com/zhaochuninhefei/gmgo/gmhttp"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/common/configtx"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/flogging"
 	"gitee.com/zhaochuninhefei/fabric-gm/orderer/common/localconfig"
 	"gitee.com/zhaochuninhefei/fabric-gm/orderer/common/types"
+	cb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
+	"gitee.com/zhaochuninhefei/gmgo/mux"
 	"github.com/golang/protobuf/proto"
-	"github.com/gorilla/mux"
-	cb "github.com/hyperledger/fabric-protos-go/common"
 	"github.com/pkg/errors"
 )
 

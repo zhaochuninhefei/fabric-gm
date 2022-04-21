@@ -14,9 +14,9 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/metrics"
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/protoext"
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/util"
-	proto "github.com/hyperledger/fabric-protos-go/gossip"
+	proto "gitee.com/zhaochuninhefei/fabric-protos-go-gm/gossip"
+	"gitee.com/zhaochuninhefei/gmgo/grpc"
 	"github.com/pkg/errors"
-	"google.golang.org/grpc"
 )
 
 type handler func(message *protoext.SignedGossipMessage)

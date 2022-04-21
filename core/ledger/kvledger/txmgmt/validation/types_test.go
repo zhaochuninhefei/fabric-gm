@@ -12,7 +12,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger/internal/version"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger/kvledger/txmgmt/privacyenabledstate"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger/kvledger/txmgmt/rwsetutil"
-	"github.com/hyperledger/fabric-protos-go/ledger/rwset/kvrwset"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/ledger/rwset/kvrwset"
 	"github.com/stretchr/testify/require"
 )
 

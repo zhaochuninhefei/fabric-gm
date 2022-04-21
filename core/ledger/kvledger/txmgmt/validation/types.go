@@ -10,7 +10,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger/internal/version"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger/kvledger/txmgmt/privacyenabledstate"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger/kvledger/txmgmt/rwsetutil"
-	"github.com/hyperledger/fabric-protos-go/peer"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 )
 
 // block is used to used to hold the information from its proto format to a structure

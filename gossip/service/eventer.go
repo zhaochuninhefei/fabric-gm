@@ -11,7 +11,7 @@ import (
 
 	"gitee.com/zhaochuninhefei/fabric-gm/common/channelconfig"
 	"gitee.com/zhaochuninhefei/fabric-gm/msp"
-	"github.com/hyperledger/fabric-protos-go/peer"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 )
 
 // Config enumerates the configuration methods required by gossip

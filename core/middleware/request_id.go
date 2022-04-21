@@ -8,7 +8,8 @@ package middleware
 
 import (
 	"context"
-	"net/http"
+
+	http "gitee.com/zhaochuninhefei/gmgo/gmhttp"
 )
 
 var requestIDKey = requestIDKeyType{}

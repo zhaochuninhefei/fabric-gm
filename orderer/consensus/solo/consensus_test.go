@@ -17,7 +17,7 @@ import (
 	mockblockcutter "gitee.com/zhaochuninhefei/fabric-gm/orderer/mocks/common/blockcutter"
 	mockmultichannel "gitee.com/zhaochuninhefei/fabric-gm/orderer/mocks/common/multichannel"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
-	cb "github.com/hyperledger/fabric-protos-go/common"
+	cb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
 	"github.com/stretchr/testify/assert"
 )
 

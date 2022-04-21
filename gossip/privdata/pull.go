@@ -27,7 +27,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/protoext"
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/util"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
-	protosgossip "github.com/hyperledger/fabric-protos-go/gossip"
+	protosgossip "gitee.com/zhaochuninhefei/fabric-protos-go-gm/gossip"
 	"github.com/pkg/errors"
 	"go.uber.org/zap/zapcore"
 )

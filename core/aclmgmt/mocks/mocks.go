@@ -10,7 +10,7 @@ import (
 	"testing"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger"
-	"github.com/hyperledger/fabric-protos-go/common"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
 	"github.com/stretchr/testify/mock"
 )
 

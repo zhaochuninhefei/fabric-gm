@@ -19,8 +19,8 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/metrics"
 	privdatacommon "gitee.com/zhaochuninhefei/fabric-gm/gossip/privdata/common"
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/util"
-	protosgossip "github.com/hyperledger/fabric-protos-go/gossip"
-	"github.com/hyperledger/fabric-protos-go/peer"
+	protosgossip "gitee.com/zhaochuninhefei/fabric-protos-go-gm/gossip"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 	"github.com/pkg/errors"
 )
 

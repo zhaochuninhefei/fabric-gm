@@ -26,11 +26,11 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/common/util"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/pkg/comm"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
 	tls "gitee.com/zhaochuninhefei/gmgo/gmtls"
+	"gitee.com/zhaochuninhefei/gmgo/grpc"
 	"gitee.com/zhaochuninhefei/gmgo/x509"
-	"github.com/hyperledger/fabric-protos-go/common"
 	"github.com/pkg/errors"
-	"google.golang.org/grpc"
 )
 
 // ConnByCertMap maps certificates represented as strings

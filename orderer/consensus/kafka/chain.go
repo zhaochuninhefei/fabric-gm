@@ -17,10 +17,10 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/orderer/common/msgprocessor"
 	"gitee.com/zhaochuninhefei/fabric-gm/orderer/consensus"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
+	cb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
+	ab "gitee.com/zhaochuninhefei/fabric-protos-go-gm/orderer"
 	"gitee.com/zhaochuninhefei/saramagm/sarama"
 	"github.com/golang/protobuf/proto"
-	cb "github.com/hyperledger/fabric-protos-go/common"
-	ab "github.com/hyperledger/fabric-protos-go/orderer"
 	"github.com/pkg/errors"
 )
 

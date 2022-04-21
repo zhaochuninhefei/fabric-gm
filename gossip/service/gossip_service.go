@@ -34,10 +34,10 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/pkg/peer/blocksprovider"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/pkg/peer/orderers"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
-	gproto "github.com/hyperledger/fabric-protos-go/gossip"
-	tspb "github.com/hyperledger/fabric-protos-go/transientstore"
+	gproto "gitee.com/zhaochuninhefei/fabric-protos-go-gm/gossip"
+	tspb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/transientstore"
+	"gitee.com/zhaochuninhefei/gmgo/grpc"
 	"github.com/pkg/errors"
-	"google.golang.org/grpc"
 )
 
 // gossipSvc is the interface of the gossip component.

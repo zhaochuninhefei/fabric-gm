@@ -12,9 +12,9 @@ import (
 	"time"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/pkg/identity"
+	cb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes/timestamp"
-	cb "github.com/hyperledger/fabric-protos-go/common"
 	"github.com/pkg/errors"
 )
 

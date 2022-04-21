@@ -17,16 +17,16 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/pkg/peer/blocksprovider/fake"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/pkg/peer/orderers"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/gossip"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/orderer"
 	"gitee.com/zhaochuninhefei/gmgo/x509"
-	"github.com/hyperledger/fabric-protos-go/common"
-	"github.com/hyperledger/fabric-protos-go/gossip"
-	"github.com/hyperledger/fabric-protos-go/orderer"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 
+	"gitee.com/zhaochuninhefei/gmgo/grpc"
+	"gitee.com/zhaochuninhefei/gmgo/grpc/connectivity"
 	"github.com/golang/protobuf/proto"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/connectivity"
 )
 
 var _ = Describe("Blocksprovider", func() {

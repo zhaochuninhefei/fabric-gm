@@ -11,7 +11,7 @@ import (
 	"testing"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/core/config/configtest"
-	"github.com/hyperledger/fabric-protos-go/orderer/etcdraft"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/orderer/etcdraft"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
 )

@@ -12,7 +12,7 @@ import (
 
 	"gitee.com/zhaochuninhefei/fabric-gm/common/metrics"
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/util"
-	proto "github.com/hyperledger/fabric-protos-go/gossip"
+	proto "gitee.com/zhaochuninhefei/fabric-protos-go-gm/gossip"
 )
 
 // PayloadsBuffer is used to store payloads into which used to

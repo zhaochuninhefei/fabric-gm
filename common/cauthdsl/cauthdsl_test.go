@@ -14,9 +14,9 @@ import (
 
 	"gitee.com/zhaochuninhefei/fabric-gm/common/policydsl"
 	"gitee.com/zhaochuninhefei/fabric-gm/msp"
+	cb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
+	mb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/msp"
 	"github.com/golang/protobuf/proto"
-	cb "github.com/hyperledger/fabric-protos-go/common"
-	mb "github.com/hyperledger/fabric-protos-go/msp"
 	"github.com/stretchr/testify/assert"
 )
 

@@ -16,8 +16,8 @@ import (
 
 	endorsement "gitee.com/zhaochuninhefei/fabric-gm/core/handlers/endorsement/api"
 	validation "gitee.com/zhaochuninhefei/fabric-gm/core/handlers/validation/api"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 	"github.com/golang/protobuf/proto"
-	"github.com/hyperledger/fabric-protos-go/peer"
 	"github.com/stretchr/testify/assert"
 )
 

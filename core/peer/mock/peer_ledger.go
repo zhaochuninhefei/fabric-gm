@@ -6,8 +6,8 @@ import (
 
 	ledgera "gitee.com/zhaochuninhefei/fabric-gm/common/ledger"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger"
-	"github.com/hyperledger/fabric-protos-go/common"
-	peera "github.com/hyperledger/fabric-protos-go/peer"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
+	peera "gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 )
 
 type PeerLedger struct {

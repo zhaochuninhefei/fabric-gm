@@ -14,9 +14,9 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/common/configtx/test"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/crypto"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/pkg/txflags"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
+	pb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 	"github.com/golang/protobuf/proto"
-	"github.com/hyperledger/fabric-protos-go/common"
-	pb "github.com/hyperledger/fabric-protos-go/peer"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/common/ledger/testutil/fakes"
 	"gitee.com/zhaochuninhefei/fabric-gm/msp"

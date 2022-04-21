@@ -13,8 +13,8 @@ import (
 
 	"gitee.com/zhaochuninhefei/fabric-gm/common/crypto/tlsgen"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/util"
-	credentials "gitee.com/zhaochuninhefei/gmgo/gmtls/gmcredentials"
-	"google.golang.org/grpc/peer"
+	"gitee.com/zhaochuninhefei/gmgo/grpc/credentials"
+	"gitee.com/zhaochuninhefei/gmgo/grpc/peer"
 )
 
 var ttl = time.Minute * 10

@@ -11,8 +11,8 @@ import (
 
 	configtxtest "gitee.com/zhaochuninhefei/fabric-gm/common/configtx/test"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger/mock"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
 	"github.com/golang/protobuf/proto"
-	"github.com/hyperledger/fabric-protos-go/common"
 	"github.com/stretchr/testify/require"
 )
 

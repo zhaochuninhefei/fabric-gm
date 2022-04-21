@@ -16,6 +16,7 @@ import (
 	"net"
 	"time"
 
+	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/utils"
 	"gitee.com/zhaochuninhefei/gmgo/sm2"
 	"gitee.com/zhaochuninhefei/gmgo/sm3"
 	"gitee.com/zhaochuninhefei/gmgo/x509"
@@ -27,7 +28,7 @@ func newPrivKey() (*sm2.PrivateKey, []byte, error) {
 	if err != nil {
 		return nil, nil, err
 	}
-	privBytes, err := x509.MarshalSm2UnecryptedPrivateKey(privateKey)
+	privBytes, err := utils.PrivateKeyToDER(privateKey)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -92,7 +93,7 @@ func newCertKeyPair(isCA bool, isServer bool, certSigner crypto.Signer, parent *
 		certSigner = privateKey
 	}
 
-	rawBytes, err := x509.CreateCertificateFromReader(rand.Reader, &template, parent, &privateKey.PublicKey, certSigner)
+	rawBytes, err := x509.CreateCertificate(rand.Reader, &template, parent, &privateKey.PublicKey, certSigner)
 	if err != nil {
 		return nil, err
 	}

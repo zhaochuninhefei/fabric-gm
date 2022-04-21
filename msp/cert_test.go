@@ -175,7 +175,7 @@ func generateSelfSignedCert(t *testing.T, now time.Time) (*sm2.PrivateKey, *x509
 			},
 		},
 	}
-	certRaw, err := x509.CreateCertificateFromReader(rand.Reader, &template, &template, &k.PublicKey, k)
+	certRaw, err := x509.CreateCertificate(rand.Reader, &template, &template, &k.PublicKey, k)
 	assert.NoError(t, err)
 
 	cert, err := x509.ParseCertificate(certRaw)

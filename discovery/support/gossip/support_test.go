@@ -14,7 +14,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/common"
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/discovery"
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/protoext"
-	"github.com/hyperledger/fabric-protos-go/gossip"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/gossip"
 	"github.com/stretchr/testify/assert"
 )
 

@@ -14,11 +14,11 @@ import (
 	"time"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/common"
+	cb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/msp"
+	"gitee.com/zhaochuninhefei/gmgo/grpc"
 	"gitee.com/zhaochuninhefei/gmgo/x509"
 	"github.com/golang/protobuf/proto"
-	cb "github.com/hyperledger/fabric-protos-go/common"
-	"github.com/hyperledger/fabric-protos-go/msp"
-	"google.golang.org/grpc"
 )
 
 // MessageCryptoService is the contract between the gossip component and the

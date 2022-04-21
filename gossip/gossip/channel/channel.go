@@ -29,7 +29,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/protoext"
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/util"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
-	proto "github.com/hyperledger/fabric-protos-go/gossip"
+	proto "gitee.com/zhaochuninhefei/fabric-protos-go-gm/gossip"
 )
 
 const DefMsgExpirationTimeout = election.DefLeaderAliveThreshold * 10

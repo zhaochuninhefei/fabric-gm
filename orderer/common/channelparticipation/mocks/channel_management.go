@@ -4,7 +4,7 @@ package mocks
 import (
 	"sync"
 
-	"github.com/hyperledger/fabric-protos-go/common"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
 	"gitee.com/zhaochuninhefei/fabric-gm/orderer/common/channelparticipation"
 	"gitee.com/zhaochuninhefei/fabric-gm/orderer/common/types"
 )

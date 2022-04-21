@@ -4,7 +4,7 @@ package fake
 import (
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/pkg/peer/blocksprovider"
 	"gitee.com/zhaochuninhefei/gmgo/x509"
-	"google.golang.org/grpc"
+	"gitee.com/zhaochuninhefei/gmgo/grpc"
 	"sync"
 )
 

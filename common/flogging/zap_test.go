@@ -15,11 +15,11 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/common/flogging"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/flogging/fabenc"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/flogging/mock"
+	"gitee.com/zhaochuninhefei/gmgo/grpc/grpclog"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"go.uber.org/zap/zaptest/observer"
-	"google.golang.org/grpc/grpclog"
 )
 
 func TestFabricLoggerEncoding(t *testing.T) {

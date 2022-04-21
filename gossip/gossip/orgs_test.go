@@ -25,8 +25,8 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/protoext"
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/util"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/pkg/comm"
-	cb "github.com/hyperledger/fabric-protos-go/common"
-	proto "github.com/hyperledger/fabric-protos-go/gossip"
+	cb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
+	proto "gitee.com/zhaochuninhefei/fabric-protos-go-gm/gossip"
 	"github.com/stretchr/testify/assert"
 )
 

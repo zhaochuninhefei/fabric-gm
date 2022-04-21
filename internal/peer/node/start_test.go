@@ -18,12 +18,12 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/core/testutil"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/peer/node/mock"
 	msptesttools "gitee.com/zhaochuninhefei/fabric-gm/msp/mgmt/testtools"
-	"github.com/hyperledger/fabric-protos-go/common"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
+	"gitee.com/zhaochuninhefei/gmgo/grpc"
 	"github.com/mitchellh/mapstructure"
 	. "github.com/onsi/gomega"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
-	"google.golang.org/grpc"
 )
 
 func TestStartCmd(t *testing.T) {

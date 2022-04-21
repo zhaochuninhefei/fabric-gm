@@ -15,9 +15,9 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/core/endorser"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/endorser/fake"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
-	cb "github.com/hyperledger/fabric-protos-go/common"
-	mspproto "github.com/hyperledger/fabric-protos-go/msp"
-	pb "github.com/hyperledger/fabric-protos-go/peer"
+	cb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
+	mspproto "gitee.com/zhaochuninhefei/fabric-protos-go-gm/msp"
+	pb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 
 	"github.com/golang/protobuf/proto"
 )

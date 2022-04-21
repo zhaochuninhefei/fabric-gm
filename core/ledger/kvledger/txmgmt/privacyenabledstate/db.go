@@ -10,6 +10,7 @@ import (
 	"encoding/base64"
 	"strings"
 
+	"gitee.com/zhaochuninhefei/fabric-config-gm/healthz"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/flogging"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/metrics"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/common/ccprovider"
@@ -21,7 +22,6 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger/kvledger/txmgmt/statedb/statecouchdb"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger/kvledger/txmgmt/statedb/stateleveldb"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger/util"
-	"github.com/hyperledger/fabric-lib-go/healthz"
 	"github.com/pkg/errors"
 )
 

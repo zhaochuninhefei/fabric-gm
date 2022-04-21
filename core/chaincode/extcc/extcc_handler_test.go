@@ -15,7 +15,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/core/container/ccintf"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/pkg/comm"
 
-	"google.golang.org/grpc"
+	"gitee.com/zhaochuninhefei/gmgo/grpc"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"

@@ -128,7 +128,7 @@ func generateCA(subjectCN string, hosts ...string) (pemCert, pemKey []byte) {
 	template.KeyUsage |= x509.KeyUsageCertSign
 	template.IsCA = true
 
-	derBytes, err := x509.CreateCertificate(&template, &template, publicKey, privateKey)
+	derBytes, err := x509.CreateCertificate(rand.Reader, &template, &template, publicKey, privateKey)
 	Expect(err).NotTo(HaveOccurred())
 
 	return pemEncode(derBytes, privateKey)
@@ -146,7 +146,7 @@ func issueCertificate(caCert, caKey []byte, subjectCN string, hosts ...string) (
 	publicKey := privateKey.Public()
 
 	template := newTemplate(subjectCN, hosts...)
-	derBytes, err := x509.CreateCertificateFromReader(rand.Reader, &template, ca, publicKey, tlsCert.PrivateKey)
+	derBytes, err := x509.CreateCertificate(rand.Reader, &template, ca, publicKey, tlsCert.PrivateKey)
 	Expect(err).NotTo(HaveOccurred())
 
 	return pemEncode(derBytes, privateKey)

@@ -316,7 +316,7 @@ func buildCert(caBytes []byte, org1CAPath string, csr *x509.CertificateRequest, 
 
 	pemBlock, _ = pem.Decode(keyBytes)
 	Expect(pemBlock).NotTo(BeNil())
-	key, err := x509.ParsePKCS8PrivateKey(pemBlock.Bytes, nil)
+	key, err := x509.ParsePKCS8PrivateKey(pemBlock.Bytes)
 	Expect(err).NotTo(HaveOccurred())
 	caKey := key
 
@@ -337,7 +337,7 @@ func buildCert(caBytes []byte, org1CAPath string, csr *x509.CertificateRequest, 
 	}
 
 	// Use root CA to create and sign cert
-	signedCert, err := x509.CreateCertificate(certTemplate, caCert, pubKey, caKey)
+	signedCert, err := x509.CreateCertificate(rand.Reader, certTemplate, caCert, pubKey, caKey)
 	Expect(err).NotTo(HaveOccurred())
 
 	return pem.EncodeToMemory(&pem.Block{Bytes: signedCert, Type: "CERTIFICATE"})

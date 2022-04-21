@@ -10,7 +10,7 @@ import (
 	"sync"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/common/flogging"
-	cb "github.com/hyperledger/fabric-protos-go/common"
+	cb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
 )
 
 var logger = flogging.MustGetLogger("orderer.mocks.common.blockcutter")

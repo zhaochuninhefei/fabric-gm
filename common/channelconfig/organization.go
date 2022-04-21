@@ -10,8 +10,8 @@ import (
 	"fmt"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/msp"
-	cb "github.com/hyperledger/fabric-protos-go/common"
-	mspprotos "github.com/hyperledger/fabric-protos-go/msp"
+	cb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
+	mspprotos "gitee.com/zhaochuninhefei/fabric-protos-go-gm/msp"
 	"github.com/pkg/errors"
 )
 

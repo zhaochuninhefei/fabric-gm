@@ -8,9 +8,11 @@ package httpadmin_test
 
 import (
 	"errors"
-	"net/http"
-	"net/http/httptest"
 	"strings"
+
+	"gitee.com/zhaochuninhefei/gmgo/gmhttp/httptest"
+
+	http "gitee.com/zhaochuninhefei/gmgo/gmhttp"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/common/flogging"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/flogging/httpadmin"

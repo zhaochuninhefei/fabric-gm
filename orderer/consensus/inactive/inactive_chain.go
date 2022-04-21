@@ -8,7 +8,7 @@ package inactive
 
 import (
 	"gitee.com/zhaochuninhefei/fabric-gm/orderer/common/types"
-	"github.com/hyperledger/fabric-protos-go/common"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
 )
 
 // Chain implements an inactive consenter.Chain

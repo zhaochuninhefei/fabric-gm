@@ -8,8 +8,8 @@ package v13
 
 import (
 	commonerrors "gitee.com/zhaochuninhefei/fabric-gm/common/errors"
-	"github.com/hyperledger/fabric-protos-go/common"
-	"github.com/hyperledger/fabric-protos-go/peer"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 )
 
 // StateBasedValidator is used to validate a transaction that performs changes to

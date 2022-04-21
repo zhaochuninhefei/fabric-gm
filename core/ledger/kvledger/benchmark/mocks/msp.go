@@ -10,7 +10,7 @@ import (
 	"time"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/msp"
-	mspprotos "github.com/hyperledger/fabric-protos-go/msp"
+	mspprotos "gitee.com/zhaochuninhefei/fabric-protos-go-gm/msp"
 )
 
 type noopmsp struct {

@@ -18,8 +18,8 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/orderer/common/broadcast"
 	"gitee.com/zhaochuninhefei/fabric-gm/orderer/common/broadcast/mock"
 	"gitee.com/zhaochuninhefei/fabric-gm/orderer/common/msgprocessor"
-	cb "github.com/hyperledger/fabric-protos-go/common"
-	ab "github.com/hyperledger/fabric-protos-go/orderer"
+	cb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
+	ab "gitee.com/zhaochuninhefei/fabric-protos-go-gm/orderer"
 )
 
 var _ = Describe("Broadcast", func() {

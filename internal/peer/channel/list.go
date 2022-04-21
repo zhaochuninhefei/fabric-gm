@@ -12,9 +12,9 @@ import (
 
 	"gitee.com/zhaochuninhefei/fabric-gm/core/scc/cscc"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
+	common2 "gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
+	pb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 	"github.com/golang/protobuf/proto"
-	common2 "github.com/hyperledger/fabric-protos-go/common"
-	pb "github.com/hyperledger/fabric-protos-go/peer"
 	"github.com/spf13/cobra"
 )
 

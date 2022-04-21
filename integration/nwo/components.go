@@ -9,7 +9,8 @@ package nwo
 import (
 	"fmt"
 	"io/ioutil"
-	"net/http"
+
+	http "gitee.com/zhaochuninhefei/gmgo/gmhttp"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/integration/runner"
 	. "github.com/onsi/gomega"

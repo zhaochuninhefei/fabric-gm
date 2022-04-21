@@ -10,7 +10,7 @@ import (
 	endorsement "gitee.com/zhaochuninhefei/fabric-gm/core/handlers/endorsement/api/state"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/transientstore"
-	"github.com/hyperledger/fabric-protos-go/ledger/rwset"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/ledger/rwset"
 	"github.com/pkg/errors"
 )
 

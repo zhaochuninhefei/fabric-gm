@@ -14,7 +14,7 @@ import (
 
 	"gitee.com/zhaochuninhefei/fabric-gm/core/chaincode"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/chaincode/mock"
-	"github.com/hyperledger/fabric-protos-go/ledger/queryresult"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/ledger/queryresult"
 	"github.com/stretchr/testify/assert"
 )
 

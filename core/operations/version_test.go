@@ -7,8 +7,9 @@ SPDX-License-Identifier: Apache-2.0
 package operations
 
 import (
-	"net/http"
-	"net/http/httptest"
+	"gitee.com/zhaochuninhefei/gmgo/gmhttp/httptest"
+
+	http "gitee.com/zhaochuninhefei/gmgo/gmhttp"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"

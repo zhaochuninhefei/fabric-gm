@@ -16,11 +16,11 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/common/grpcmetrics/fakes"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/grpcmetrics/testpb"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/metrics/metricsfakes"
+	"gitee.com/zhaochuninhefei/gmgo/grpc"
+	"gitee.com/zhaochuninhefei/gmgo/grpc/codes"
+	"gitee.com/zhaochuninhefei/gmgo/grpc/status"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 )
 
 var _ = Describe("Interceptor", func() {

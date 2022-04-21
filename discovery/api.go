@@ -11,7 +11,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/common"
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/discovery"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
-	discprotos "github.com/hyperledger/fabric-protos-go/discovery"
+	discprotos "gitee.com/zhaochuninhefei/fabric-protos-go-gm/discovery"
 )
 
 // AccessControlSupport checks if clients are eligible of being serviced

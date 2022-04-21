@@ -17,7 +17,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/api"
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/common"
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/util"
-	cb "github.com/hyperledger/fabric-protos-go/common"
+	cb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )

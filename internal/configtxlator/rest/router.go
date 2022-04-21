@@ -7,7 +7,7 @@ SPDX-License-Identifier: Apache-2.0
 package rest
 
 import (
-	"github.com/gorilla/mux"
+	"gitee.com/zhaochuninhefei/gmgo/mux"
 )
 
 func NewRouter() *mux.Router {

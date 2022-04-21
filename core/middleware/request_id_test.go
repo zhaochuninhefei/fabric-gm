@@ -7,8 +7,9 @@ SPDX-License-Identifier: Apache-2.0
 package middleware_test
 
 import (
-	"net/http"
-	"net/http/httptest"
+	"gitee.com/zhaochuninhefei/gmgo/gmhttp/httptest"
+
+	http "gitee.com/zhaochuninhefei/gmgo/gmhttp"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/core/middleware"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/middleware/fakes"

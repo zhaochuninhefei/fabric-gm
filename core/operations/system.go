@@ -9,11 +9,13 @@ package operations
 import (
 	"context"
 	"net"
-	"net/http"
 	"os"
 	"strings"
 	"time"
 
+	http "gitee.com/zhaochuninhefei/gmgo/gmhttp"
+
+	"gitee.com/zhaochuninhefei/fabric-config-gm/healthz"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/flogging"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/flogging/httpadmin"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/metadata"
@@ -25,9 +27,8 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/common/util"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/middleware"
 	tls "gitee.com/zhaochuninhefei/gmgo/gmtls"
+	"gitee.com/zhaochuninhefei/gmgo/prometheus/promhttp"
 	kitstatsd "github.com/go-kit/kit/metrics/statsd"
-	"github.com/hyperledger/fabric-lib-go/healthz"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 //go:generate counterfeiter -o fakes/logger.go -fake-name Logger . Logger

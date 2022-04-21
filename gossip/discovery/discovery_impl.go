@@ -19,7 +19,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/gossip/msgstore"
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/protoext"
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/util"
-	proto "github.com/hyperledger/fabric-protos-go/gossip"
+	proto "gitee.com/zhaochuninhefei/fabric-protos-go-gm/gossip"
 	"github.com/pkg/errors"
 )
 

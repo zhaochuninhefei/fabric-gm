@@ -9,7 +9,7 @@ package endorsertx
 import (
 	"regexp"
 
-	"github.com/hyperledger/fabric-protos-go/peer"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/pkg/tx"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"

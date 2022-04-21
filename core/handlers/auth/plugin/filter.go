@@ -10,7 +10,7 @@ import (
 	"context"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/core/handlers/auth"
-	"github.com/hyperledger/fabric-protos-go/peer"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 )
 
 // NewFilter creates a new Filter

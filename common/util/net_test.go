@@ -10,8 +10,8 @@ import (
 	"context"
 	"testing"
 
+	"gitee.com/zhaochuninhefei/gmgo/grpc/peer"
 	"github.com/stretchr/testify/assert"
-	"google.golang.org/grpc/peer"
 )
 
 type addr struct {

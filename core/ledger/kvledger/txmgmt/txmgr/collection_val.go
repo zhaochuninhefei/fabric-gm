@@ -8,7 +8,7 @@ package txmgr
 
 import (
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger"
-	"github.com/hyperledger/fabric-protos-go/peer"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 )
 
 // collNameValidator validates the presence of a collection in a namespace

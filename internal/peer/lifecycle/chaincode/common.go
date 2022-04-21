@@ -15,10 +15,10 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/common/policydsl"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/peer/chaincode"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
+	pb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
+	"gitee.com/zhaochuninhefei/gmgo/grpc"
 	"github.com/golang/protobuf/proto"
-	pb "github.com/hyperledger/fabric-protos-go/peer"
 	"github.com/pkg/errors"
-	"google.golang.org/grpc"
 )
 
 // EndorserClient defines the interface for sending a proposal

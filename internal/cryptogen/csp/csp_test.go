@@ -18,7 +18,6 @@ import (
 	"testing"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/cryptogen/csp"
-	"gitee.com/zhaochuninhefei/gmgo/pkcs12"
 	"gitee.com/zhaochuninhefei/gmgo/sm2"
 	"gitee.com/zhaochuninhefei/gmgo/x509"
 	"github.com/stretchr/testify/assert"
@@ -57,7 +56,7 @@ func TestLoadPrivateKey_BadPEM(t *testing.T) {
 		t.Fatalf("Failed to generate RSA key: %s", err)
 	}
 
-	pkcs8Encoded, err := pkcs12.MarshalPKCS8PrivateKey(rsaKey)
+	pkcs8Encoded, err := x509.MarshalPKCS8PrivateKey(rsaKey)
 	if err != nil {
 		t.Fatalf("Failed to PKCS8 encode RSA private key: %s", err)
 	}

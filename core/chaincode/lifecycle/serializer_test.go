@@ -16,8 +16,8 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/core/chaincode/lifecycle"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/chaincode/lifecycle/mock"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
+	lb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer/lifecycle"
 	"github.com/golang/protobuf/proto"
-	lb "github.com/hyperledger/fabric-protos-go/peer/lifecycle"
 )
 
 var _ = Describe("Serializer", func() {

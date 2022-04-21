@@ -17,10 +17,10 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-config-gm/configtx"
 	"gitee.com/zhaochuninhefei/fabric-gm/integration/nwo"
 	"gitee.com/zhaochuninhefei/fabric-gm/integration/nwo/commands"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
 	"gitee.com/zhaochuninhefei/gmgo/x509"
 	docker "github.com/fsouza/go-dockerclient"
 	"github.com/golang/protobuf/proto"
-	"github.com/hyperledger/fabric-protos-go/common"
 	"github.com/tedsuo/ifrit"
 
 	. "github.com/onsi/ginkgo"
@@ -324,7 +324,7 @@ func parsePrivateKey(filename string) crypto.PrivateKey {
 	pkBytes, err := ioutil.ReadFile(filename)
 	Expect(err).NotTo(HaveOccurred())
 	pemBlock, _ := pem.Decode(pkBytes)
-	privateKey, err := x509.ParsePKCS8PrivateKey(pemBlock.Bytes, nil)
+	privateKey, err := x509.ParsePKCS8PrivateKey(pemBlock.Bytes)
 	Expect(err).NotTo(HaveOccurred())
 	return privateKey
 }

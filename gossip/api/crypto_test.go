@@ -13,7 +13,7 @@ import (
 	"testing"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
-	"github.com/hyperledger/fabric-protos-go/msp"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/msp"
 	"github.com/stretchr/testify/assert"
 )
 

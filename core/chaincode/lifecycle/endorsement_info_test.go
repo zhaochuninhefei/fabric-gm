@@ -12,7 +12,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/core/chaincode/lifecycle"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/chaincode/lifecycle/mock"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/scc"
-	lb "github.com/hyperledger/fabric-protos-go/peer/lifecycle"
+	lb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer/lifecycle"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"

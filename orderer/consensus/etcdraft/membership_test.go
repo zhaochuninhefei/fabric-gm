@@ -13,7 +13,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/common/crypto/tlsgen"
 	"gitee.com/zhaochuninhefei/fabric-gm/orderer/consensus/etcdraft"
 	"gitee.com/zhaochuninhefei/fabric-gm/orderer/consensus/etcdraft/mocks"
-	etcdraftproto "github.com/hyperledger/fabric-protos-go/orderer/etcdraft"
+	etcdraftproto "gitee.com/zhaochuninhefei/fabric-protos-go-gm/orderer/etcdraft"
 	"github.com/stretchr/testify/require"
 	"go.etcd.io/etcd/raft/raftpb"
 )

@@ -14,9 +14,9 @@ import (
 	"time"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
+	m "gitee.com/zhaochuninhefei/fabric-protos-go-gm/msp"
 	"gitee.com/zhaochuninhefei/gmgo/x509"
 	"github.com/golang/protobuf/proto"
-	m "github.com/hyperledger/fabric-protos-go/msp"
 	errors "github.com/pkg/errors"
 )
 

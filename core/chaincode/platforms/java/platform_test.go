@@ -20,7 +20,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/core/chaincode/platforms/java"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/chaincode/platforms/util"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/config/configtest"
-	pb "github.com/hyperledger/fabric-protos-go/peer"
+	pb "gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

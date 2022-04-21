@@ -23,7 +23,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger/kvledger/txmgmt/statedb/stateleveldb"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger/mock"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/ledger/util"
-	"github.com/hyperledger/fabric-protos-go/peer"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 	"github.com/stretchr/testify/require"
 )
 

@@ -11,7 +11,7 @@ import (
 	"testing"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/discovery/protoext"
-	"github.com/hyperledger/fabric-protos-go/discovery"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/discovery"
 	"github.com/stretchr/testify/assert"
 )
 
