@@ -14,10 +14,10 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/common/metrics/prometheus"
 	http "gitee.com/zhaochuninhefei/gmgo/gmhttp"
 	"gitee.com/zhaochuninhefei/gmgo/gmhttp/httptest"
+	"gitee.com/zhaochuninhefei/gmgo/prometheus/promhttp"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	prom "github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 var _ = Describe("Provider", func() {
