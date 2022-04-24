@@ -95,14 +95,16 @@ func TestMain(m *testing.M) {
 }
 
 func TestTwoDigitVersion(t *testing.T) {
-	version := "2.0.0"
-	expected := "2.0"
+	version := "2.2.5-0.0.1"
+	expected := "2.2"
 	actual := twoDigitVersion(version)
+	fmt.Printf("expected: %s , actual: %s \n", expected, actual)
 	assert.Equal(t, expected, actual, `Error parsing two digit version. Expected "%s", got "%s"`, expected, actual)
 
 	version = "latest"
 	expected = "latest"
 	actual = twoDigitVersion(version)
+	fmt.Printf("expected: %s , actual: %s \n", expected, actual)
 	assert.Equal(t, expected, actual, `Error parsing two digit version. Expected "%s", got "%s"`, expected, actual)
 }
 

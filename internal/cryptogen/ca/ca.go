@@ -211,9 +211,9 @@ func computeSKI(privKey *sm2.PrivateKey) []byte {
 // default template for X509 subject
 func subjectTemplate() pkix.Name {
 	return pkix.Name{
-		Country:  []string{"US"},
-		Locality: []string{"San Francisco"},
-		Province: []string{"California"},
+		Country:  []string{"CN"},
+		Locality: []string{"Hefei"},
+		Province: []string{"Anhui"},
 	}
 }
 

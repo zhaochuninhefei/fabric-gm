@@ -237,7 +237,8 @@ func Load(profile string, configPaths ...string) *Profile {
 	} else {
 		cf.InitViper(config, "configtx")
 	}
-
+	// TODO: 这里需要确保"github.com/spf13/viper"的版本是`v0.0.0-20150908122457-1967d93db724`。
+	// 更高版本的viper会将配置文件中的所有map[string]interface{}结构中的key都转为小写字母，这将导致后续很多操作抛出异常。
 	err := config.ReadInConfig()
 	if err != nil {
 		logger.Panicf("Error reading configuration: %s", err)

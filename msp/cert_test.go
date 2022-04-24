@@ -138,7 +138,7 @@ func generateSelfSignedCert(t *testing.T, now time.Time) (*sm2.PrivateKey, *x509
 		Subject: pkix.Name{
 			CommonName:   commonName,
 			Organization: []string{"Σ Acme Co"},
-			Country:      []string{"US"},
+			Country:      []string{"CN"},
 			ExtraNames: []pkix.AttributeTypeAndValue{
 				{
 					Type:  []int{2, 5, 4, 42},

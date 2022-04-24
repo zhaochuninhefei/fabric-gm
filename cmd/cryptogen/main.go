@@ -119,10 +119,10 @@ PeerOrgs:
     # ---------------------------------------------------------------------------
     # CA:
     #    Hostname: ca # implicitly ca.org1.example.com
-    #    Country: US
-    #    Province: California
-    #    Locality: San Francisco
-    #    OrganizationalUnit: Hyperledger Fabric
+    #    Country: CN
+    #    Province: Anhui
+    #    Locality: Hefei
+    #    OrganizationalUnit: gcsoft
     #    StreetAddress: address for org # default nil
     #    PostalCode: postalCode for org # default nil
 

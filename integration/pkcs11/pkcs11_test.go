@@ -279,9 +279,9 @@ func createCSR(ctx *pkcs11.Ctx, sess pkcs11.SessionHandle, org, ou string) (*sm2
 
 	csrTemplate := x509.CertificateRequest{
 		Subject: pkix.Name{
-			Country:            []string{"US"},
-			Province:           []string{"California"},
-			Locality:           []string{"San Francisco"},
+			Country:            []string{"CN"},
+			Province:           []string{"Anhui"},
+			Locality:           []string{"Hefei"},
 			Organization:       []string{fmt.Sprintf("%s.example.com", org)},
 			OrganizationalUnit: []string{ou},
 			CommonName:         fmt.Sprintf("peer.%s.example.com", org),

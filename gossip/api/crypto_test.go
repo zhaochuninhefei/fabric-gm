@@ -56,7 +56,7 @@ func TestPeerIdentityTypeString(t *testing.T) {
 				Mspid:   "SampleOrg",
 				IdBytes: certBytes,
 			})),
-			expectedOut: `{"CN":"peer0.org1.example.com","Issuer-CN":"ca.org1.example.com","Issuer-L-ST-C":"[San Francisco]-[]-[US]","Issuer-OU":["COP"],"L-ST-C":"[San Francisco]-[]-[US]","MSP":"SampleOrg","OU":["COP"]}`,
+			expectedOut: `{"CN":"peer0.org1.example.com","Issuer-CN":"ca.org1.example.com","Issuer-L-ST-C":"[Hefei]-[Anhui]-[CN]","Issuer-OU":["gcbaas"],"L-ST-C":"[Hefei]-[Anhui]-[CN]","MSP":"SampleOrg","OU":["gcbaas"]}`,
 		},
 	} {
 		t.Run(testCase.description, func(t *testing.T) {

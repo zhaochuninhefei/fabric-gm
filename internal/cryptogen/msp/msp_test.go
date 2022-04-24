@@ -22,10 +22,10 @@ const (
 	testCAOrg              = "example.com"
 	testCAName             = "ca" + "." + testCAOrg
 	testName               = "peer0"
-	testCountry            = "US"
-	testProvince           = "California"
-	testLocality           = "San Francisco"
-	testOrganizationalUnit = "Hyperledger Fabric"
+	testCountry            = "CN"
+	testProvince           = "Anhui"
+	testLocality           = "Hefei"
+	testOrganizationalUnit = "gcsoft"
 	testStreetAddress      = "testStreetAddress"
 	testPostalCode         = "123456"
 )

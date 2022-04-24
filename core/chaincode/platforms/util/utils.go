@@ -186,5 +186,12 @@ func twoDigitVersion(version string) string {
 	if strings.LastIndex(version, ".") < 0 {
 		return version
 	}
-	return version[0:strings.LastIndex(version, ".")]
+	// return version[0:strings.LastIndex(version, ".")]
+	firstPointIndex := strings.Index(version, ".")
+	tmp := version[firstPointIndex+1:]
+	secondPointIndex := strings.Index(tmp, ".")
+	if secondPointIndex < 0 {
+		return version
+	}
+	return version[0 : firstPointIndex+secondPointIndex+1]
 }

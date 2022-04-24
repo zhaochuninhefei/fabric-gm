@@ -10,4 +10,6 @@ package metadata
 var Version = "latest"
 var CommitSHA = "development build"
 var BaseDockerLabel = "org.hyperledger.fabric"
-var DockerNamespace = "hyperledger"
+
+// hyperledger -> gcbaas-gm
+var DockerNamespace = "gcbaas-gm"
