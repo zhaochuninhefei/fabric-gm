@@ -46,9 +46,6 @@ func NewDefaultSecurityLevelWithKeystore(keyStore bccsp.KeyStore) (bccsp.BCCSP, 
 // NewWithParams returns a new instance of the software-based BCCSP
 // set at the passed security level, hash family and KeyStore.
 // 根据参数生成swbccsp
-// 目前存在问题：
-// １．sm4加解密没有分组 --> 该问题已对应，修改了`bccsp/sw/sm4.go`的sm4Encryptor与sm4Decryptor的接口实现方法
-// ２．ecdsa的密钥、签名都是真实的ecdsa，但验签逻辑内部却转为sm2验签，原因不明 --> 该问题已对应，改回了真实的ecdsa验签
 func NewWithParams(usingGM bool, securityLevel int, hashFamily string, keyStore bccsp.KeyStore) (bccsp.BCCSP, error) {
 	// Init config
 	conf := &config{}

@@ -16,9 +16,8 @@ limitations under the License.
 package sw
 
 import (
-	"errors"
-
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
+	"github.com/pkg/errors"
 )
 
 /*
@@ -43,11 +42,11 @@ func (ks *dummyKeyStore) ReadOnly() bool {
 
 // GetKey returns a key object whose SKI is the one passed.
 func (ks *dummyKeyStore) GetKey(ski []byte) (bccsp.Key, error) {
-	return nil, errors.New("key not found. This is a dummy KeyStore")
+	return nil, errors.New("Key not found. This is a dummy KeyStore")
 }
 
 // StoreKey stores the key k in this KeyStore.
 // If this KeyStore is read only then the method will fail.
 func (ks *dummyKeyStore) StoreKey(k bccsp.Key) error {
-	return errors.New("cannot store key. This is a dummy read-only KeyStore")
+	return errors.New("Cannot store key. This is a dummy read-only KeyStore")
 }

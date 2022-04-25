@@ -18,7 +18,7 @@ package sw
 
 import (
 	"crypto/rand"
-	"errors"
+	"github.com/pkg/errors"
 	"fmt"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp"
