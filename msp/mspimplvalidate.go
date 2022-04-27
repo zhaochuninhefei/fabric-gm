@@ -250,9 +250,10 @@ func (msp *bccspmsp) validateIdentityOUsV142(id *identity) error {
 	if msp.ordererOU != nil {
 		validOUs[msp.ordererOU.OrganizationalUnitIdentifier] = msp.ordererOU
 	}
-
+	// fmt.Printf("===== msp/mspimplvalidate.go validateIdentityOUsV142: validOUs: %v\n", validOUs)
 	for _, OU := range id.GetOrganizationalUnits() {
 		// Is OU.OrganizationalUnitIdentifier one of the special OUs?
+		// fmt.Printf("===== msp/mspimplvalidate.go validateIdentityOUsV142: OU.OrganizationalUnitIdentifier: %s\n", OU.OrganizationalUnitIdentifier)
 		nodeOU := validOUs[OU.OrganizationalUnitIdentifier]
 		if nodeOU == nil {
 			continue
@@ -268,7 +269,7 @@ func (msp *bccspmsp) validateIdentityOUsV142(id *identity) error {
 			break
 		}
 	}
-
+	// 必须有且只能有一个OU匹配: admin client peer orderer
 	// the identity should have exactly one OU role, return an error if the counter is not 1.
 	if counter == 0 {
 		return errors.Errorf("the identity does not have an OU that resolves to client, peer, orderer, or admin role. OUs: %s, MSP: [%s]", OUIDs(id.GetOrganizationalUnits()), msp.name)
