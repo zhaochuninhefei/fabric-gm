@@ -7,7 +7,7 @@ require (
 	gitee.com/zhaochuninhefei/fabric-chaincode-go-gm v0.0.5
 	gitee.com/zhaochuninhefei/fabric-config-gm v0.0.4
 	gitee.com/zhaochuninhefei/fabric-protos-go-gm v0.0.1
-	gitee.com/zhaochuninhefei/gmgo v0.0.12
+	gitee.com/zhaochuninhefei/gmgo v0.0.14
 	gitee.com/zhaochuninhefei/saramagm v0.0.4
 	github.com/Knetic/govaluate v3.0.1-0.20171022003610-9aa49832a739+incompatible
 	github.com/VictoriaMetrics/fastcache v1.9.0
@@ -42,6 +42,7 @@ require (
 )
 
 require (
+	gitee.com/zhaochuninhefei/zcgolog v0.0.7 // indirect
 	github.com/Azure/go-ansiterm v0.0.0-20210617225240-d185dfc1b5a1 // indirect
 	github.com/BurntSushi/toml v0.3.1 // indirect
 	github.com/DataDog/zstd v1.5.0 // indirect

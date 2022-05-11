@@ -72,10 +72,12 @@ gitee.com/zhaochuninhefei/fabric-config-gm v0.0.4/go.mod h1:AC26Br3hcSAcy0QmsV5j
 gitee.com/zhaochuninhefei/fabric-protos-go-gm v0.0.1 h1:3SLYH6k5a/eDA3p2uxhSTGxT6h85VjPai/0NoHHSC6E=
 gitee.com/zhaochuninhefei/fabric-protos-go-gm v0.0.1/go.mod h1:cAEwQ9OO7YY3kJ4hqkLVhtk8j+y0etmvll3ZwOf044E=
 gitee.com/zhaochuninhefei/gmgo v0.0.8/go.mod h1:toMA93O2xt6VLnd7An85Iy7+RSJ4jhf1sVOBTU8zZ50=
-gitee.com/zhaochuninhefei/gmgo v0.0.12 h1:dVbTwVroppv9LfsRTlSUKz3NayYNlwNfgRbt/f/xztI=
-gitee.com/zhaochuninhefei/gmgo v0.0.12/go.mod h1:toMA93O2xt6VLnd7An85Iy7+RSJ4jhf1sVOBTU8zZ50=
+gitee.com/zhaochuninhefei/gmgo v0.0.14 h1:2bJfSqejJCBkHkC7I5GGnP/z0MJGfmTIJXeHY935+dc=
+gitee.com/zhaochuninhefei/gmgo v0.0.14/go.mod h1:0mFThdQpNf6i86qjCXmJl6qUpu2+7L4peNatsRtm8rE=
 gitee.com/zhaochuninhefei/saramagm v0.0.4 h1:lLNQFGpywQxTxbdtBR5tGV5cu38dHzIazj6yFweOiQg=
 gitee.com/zhaochuninhefei/saramagm v0.0.4/go.mod h1:1q/wPdfD1bLmuRNROZFTRPTYTDfUkWTanEEZbhHjRi0=
+gitee.com/zhaochuninhefei/zcgolog v0.0.7 h1:YdFOpsZFkEGrNBjtZXPpGSKtrzYhSO6YnstW9A14otc=
+gitee.com/zhaochuninhefei/zcgolog v0.0.7/go.mod h1:aHkHxJFyxmDBHbRxeIcKYuAYVUzneXzyfqbjKMdEgLc=
 github.com/Azure/azure-amqp-common-go/v2 v2.1.0/go.mod h1:R8rea+gJRuJR6QxTir/XuEd+YuKoUiazDC/N96FiDEU=
 github.com/Azure/azure-pipeline-go v0.2.1/go.mod h1:UGSo8XybXnIGZ3epmeBw7Jdz+HiUVpqIlpz/HKHylF4=
 github.com/Azure/azure-sdk-for-go v16.2.1+incompatible/go.mod h1:9XXNKU+eRnpl9moKnB4QOLf1HestfXbmab5FXxiDBjc=
