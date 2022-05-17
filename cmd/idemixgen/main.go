@@ -19,6 +19,7 @@ import (
 	"path/filepath"
 
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/utils"
+	"gitee.com/zhaochuninhefei/fabric-gm/cmd"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/tools/idemixgen/idemixca"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/tools/idemixgen/metadata"
 	"gitee.com/zhaochuninhefei/fabric-gm/idemix"
@@ -54,6 +55,8 @@ var (
 )
 
 func main() {
+	// 检查zclog日志级别并设置
+	cmd.CheckZclogLevelFromOsArgs()
 	app.HelpFlag.Short('h')
 
 	switch kingpin.MustParse(app.Parse(os.Args[1:])) {

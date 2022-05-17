@@ -383,7 +383,7 @@ else
 fi
 echo Done!
 `,
-			Env: []string{"GOPROXY=https://proxy.golang.org"},
+			Env: []string{"GOPROXY=https://goproxy.cn"},
 		}
 		assert.Equal(t, expectedOpts, opts)
 	})

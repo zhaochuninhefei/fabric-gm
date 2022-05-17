@@ -20,6 +20,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-gm/core/chaincode/platforms/java"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/chaincode/platforms/node"
 	"gitee.com/zhaochuninhefei/fabric-gm/core/chaincode/platforms/util"
+	"gitee.com/zhaochuninhefei/zcgolog/zclog"
 	docker "github.com/fsouza/go-dockerclient"
 	"github.com/pkg/errors"
 )
@@ -132,7 +133,7 @@ func (r *Registry) StreamDockerBuild(ccType, path string, codePackage io.Reader,
 	if err != nil {
 		return errors.Wrap(err, "platform failed to create docker build options")
 	}
-
+	zclog.Debugf("===== buildOptions: s%", buildOptions.String())
 	output := &bytes.Buffer{}
 	buildOptions.InputStream = codePackage
 	buildOptions.OutputStream = output
@@ -173,7 +174,7 @@ func (r *Registry) GenerateDockerBuild(ccType, path string, codePackage io.Reade
 	if err != nil {
 		return nil, fmt.Errorf("Failed to generate a Dockerfile: %s", err)
 	}
-
+	zclog.Debugln("dockerFile:", dockerFile)
 	inputFiles["Dockerfile"] = []byte(dockerFile)
 
 	// ----------------------------------------------------------------------------------------------------

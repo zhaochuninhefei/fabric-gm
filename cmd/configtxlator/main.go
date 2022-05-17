@@ -13,9 +13,8 @@ import (
 	"os"
 	"reflect"
 
-	http "gitee.com/zhaochuninhefei/gmgo/gmhttp"
-
 	"gitee.com/zhaochuninhefei/fabric-config-gm/protolator"
+	"gitee.com/zhaochuninhefei/fabric-gm/cmd"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/flogging"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/configtxlator/metadata"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/configtxlator/rest"
@@ -26,6 +25,7 @@ import (
 	_ "gitee.com/zhaochuninhefei/fabric-protos-go-gm/orderer"
 	_ "gitee.com/zhaochuninhefei/fabric-protos-go-gm/orderer/etcdraft"
 	_ "gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
+	http "gitee.com/zhaochuninhefei/gmgo/gmhttp"
 	"github.com/golang/protobuf/proto"
 
 	"gitee.com/zhaochuninhefei/gmgo/handlers"
@@ -64,6 +64,8 @@ var (
 var logger = flogging.MustGetLogger("configtxlator")
 
 func main() {
+	// 检查zclog日志级别并设置
+	cmd.CheckZclogLevelFromOsArgs()
 	kingpin.Version("0.0.1")
 	switch kingpin.MustParse(app.Parse(os.Args[1:])) {
 	// "start" command

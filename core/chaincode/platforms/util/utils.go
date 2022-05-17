@@ -15,6 +15,7 @@ import (
 
 	"gitee.com/zhaochuninhefei/fabric-gm/common/flogging"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/metadata"
+	"gitee.com/zhaochuninhefei/zcgolog/zclog"
 	docker "github.com/fsouza/go-dockerclient"
 	"github.com/spf13/viper"
 )
@@ -63,7 +64,8 @@ func DockerBuild(opts DockerBuildOptions, client *docker.Client) error {
 			return fmt.Errorf("No image provided and \"chaincode.builder\" default does not exist")
 		}
 	}
-
+	zclog.Debugf("===== opts.Image: %s", opts.Image)
+	zclog.Debugf("===== Attempting build with options: %s", opts.String())
 	logger.Debugf("Attempting build with options: %s", opts)
 
 	//-----------------------------------------------------------------------------------

@@ -17,6 +17,7 @@ import (
 	"gitee.com/zhaochuninhefei/fabric-config-gm/protolator"
 	"gitee.com/zhaochuninhefei/fabric-config-gm/protolator/protoext/ordererext"
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/factory"
+	"gitee.com/zhaochuninhefei/fabric-gm/cmd"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/channelconfig"
 	"gitee.com/zhaochuninhefei/fabric-gm/common/flogging"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/configtxgen/encoder"
@@ -210,6 +211,8 @@ func dirExists(path string) (bool, error) {
 }
 
 func main() {
+	// 检查zclog日志级别并设置
+	cmd.CheckZclogLevelFromOsArgs()
 	var outputBlock, outputChannelCreateTx, channelCreateTxBaseProfile, profile, configPath, channelID, inspectBlock, inspectChannelCreateTx, outputAnchorPeersUpdate, asOrg, printOrg string
 
 	flag.StringVar(&outputBlock, "outputBlock", "", "The path to write the genesis block to (if set)")

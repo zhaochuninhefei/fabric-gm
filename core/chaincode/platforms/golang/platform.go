@@ -6,6 +6,10 @@ SPDX-License-Identifier: Apache-2.0
 
 package golang
 
+/*
+core/chaincode/platforms/golang/platform.go 用于编译golang智能合约
+*/
+
 import (
 	"archive/tar"
 	"bytes"
@@ -206,6 +210,8 @@ func getLDFlagsOpts() string {
 
 var buildScript = `
 set -e
+go env -w GOPROXY=https://goproxy.cn,direct
+go env -w GOPRIVATE=gitee.com/zhaochuninhefei
 if [ -f "/chaincode/input/src/go.mod" ] && [ -d "/chaincode/input/src/vendor" ]; then
     cd /chaincode/input/src
     GO111MODULE=on go build -v -mod=vendor %[1]s -o /chaincode/output/chaincode %[2]s
@@ -228,11 +234,15 @@ func (p *Platform) DockerBuildOptions(path string) (util.DockerBuildOptions, err
 	env := []string{}
 	for _, key := range []string{"GOPROXY", "GOSUMDB"} {
 		if val, ok := os.LookupEnv(key); ok {
-			env = append(env, fmt.Sprintf("%s=%s", key, val))
+			if key == "GOPROXY" && val != "https://goproxy.cn,direct" {
+				env = append(env, "GOPROXY=https://goproxy.cn,direct")
+			} else {
+				env = append(env, fmt.Sprintf("%s=%s", key, val))
+			}
 			continue
 		}
 		if key == "GOPROXY" {
-			env = append(env, "GOPROXY=https://proxy.golang.org")
+			env = append(env, "GOPROXY=https://goproxy.cn,direct")
 		}
 	}
 	ldFlagOpts := getLDFlagsOpts()

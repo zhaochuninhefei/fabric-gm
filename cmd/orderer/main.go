@@ -9,8 +9,13 @@ SPDX-License-Identifier: Apache-2.0
 // function should be included in this package.
 package main
 
-import "gitee.com/zhaochuninhefei/fabric-gm/orderer/common/server"
+import (
+	"gitee.com/zhaochuninhefei/fabric-gm/cmd"
+	"gitee.com/zhaochuninhefei/fabric-gm/orderer/common/server"
+)
 
 func main() {
+	// 检查zclog日志级别并设置
+	cmd.CheckZclogLevelFromOsArgs()
 	server.Main()
 }

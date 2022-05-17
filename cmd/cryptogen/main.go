@@ -14,9 +14,9 @@ import (
 	"path/filepath"
 	"text/template"
 
-	"gitee.com/zhaochuninhefei/fabric-gm/internal/cryptogen/csp"
-
+	"gitee.com/zhaochuninhefei/fabric-gm/cmd"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/cryptogen/ca"
+	"gitee.com/zhaochuninhefei/fabric-gm/internal/cryptogen/csp"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/cryptogen/metadata"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/cryptogen/msp"
 
@@ -217,6 +217,8 @@ var (
 )
 
 func main() {
+	// 检查zclog日志级别并设置
+	cmd.CheckZclogLevelFromOsArgs()
 	kingpin.Version("0.0.1")
 	switch kingpin.MustParse(app.Parse(os.Args[1:])) {
 

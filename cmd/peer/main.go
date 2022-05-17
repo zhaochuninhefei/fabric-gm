@@ -10,15 +10,15 @@ import (
 	"os"
 	"strings"
 
-	_ "gitee.com/zhaochuninhefei/gmgo/gmhttp/pprof"
-
 	"gitee.com/zhaochuninhefei/fabric-gm/bccsp/factory"
+	"gitee.com/zhaochuninhefei/fabric-gm/cmd"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/peer/chaincode"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/peer/channel"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/peer/common"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/peer/lifecycle"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/peer/node"
 	"gitee.com/zhaochuninhefei/fabric-gm/internal/peer/version"
+	_ "gitee.com/zhaochuninhefei/gmgo/gmhttp/pprof"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -28,6 +28,8 @@ import (
 var mainCmd = &cobra.Command{Use: "peer"}
 
 func main() {
+	// 检查zclog日志级别并设置
+	cmd.CheckZclogLevelFromOsArgs()
 	// For environment variables.
 	viper.SetEnvPrefix(common.CmdRoot)
 	viper.AutomaticEnv()
