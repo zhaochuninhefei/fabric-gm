@@ -239,11 +239,11 @@ func (*sm4ImportKeyOptsKeyImporter) KeyImport(raw interface{}, opts bccsp.KeyImp
 	return &SM4Key{utils.Clone(sm4Raw), false}, nil
 }
 
-// sm2私钥(PKCS#8标准的der字节流)导入器
+// sm2私钥(PKCS#8标准 或 SEC1标准的der字节流)导入器
 type sm2PrivateKeyOptsKeyImporter struct{}
 
 // sm2私钥导入
-// raw : PKCS#8标准的der字节流
+// raw : PKCS#8标准 或 SEC1标准 的der字节流
 func (*sm2PrivateKeyOptsKeyImporter) KeyImport(raw interface{}, opts bccsp.KeyImportOpts) (k bccsp.Key, err error) {
 	der, ok := raw.([]byte)
 	if !ok {
@@ -256,7 +256,10 @@ func (*sm2PrivateKeyOptsKeyImporter) KeyImport(raw interface{}, opts bccsp.KeyIm
 
 	sm2SK, err := gmx509.ParsePKCS8PrivateKey(der)
 	if err != nil {
-		return nil, fmt.Errorf("failed converting to SM2 private key [%s]", err)
+		sm2SK, err = gmx509.ParseECPrivateKey(der)
+		if err != nil {
+			return nil, fmt.Errorf("failed converting to SM2 private key [%s]", err)
+		}
 	}
 	privSm2, ok := sm2SK.(*sm2.PrivateKey)
 	if !ok {
