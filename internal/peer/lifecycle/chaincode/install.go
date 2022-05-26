@@ -171,6 +171,7 @@ func (i *Installer) submitInstallProposal(signedProposal *pb.SignedProposal) err
 	if err != nil {
 		return errors.Wrap(err, "failed to unmarshal proposal response's response payload")
 	}
+	// 合约安装成功日志 *重要* 不要修改
 	logger.Infof("Chaincode code package identifier: %s", icr.PackageId)
 
 	return nil

@@ -154,28 +154,40 @@ func (c *CommittedQuerier) printResponseAsJSON(proposalResponse *pb.ProposalResp
 // from the server as human readable plain-text.
 func (c *CommittedQuerier) printResponse(proposalResponse *pb.ProposalResponse) error {
 	if c.Input.Name != "" {
+		// 入参指定了合约名称的话，只返回指定合约的信息
 		result := &lb.QueryChaincodeDefinitionResult{}
 		err := proto.Unmarshal(proposalResponse.Response.Payload, result)
 		if err != nil {
 			return errors.Wrap(err, "failed to unmarshal proposal response's response payload")
 		}
+		//  *重要* 不要修改
+		// 注意这里使用fmt直接在输出流里写入结果，不要改为日志框架，以免多出一些日志格式信息
 		fmt.Fprintf(c.Writer, "Committed chaincode definition for chaincode '%s' on channel '%s':\n", c.Input.Name, c.Input.ChannelID)
+		// Version: %s, Sequence: %d, Endorsement Plugin: %s, Validation Plugin: %s
 		c.printSingleChaincodeDefinition(result)
+		// , Approvals: [%s]\n
 		c.printApprovals(result)
-
+		// 注意这里返回的格式是:
+		// Version: %s, Sequence: %d, Endorsement Plugin: %s, Validation Plugin: %s, Approvals: [%s]\n
 		return nil
 	}
-
+	// 如果入参没有指定合约名称，则返回所有已提交的合约信息
 	result := &lb.QueryChaincodeDefinitionsResult{}
 	err := proto.Unmarshal(proposalResponse.Response.Payload, result)
 	if err != nil {
 		return errors.Wrap(err, "failed to unmarshal proposal response's response payload")
 	}
 	fmt.Fprintf(c.Writer, "Committed chaincode definitions on channel '%s':\n", c.Input.ChannelID)
+	// 遍历所有已提交合约
 	for _, cd := range result.ChaincodeDefinitions {
+		//  *重要* 不要修改
+		// Name: %s,
 		fmt.Fprintf(c.Writer, "Name: %s, ", cd.Name)
+		// Version: %s, Sequence: %d, Endorsement Plugin: %s, Validation Plugin: %s
 		c.printSingleChaincodeDefinition(cd)
 		fmt.Fprintf(c.Writer, "\n")
+		// 注意每个合约信息的返回格式:
+		// Name: %s,Version: %s, Sequence: %d, Endorsement Plugin: %s, Validation Plugin: %s\n
 	}
 	return nil
 }

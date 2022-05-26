@@ -161,6 +161,10 @@ func (a *ApprovedQuerier) printResponse(proposalResponse *pb.ProposalResponse) e
 		case *lb.ChaincodeSource_Unavailable_:
 		}
 	}
+	// *重要* 不要修改
+	// 注意使用fmt而不是日志框架，因为要避免输出多余的日志格式信息到输出流。
+	// 这里返回的已审议合约信息的格式是:
+	// sequence: %d, version: %s, init-required: %t, package-id: %s, endorsement plugin: %s, validation plugin: %s\n
 	fmt.Fprintf(a.Writer, "sequence: %d, version: %s, init-required: %t, package-id: %s, endorsement plugin: %s, validation plugin: %s\n",
 		result.Sequence, result.Version, result.InitRequired, packageID, result.EndorsementPlugin, result.ValidationPlugin)
 	return nil

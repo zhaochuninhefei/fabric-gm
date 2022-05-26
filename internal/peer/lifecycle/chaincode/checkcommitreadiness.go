@@ -207,6 +207,7 @@ func (c *CommitReadinessChecker) printResponse(proposalResponse *pb.ProposalResp
 
 	fmt.Fprintf(c.Writer, "Chaincode definition for chaincode '%s', version '%s', sequence '%d' on channel '%s' approval status by org:\n", c.Input.Name, c.Input.Version, c.Input.Sequence, c.Input.ChannelID)
 	for _, org := range orgs {
+		// 合约提交就绪检查结果输出，注意使用fmt而不是日志框架 *重要* 不要修改
 		fmt.Fprintf(c.Writer, "%s: %t\n", org, result.Approvals[org])
 	}
 

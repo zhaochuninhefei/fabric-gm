@@ -142,6 +142,8 @@ func (i *InstalledQuerier) printResponse(proposalResponse *pb.ProposalResponse) 
 	}
 	fmt.Fprintln(i.Writer, "Installed chaincodes on peer:")
 	for _, chaincode := range qicr.InstalledChaincodes {
+		// 已安装合约查询日志 *重要* 不要修改
+		// 注意使用fmt而不是日志框架
 		fmt.Fprintf(i.Writer, "Package ID: %s, Label: %s\n", chaincode.PackageId, chaincode.Label)
 	}
 	return nil
