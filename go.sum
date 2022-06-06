@@ -72,8 +72,8 @@ gitee.com/zhaochuninhefei/fabric-config-gm v0.0.4/go.mod h1:AC26Br3hcSAcy0QmsV5j
 gitee.com/zhaochuninhefei/fabric-protos-go-gm v0.0.1 h1:3SLYH6k5a/eDA3p2uxhSTGxT6h85VjPai/0NoHHSC6E=
 gitee.com/zhaochuninhefei/fabric-protos-go-gm v0.0.1/go.mod h1:cAEwQ9OO7YY3kJ4hqkLVhtk8j+y0etmvll3ZwOf044E=
 gitee.com/zhaochuninhefei/gmgo v0.0.8/go.mod h1:toMA93O2xt6VLnd7An85Iy7+RSJ4jhf1sVOBTU8zZ50=
-gitee.com/zhaochuninhefei/gmgo v0.0.15 h1:d3rTm3xUmFqzN9Ev/FJLwVa9JIhTUnCpqZHMsRsnNq4=
-gitee.com/zhaochuninhefei/gmgo v0.0.15/go.mod h1:NB/yG4yaJEzRRyEUhd0AmJF3mB306QLQmxMt0jJKC4U=
+gitee.com/zhaochuninhefei/gmgo v0.0.16 h1:hmxo4YUAsgv0gX4UGhq5ez+Wfc2jh+sMuo4Ej/sWNYg=
+gitee.com/zhaochuninhefei/gmgo v0.0.16/go.mod h1:NB/yG4yaJEzRRyEUhd0AmJF3mB306QLQmxMt0jJKC4U=
 gitee.com/zhaochuninhefei/saramagm v0.0.4 h1:lLNQFGpywQxTxbdtBR5tGV5cu38dHzIazj6yFweOiQg=
 gitee.com/zhaochuninhefei/saramagm v0.0.4/go.mod h1:1q/wPdfD1bLmuRNROZFTRPTYTDfUkWTanEEZbhHjRi0=
 gitee.com/zhaochuninhefei/zcgolog v0.0.14 h1:B04r2JPUH712BtBa+oVWe5SGR0wWPghEUFhHxANcvbk=
