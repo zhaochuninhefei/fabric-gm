@@ -137,7 +137,7 @@ func SetupBCCSPKeystoreConfig(bccspConfig *factory.FactoryOpts, keystoreDir stri
 		bccspConfig = factory.GetDefaultOpts()
 	}
 
-	mspLogger.Infof("bccspConfig.ProviderName---,%v", bccspConfig.ProviderName)
+	// mspLogger.Debugf("bccspConfig.ProviderName: %v\n", bccspConfig.ProviderName)
 	if bccspConfig.ProviderName == "GM" || bccspConfig.SwOpts != nil {
 		if bccspConfig.SwOpts == nil {
 			bccspConfig.SwOpts = factory.GetDefaultOpts().SwOpts
