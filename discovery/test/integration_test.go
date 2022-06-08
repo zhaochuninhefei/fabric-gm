@@ -126,21 +126,21 @@ func TestGreenPath(t *testing.T) {
 	service.lsccMetadataManager.query.On("GetState", "lscc", "cc2").Return(cc2Bytes, nil)
 	service.lsccMetadataManager.query.On("GetState", "lscc", "cc2~collection").Return(collectionConfigBytes, nil)
 
-	ccWithCollection := &ChaincodeInterest{
-		Chaincodes: []*ChaincodeCall{
+	ccWithCollection := &peer.ChaincodeInterest{
+		Chaincodes: []*peer.ChaincodeCall{
 			{Name: "cc2", CollectionNames: []string{"col12"}},
 		},
 	}
-	cc2cc := &ChaincodeInterest{
-		Chaincodes: []*ChaincodeCall{
+	cc2cc := &peer.ChaincodeInterest{
+		Chaincodes: []*peer.ChaincodeCall{
 			{Name: "cc1"}, {Name: "cc2"},
 		},
 	}
 
 	// Send all queries
 	req := disc.NewRequest().AddLocalPeersQuery().OfChannel("mychannel")
-	col1 := &ChaincodeCall{Name: "cc2", CollectionNames: []string{"col1"}}
-	nonExistentCollection := &ChaincodeCall{Name: "cc2", CollectionNames: []string{"col3"}}
+	col1 := &peer.ChaincodeCall{Name: "cc2", CollectionNames: []string{"col1"}}
+	nonExistentCollection := &peer.ChaincodeCall{Name: "cc2", CollectionNames: []string{"col3"}}
 	_ = nonExistentCollection
 	req, err := req.AddPeersQuery().AddPeersQuery(col1).AddPeersQuery(nonExistentCollection).AddConfigQuery().AddEndorsersQuery(cc2cc, ccWithCollection)
 
@@ -239,8 +239,8 @@ func TestEndorsementComputationFailure(t *testing.T) {
 
 	// Now test a collection query that should fail because cc2's endorsement policy is Org1MSP AND org2MSP
 	// but the collection is configured only to have peers from Org1MSP
-	ccWithCollection := &ChaincodeInterest{
-		Chaincodes: []*ChaincodeCall{
+	ccWithCollection := &peer.ChaincodeInterest{
+		Chaincodes: []*peer.ChaincodeCall{
 			{Name: "cc2", CollectionNames: []string{"col1"}},
 		},
 	}
@@ -264,8 +264,8 @@ func TestLedgerFailure(t *testing.T) {
 	service.lsccMetadataManager.query.On("GetState", "lscc", "cc2").Return(nil, errors.New("IO error"))
 	service.lsccMetadataManager.query.On("GetState", "lscc", "cc12~collection").Return(collectionConfigBytes, nil)
 
-	ccWithCollection := &ChaincodeInterest{
-		Chaincodes: []*ChaincodeCall{
+	ccWithCollection := &peer.ChaincodeInterest{
+		Chaincodes: []*peer.ChaincodeCall{
 			{Name: "cc1"},
 			{Name: "cc2", CollectionNames: []string{"col1"}},
 		},

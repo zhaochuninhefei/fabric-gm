@@ -9,7 +9,8 @@ package endorsement
 import (
 	"gitee.com/zhaochuninhefei/fabric-gm/common/policies"
 	"gitee.com/zhaochuninhefei/fabric-gm/gossip/api"
-	. "gitee.com/zhaochuninhefei/fabric-protos-go-gm/discovery"
+
+	// . "gitee.com/zhaochuninhefei/fabric-protos-go-gm/discovery"
 	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 	"github.com/pkg/errors"
 )
@@ -47,7 +48,7 @@ type principalSetsByCollectionName map[string]policies.PrincipalSet
 
 // toIdentityFilter converts this principalSetsByCollectionName mapping to a filter
 // which accepts or rejects identities of peers.
-func (psbc principalSetsByCollectionName) toIdentityFilter(channel string, evaluator principalEvaluator, cc *ChaincodeCall) (identityFilter, error) {
+func (psbc principalSetsByCollectionName) toIdentityFilter(channel string, evaluator principalEvaluator, cc *peer.ChaincodeCall) (identityFilter, error) {
 	var principalSets policies.PrincipalSets
 	for _, col := range cc.CollectionNames {
 		// Each collection we're interested in should exist in the principalSetsByCollectionName mapping.

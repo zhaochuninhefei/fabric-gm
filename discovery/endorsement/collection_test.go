@@ -17,7 +17,6 @@ import (
 	disc "gitee.com/zhaochuninhefei/fabric-gm/gossip/discovery"
 	"gitee.com/zhaochuninhefei/fabric-gm/protoutil"
 	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/common"
-	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/discovery"
 	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/msp"
 	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 	"github.com/stretchr/testify/assert"
@@ -98,7 +97,7 @@ func TestToIdentityFilter(t *testing.T) {
 	col2principals["foo"] = []*msp.MSPPrincipal{orgPrincipal("Org1MSP"), orgPrincipal("Org2MSP")}
 
 	t.Run("collection doesn't exist in mapping", func(t *testing.T) {
-		filter, err := col2principals.toIdentityFilter("mychannel", &principalEvaluatorMock{}, &discovery.ChaincodeCall{
+		filter, err := col2principals.toIdentityFilter("mychannel", &principalEvaluatorMock{}, &peer.ChaincodeCall{
 			Name:            "mycc",
 			CollectionNames: []string{"bar"},
 		})
@@ -107,7 +106,7 @@ func TestToIdentityFilter(t *testing.T) {
 	})
 
 	t.Run("collection exists in mapping", func(t *testing.T) {
-		filter, err := col2principals.toIdentityFilter("mychannel", &principalEvaluatorMock{}, &discovery.ChaincodeCall{
+		filter, err := col2principals.toIdentityFilter("mychannel", &principalEvaluatorMock{}, &peer.ChaincodeCall{
 			Name:            "mycc",
 			CollectionNames: []string{"foo"},
 		})

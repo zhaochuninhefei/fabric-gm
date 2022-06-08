@@ -19,6 +19,7 @@ import (
 	. "gitee.com/zhaochuninhefei/fabric-protos-go-gm/discovery"
 	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/gossip"
 	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/msp"
+	"gitee.com/zhaochuninhefei/fabric-protos-go-gm/peer"
 	"github.com/golang/protobuf/proto"
 	"github.com/pkg/errors"
 )
@@ -90,17 +91,17 @@ func (pc *EndorsersCmd) Execute(conf common.Config) error {
 		return err
 	}
 
-	var ccCalls []*ChaincodeCall
+	var ccCalls []*peer.ChaincodeCall
 
 	for _, cc := range *ccAndCol.Chaincodes {
-		ccCalls = append(ccCalls, &ChaincodeCall{
+		ccCalls = append(ccCalls, &peer.ChaincodeCall{
 			Name:            cc,
 			CollectionNames: cc2collections[cc],
 			NoPrivateReads:  ccAndCol.noPrivateReads(cc),
 		})
 	}
 
-	req, err := discovery.NewRequest().OfChannel(channel).AddEndorsersQuery(&ChaincodeInterest{Chaincodes: ccCalls})
+	req, err := discovery.NewRequest().OfChannel(channel).AddEndorsersQuery(&peer.ChaincodeInterest{Chaincodes: ccCalls})
 	if err != nil {
 		return errors.Wrap(err, "failed creating request")
 	}

@@ -6,7 +6,7 @@ require (
 	code.cloudfoundry.org/clock v1.0.0
 	gitee.com/zhaochuninhefei/fabric-chaincode-go-gm v0.0.5
 	gitee.com/zhaochuninhefei/fabric-config-gm v0.0.4
-	gitee.com/zhaochuninhefei/fabric-protos-go-gm v0.0.1
+	gitee.com/zhaochuninhefei/fabric-protos-go-gm v0.0.3
 	gitee.com/zhaochuninhefei/gmgo v0.0.16
 	gitee.com/zhaochuninhefei/saramagm v0.0.4
 	gitee.com/zhaochuninhefei/zcgolog v0.0.14
