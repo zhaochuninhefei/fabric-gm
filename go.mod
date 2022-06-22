@@ -7,7 +7,7 @@ require (
 	gitee.com/zhaochuninhefei/fabric-chaincode-go-gm v0.0.5
 	gitee.com/zhaochuninhefei/fabric-config-gm v0.0.4
 	gitee.com/zhaochuninhefei/fabric-protos-go-gm v0.0.3
-	gitee.com/zhaochuninhefei/gmgo v0.0.16
+	gitee.com/zhaochuninhefei/gmgo v0.0.17
 	gitee.com/zhaochuninhefei/saramagm v0.0.4
 	gitee.com/zhaochuninhefei/zcgolog v0.0.14
 	github.com/Knetic/govaluate v3.0.1-0.20171022003610-9aa49832a739+incompatible
